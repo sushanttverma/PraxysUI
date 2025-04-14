@@ -1,15 +1,23 @@
 @import "tailwindcss";
 
 /* ─── Praxys Brand Palette ───
- * Void     #050505  — deepest black, primary background
- * Obsidian #0B0A08  — warm dark surface
- * Ignite   #E84E2D  — red-orange brand accent
- * Blush    #C9958A  — warm counterbalance, hover states
- * Chalk    #F2ECE2  — warm off-white, primary text
+ * Dark Mode (default):
+ *   Void     #050505  — deepest black, primary background
+ *   Obsidian #0B0A08  — warm dark surface
+ *   Ignite   #E84E2D  — red-orange brand accent
+ *   Blush    #C9958A  — warm counterbalance, hover states
+ *   Chalk    #F2ECE2  — warm off-white, primary text
+ *
+ * Light Mode:
+ *   Void     #FAFAF8  — warm near-white background
+ *   Obsidian #F0EDE8  — warm light surface
+ *   Ignite   #D4432A  — slightly deeper red for contrast
+ *   Blush    #8B6B62  — darker warm for readable secondary text
+ *   Chalk    #1A1714  — near-black warm text
  * ─────────────────────────── */
 
 :root {
-  /* Core 5 */
+  /* Core 5 — dark mode (default) */
   --color-void: #050505;
   --color-obsidian: #0B0A08;
   --color-ignite: #E84E2D;
@@ -21,6 +29,42 @@
   --color-border-light: #2a2722;
   --color-text-faint: #3d3937;
   --color-ignite-dim: #E84E2D14;
+
+  /* Glow / gradient tokens (used in inline styles) */
+  --glow-ignite-shadow: 0 0 60px -12px #E84E2D30, 0 0 120px -24px #E84E2D15;
+  --selection-bg: #E84E2D40;
+
+  /* Code block background */
+  --color-code-bg: #0B0A08;
+
+  /* Hero / CTA radial glow tokens */
+  --hero-glow-primary: #E84E2D12;
+  --hero-glow-primary-mid: #E84E2D06;
+  --hero-glow-secondary: #C9958A08;
+  --cta-glow: #E84E2D15;
+}
+
+[data-theme="light"] {
+  --color-void: #FAFAF8;
+  --color-obsidian: #F0EDE8;
+  --color-ignite: #D4432A;
+  --color-blush: #8B6B62;
+  --color-chalk: #1A1714;
+
+  --color-border: #D9D4CC;
+  --color-border-light: #C5BFBA;
+  --color-text-faint: #9B9490;
+  --color-ignite-dim: #D4432A12;
+
+  --glow-ignite-shadow: 0 0 60px -12px #D4432A20, 0 0 120px -24px #D4432A10;
+  --selection-bg: #D4432A30;
+
+  --color-code-bg: #F0EDE8;
+
+  --hero-glow-primary: #D4432A10;
+  --hero-glow-primary-mid: #D4432A06;
+  --hero-glow-secondary: #8B6B6208;
+  --cta-glow: #D4432A10;
 }
 
 @theme inline {
@@ -58,6 +102,22 @@ body {
   font-family: var(--font-body);
 }
 
+/* Smooth theme transitions */
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body,
+nav,
+header,
+footer,
+aside,
+main,
+section {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -70,14 +130,9 @@ body {
   border-radius: 3px;
 }
 
-/* Smooth scroll */
-html {
-  scroll-behavior: smooth;
-}
-
 /* Selection */
 ::selection {
-  background: #E84E2D40;
+  background: var(--selection-bg);
   color: var(--color-chalk);
 }
 
@@ -108,7 +163,7 @@ html {
 
 /* Glow effect */
 .glow-ignite {
-  box-shadow: 0 0 60px -12px #E84E2D30, 0 0 120px -24px #E84E2D15;
+  box-shadow: var(--glow-ignite-shadow);
 }
 
 /* Card hover glow */
@@ -125,6 +180,28 @@ html {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+[data-theme="light"] .card-glow::before {
+  background: linear-gradient(135deg, #D4432A15, transparent 40%, transparent 60%, #8B6B6210);
+}
 .card-glow:hover::before {
   opacity: 1;
+}
+
+/* Code block theme switching */
+.code-block-light {
+  display: none;
+}
+.code-block-dark {
+  display: block;
+}
+[data-theme="light"] .code-block-light {
+  display: block;
+}
+[data-theme="light"] .code-block-dark {
+  display: none;
+}
+
+/* Light mode: reduce noise overlay */
+[data-theme="light"] .noise-overlay::before {
+  opacity: 0.015;
 }

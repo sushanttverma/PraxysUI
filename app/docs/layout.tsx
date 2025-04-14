@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Search, Github, Menu } from "lucide-react";
 import Sidebar from "./components/Sidebar";
+import ThemeToggle from "../components/ThemeToggle";
 
 export default function DocsLayout({
   children,
@@ -70,6 +71,7 @@ export default function DocsLayout({
                 Ctrl K
               </kbd>
             </button>
+            <ThemeToggle />
             <a
               href="https://github.com"
               target="_blank"

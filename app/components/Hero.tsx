@@ -12,14 +12,14 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(60% 50% at 50% 40%, #E84E2D12, #E84E2D06 40%, transparent 70%)",
+            "radial-gradient(60% 50% at 50% 40%, var(--hero-glow-primary), var(--hero-glow-primary-mid) 40%, transparent 70%)",
         }}
       />
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(80% 60% at 50% 50%, #C9958A08, transparent 60%)",
+            "radial-gradient(80% 60% at 50% 50%, var(--hero-glow-secondary), transparent 60%)",
         }}
       />
 

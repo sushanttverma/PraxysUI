@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Search, Github, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -52,6 +53,7 @@ export default function Navbar() {
               Ctrl K
             </kbd>
           </button>
+          <ThemeToggle />
           <a
             href="https://github.com"
             target="_blank"
@@ -105,15 +107,18 @@ export default function Navbar() {
                 Docs
               </Link>
               <div className="my-2 border-t border-border" />
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-blush transition-colors hover:bg-void hover:text-chalk"
-              >
-                <Github className="h-4 w-4" />
-                GitHub
-              </a>
+              <div className="flex items-center gap-3 px-3 py-2.5">
+                <ThemeToggle />
+                <a
+                  href="https://github.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm text-blush transition-colors hover:text-chalk"
+                >
+                  <Github className="h-4 w-4" />
+                  GitHub
+                </a>
+              </div>
             </div>
           </motion.div>
         )}

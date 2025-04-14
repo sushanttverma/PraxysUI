@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { ThemeProvider } from "./components/ThemeProvider";
 import "./globals.css";
 
 const geistPixel = localFont({
@@ -21,8 +22,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geistPixel.variable}>
+    <html lang="en" className={geistPixel.variable} suppressHydrationWarning>
       <head>
+        {/* Inline script to prevent FOUC — reads theme before first paint */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('praxys-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t)}else if(window.matchMedia('(prefers-color-scheme:light)').matches){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()`,
+          }}
+        />
         {/* Satoshi — body font */}
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link
@@ -42,7 +49,7 @@ export default function RootLayout({
         />
       </head>
       <body className="noise-overlay antialiased">
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

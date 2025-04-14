@@ -19,7 +19,7 @@ export default function CTA() {
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "radial-gradient(50% 80% at 50% 0%, #E84E2D15, transparent 70%)",
+                "radial-gradient(50% 80% at 50% 0%, var(--cta-glow), transparent 70%)",
             }}
           />
 
