@@ -969,6 +969,524 @@ export function Demo() {
     component: () => import("@/app/components/ui/social-flip-button"),
     demo: () => import("@/app/components/demos/social-flip-button-demo"),
   },
+
+  "testimonials-card": {
+    slug: "testimonials-card",
+    title: "Testimonials Card",
+    description:
+      "An auto-rotating testimonials card with smooth crossfade transitions, avatar display, and dot navigation.",
+    category: "cards",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useState, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface Testimonial {
+  quote: string
+  author: string
+  role: string
+  avatar?: string
+}
+
+interface TestimonialsCardProps {
+  testimonials: Testimonial[]
+  className?: string
+  autoPlay?: boolean
+  interval?: number
+}
+
+const TestimonialsCard: React.FC<TestimonialsCardProps> = ({
+  testimonials,
+  className = '',
+  autoPlay = true,
+  interval = 5000,
+}) => {
+  const [current, setCurrent] = useState(0)
+
+  const next = useCallback(() => {
+    setCurrent((prev) => (prev + 1) % testimonials.length)
+  }, [testimonials.length])
+
+  useEffect(() => {
+    if (!autoPlay || testimonials.length <= 1) return
+    const timer = setInterval(next, interval)
+    return () => clearInterval(timer)
+  }, [autoPlay, interval, next, testimonials.length])
+
+  const t = testimonials[current]
+
+  return (
+    <div
+      className={cn(
+        'relative rounded-xl border border-border bg-obsidian p-8 overflow-hidden',
+        className
+      )}
+    >
+      {/* Quote mark */}
+      <span className="absolute top-4 right-6 font-pixel text-6xl leading-none text-ignite/10">
+        &ldquo;
+      </span>
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={current}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.4 }}
+          className="relative z-10"
+        >
+          <p className="text-base leading-relaxed text-chalk italic">
+            &ldquo;{t.quote}&rdquo;
+          </p>
+          <div className="mt-6 flex items-center gap-3">
+            {t.avatar ? (
+              <img
+                src={t.avatar}
+                alt={t.author}
+                className="h-10 w-10 rounded-full border border-border object-cover"
+              />
+            ) : (
+              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-ignite/10 font-pixel text-sm text-ignite">
+                {t.author.charAt(0)}
+              </div>
+            )}
+            <div>
+              <p className="text-sm font-semibold text-chalk">{t.author}</p>
+              <p className="text-xs text-blush">{t.role}</p>
+            </div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Dots */}
+      {testimonials.length > 1 && (
+        <div className="mt-6 flex gap-1.5">
+          {testimonials.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrent(i)}
+              className={cn(
+                'h-1.5 rounded-full transition-all duration-300 cursor-pointer',
+                i === current
+                  ? 'w-6 bg-ignite'
+                  : 'w-1.5 bg-border-light hover:bg-blush/50'
+              )}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default TestimonialsCard`,
+    usage: `import TestimonialsCard from "@/app/components/ui/testimonials-card"
+
+export function Demo() {
+  return (
+    <TestimonialsCard
+      testimonials={[
+        { quote: "Amazing components!", author: "Jane Doe", role: "Developer" },
+        { quote: "Saved me hours.", author: "John Smith", role: "Designer" },
+      ]}
+    />
+  )
+}`,
+    props: [
+      {
+        name: "testimonials",
+        type: "Testimonial[]",
+        default: "—",
+        description:
+          "Array of testimonials with quote, author, role, and optional avatar URL.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "autoPlay",
+        type: "boolean",
+        default: "true",
+        description: "Whether to auto-rotate testimonials.",
+      },
+      {
+        name: "interval",
+        type: "number",
+        default: "5000",
+        description: "Auto-rotation interval in milliseconds.",
+      },
+    ],
+    component: () => import("@/app/components/ui/testimonials-card"),
+    demo: () => import("@/app/components/demos/testimonials-card-demo"),
+  },
+
+  "staggered-grid": {
+    slug: "staggered-grid",
+    title: "Staggered Grid",
+    description:
+      "A grid layout where children animate in with a staggered fade-up effect as they enter the viewport.",
+    category: "cards",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface StaggeredGridProps {
+  children: React.ReactNode[]
+  className?: string
+  columns?: number
+  staggerDelay?: number
+}
+
+const StaggeredGrid: React.FC<StaggeredGridProps> = ({
+  children,
+  className = '',
+  columns = 3,
+  staggerDelay = 0.08,
+}) => {
+  return (
+    <div
+      className={cn('grid gap-4', className)}
+      style={{
+        gridTemplateColumns: \`repeat(\${columns}, minmax(0, 1fr))\`,
+      }}
+    >
+      {React.Children.map(children, (child, i) => (
+        <motion.div
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{
+            duration: 0.5,
+            delay: i * staggerDelay,
+            ease: [0.2, 0.65, 0.3, 0.9],
+          }}
+        >
+          {child}
+        </motion.div>
+      ))}
+    </div>
+  )
+}
+
+export default StaggeredGrid`,
+    usage: `import StaggeredGrid from "@/app/components/ui/staggered-grid"
+
+export function Demo() {
+  return (
+    <StaggeredGrid columns={3}>
+      {[1, 2, 3, 4, 5, 6].map((n) => (
+        <div key={n} className="rounded-lg border border-border bg-obsidian p-6 text-chalk">
+          Item {n}
+        </div>
+      ))}
+    </StaggeredGrid>
+  )
+}`,
+    props: [
+      {
+        name: "children",
+        type: "React.ReactNode[]",
+        default: "—",
+        description: "Array of child elements to render in the grid.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "columns",
+        type: "number",
+        default: "3",
+        description: "Number of grid columns.",
+      },
+      {
+        name: "staggerDelay",
+        type: "number",
+        default: "0.08",
+        description: "Delay between each child animation in seconds.",
+      },
+    ],
+    component: () => import("@/app/components/ui/staggered-grid"),
+    demo: () => import("@/app/components/demos/staggered-grid-demo"),
+  },
+
+  "expandable-bento-grid": {
+    slug: "expandable-bento-grid",
+    title: "Expandable Bento Grid",
+    description:
+      "A bento-style grid where clicking an item expands it into a full overlay modal with smooth layout animations.",
+    category: "cards",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface BentoItem {
+  id: string
+  title: string
+  description: string
+  icon?: React.ReactNode
+  span?: 'normal' | 'wide' | 'tall'
+}
+
+interface ExpandableBentoGridProps {
+  items: BentoItem[]
+  className?: string
+}
+
+const ExpandableBentoGrid: React.FC<ExpandableBentoGridProps> = ({
+  items,
+  className = '',
+}) => {
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+
+  return (
+    <>
+      <div
+        className={cn(
+          'grid auto-rows-[140px] grid-cols-3 gap-3',
+          className
+        )}
+      >
+        {items.map((item) => {
+          const isExpanded = expandedId === item.id
+          return (
+            <motion.div
+              key={item.id}
+              layoutId={\`bento-\${item.id}\`}
+              onClick={() => setExpandedId(isExpanded ? null : item.id)}
+              className={cn(
+                'group relative cursor-pointer rounded-xl border border-border bg-obsidian p-5 overflow-hidden transition-colors hover:border-border-light',
+                item.span === 'wide' && 'col-span-2',
+                item.span === 'tall' && 'row-span-2'
+              )}
+            >
+              {item.icon && (
+                <div className="mb-3 text-ignite">{item.icon}</div>
+              )}
+              <h3 className="font-pixel text-sm font-semibold text-chalk">
+                {item.title}
+              </h3>
+              <p className="mt-1 text-xs leading-relaxed text-blush line-clamp-2">
+                {item.description}
+              </p>
+            </motion.div>
+          )
+        })}
+      </div>
+
+      {/* Expanded overlay */}
+      <AnimatePresence>
+        {expandedId && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-40 bg-void/60 backdrop-blur-sm"
+              onClick={() => setExpandedId(null)}
+            />
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+              <motion.div
+                layoutId={\`bento-\${expandedId}\`}
+                className="w-full max-w-lg rounded-xl border border-border bg-obsidian p-8"
+              >
+                {(() => {
+                  const item = items.find((i) => i.id === expandedId)
+                  if (!item) return null
+                  return (
+                    <>
+                      {item.icon && (
+                        <div className="mb-4 text-ignite">{item.icon}</div>
+                      )}
+                      <h3 className="font-pixel text-xl font-semibold text-chalk">
+                        {item.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-relaxed text-blush">
+                        {item.description}
+                      </p>
+                      <button
+                        onClick={() => setExpandedId(null)}
+                        className="mt-6 rounded-lg border border-border px-4 py-2 text-sm text-blush transition-colors hover:text-chalk cursor-pointer"
+                      >
+                        Close
+                      </button>
+                    </>
+                  )
+                })()}
+              </motion.div>
+            </div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
+  )
+}
+
+export default ExpandableBentoGrid`,
+    usage: `import ExpandableBentoGrid from "@/app/components/ui/expandable-bento-grid"
+
+export function Demo() {
+  return (
+    <ExpandableBentoGrid
+      items={[
+        { id: "1", title: "Analytics", description: "Track performance metrics.", span: "wide" },
+        { id: "2", title: "Settings", description: "Configure your preferences." },
+        { id: "3", title: "Users", description: "Manage team members.", span: "tall" },
+      ]}
+    />
+  )
+}`,
+    props: [
+      {
+        name: "items",
+        type: "BentoItem[]",
+        default: "—",
+        description:
+          "Array of items with id, title, description, optional icon, and optional span ('normal' | 'wide' | 'tall').",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+    ],
+    component: () => import("@/app/components/ui/expandable-bento-grid"),
+    demo: () => import("@/app/components/demos/expandable-bento-grid-demo"),
+  },
+
+  "perspective-grid": {
+    slug: "perspective-grid",
+    title: "Perspective Grid",
+    description:
+      "A 3D perspective grid that tilts items on hover with smooth spring animations and staggered entrance.",
+    category: "cards",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface PerspectiveGridProps {
+  children: React.ReactNode[]
+  className?: string
+  columns?: number
+  tiltAmount?: number
+}
+
+const PerspectiveGrid: React.FC<PerspectiveGridProps> = ({
+  children,
+  className = '',
+  columns = 3,
+  tiltAmount = 8,
+}) => {
+  return (
+    <div
+      className={cn('grid gap-4', className)}
+      style={{
+        gridTemplateColumns: \`repeat(\${columns}, minmax(0, 1fr))\`,
+        perspective: '1000px',
+      }}
+    >
+      {React.Children.map(children, (child, i) => (
+        <PerspectiveItem key={i} tiltAmount={tiltAmount} index={i}>
+          {child}
+        </PerspectiveItem>
+      ))}
+    </div>
+  )
+}
+
+function PerspectiveItem({
+  children,
+  tiltAmount,
+  index,
+}: {
+  children: React.ReactNode
+  tiltAmount: number
+  index: number
+}) {
+  const [hovered, setHovered] = React.useState(false)
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, rotateY: -15 }}
+      whileInView={{ opacity: 1, rotateY: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      animate={{
+        rotateX: hovered ? tiltAmount : 0,
+        rotateY: hovered ? -tiltAmount : 0,
+        scale: hovered ? 1.02 : 1,
+      }}
+      style={{ transformStyle: 'preserve-3d' }}
+      className="cursor-pointer transition-shadow duration-300"
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+export default PerspectiveGrid`,
+    usage: `import PerspectiveGrid from "@/app/components/ui/perspective-grid"
+
+export function Demo() {
+  return (
+    <PerspectiveGrid columns={3} tiltAmount={8}>
+      {[1, 2, 3].map((n) => (
+        <div key={n} className="rounded-lg border border-border bg-obsidian p-8 text-center text-chalk">
+          Card {n}
+        </div>
+      ))}
+    </PerspectiveGrid>
+  )
+}`,
+    props: [
+      {
+        name: "children",
+        type: "React.ReactNode[]",
+        default: "—",
+        description: "Array of child elements to render in the grid.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "columns",
+        type: "number",
+        default: "3",
+        description: "Number of grid columns.",
+      },
+      {
+        name: "tiltAmount",
+        type: "number",
+        default: "8",
+        description: "Degrees of 3D tilt on hover.",
+      },
+    ],
+    component: () => import("@/app/components/ui/perspective-grid"),
+    demo: () => import("@/app/components/demos/perspective-grid-demo"),
+  },
 };
 
 // Helper: check if a slug is a component page
