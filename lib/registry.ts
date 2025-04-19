@@ -1487,6 +1487,247 @@ export function Demo() {
     component: () => import("@/app/components/ui/perspective-grid"),
     demo: () => import("@/app/components/demos/perspective-grid-demo"),
   },
+
+  "flip-fade-text": {
+    slug: "flip-fade-text",
+    title: "Flip Fade Text",
+    description:
+      "A rotating text component that cycles through words with a 3D flip and fade transition, perfect for hero taglines.",
+    category: "text",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useState, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface FlipFadeTextProps {
+  words: string[]
+  className?: string
+  interval?: number
+  duration?: number
+}
+
+const FlipFadeText: React.FC<FlipFadeTextProps> = ({
+  words,
+  className = '',
+  interval = 3000,
+  duration = 0.5,
+}) => {
+  const [index, setIndex] = useState(0)
+
+  const advance = useCallback(() => {
+    setIndex((prev) => (prev + 1) % words.length)
+  }, [words.length])
+
+  useEffect(() => {
+    const timer = setInterval(advance, interval)
+    return () => clearInterval(timer)
+  }, [advance, interval])
+
+  return (
+    <span className={cn('relative inline-flex overflow-hidden', className)}>
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={words[index]}
+          initial={{ rotateX: 90, opacity: 0, y: 10 }}
+          animate={{ rotateX: 0, opacity: 1, y: 0 }}
+          exit={{ rotateX: -90, opacity: 0, y: -10 }}
+          transition={{ duration, ease: [0.2, 0.65, 0.3, 0.9] }}
+          className="inline-block"
+          style={{ transformOrigin: 'bottom center' }}
+        >
+          {words[index]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  )
+}
+
+export default FlipFadeText`,
+    usage: `import FlipFadeText from "@/app/components/ui/flip-fade-text"
+
+export function Demo() {
+  return (
+    <h1 className="text-4xl font-bold text-chalk">
+      Build{" "}
+      <FlipFadeText
+        words={["faster", "better", "smarter"]}
+        className="text-ignite"
+      />
+    </h1>
+  )
+}`,
+    props: [
+      {
+        name: "words",
+        type: "string[]",
+        default: "—",
+        description: "Array of words to cycle through.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "interval",
+        type: "number",
+        default: "3000",
+        description: "Time between word changes in milliseconds.",
+      },
+      {
+        name: "duration",
+        type: "number",
+        default: "0.5",
+        description: "Duration of the flip animation in seconds.",
+      },
+    ],
+    component: () => import("@/app/components/ui/flip-fade-text"),
+    demo: () => import("@/app/components/demos/flip-fade-text-demo"),
+  },
+
+  "displacement-text": {
+    slug: "displacement-text",
+    title: "3D Displacement Text",
+    description:
+      "Mouse-reactive 3D text with depth shadows that follows cursor movement, creating a dramatic displacement effect.",
+    category: "text",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useRef } from 'react'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface DisplacementTextProps {
+  text: string
+  className?: string
+  fontSize?: number
+  color?: string
+  shadowColor?: string
+  depth?: number
+}
+
+const DisplacementText: React.FC<DisplacementTextProps> = ({
+  text,
+  className = '',
+  fontSize = 64,
+  color = 'var(--color-chalk)',
+  shadowColor = 'var(--color-ignite)',
+  depth = 12,
+}) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const mouseX = useMotionValue(0.5)
+  const mouseY = useMotionValue(0.5)
+
+  const springX = useSpring(mouseX, { stiffness: 150, damping: 20 })
+  const springY = useSpring(mouseY, { stiffness: 150, damping: 20 })
+
+  const rotateX = useTransform(springY, [0, 1], [depth, -depth])
+  const rotateY = useTransform(springX, [0, 1], [-depth, depth])
+
+  const shadowX = useTransform(springX, [0, 1], [depth, -depth])
+  const shadowY = useTransform(springY, [0, 1], [depth, -depth])
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = ref.current?.getBoundingClientRect()
+    if (!rect) return
+    mouseX.set((e.clientX - rect.left) / rect.width)
+    mouseY.set((e.clientY - rect.top) / rect.height)
+  }
+
+  function handleMouseLeave() {
+    mouseX.set(0.5)
+    mouseY.set(0.5)
+  }
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={cn(
+        'flex items-center justify-center cursor-crosshair select-none',
+        className
+      )}
+      style={{ perspective: '800px' }}
+    >
+      <motion.span
+        className="font-pixel font-bold"
+        style={{
+          fontSize,
+          color,
+          rotateX,
+          rotateY,
+          textShadow: useTransform(
+            [shadowX, shadowY],
+            ([x, y]) =>
+              \`\${x}px \${y}px 0px \${shadowColor}, \${Number(x) * 2}px \${Number(y) * 2}px 0px \${shadowColor}40\`
+          ),
+          transformStyle: 'preserve-3d',
+        }}
+      >
+        {text}
+      </motion.span>
+    </div>
+  )
+}
+
+export default DisplacementText`,
+    usage: `import DisplacementText from "@/app/components/ui/displacement-text"
+
+export function Demo() {
+  return (
+    <DisplacementText
+      text="PRAXYS"
+      fontSize={72}
+      depth={15}
+    />
+  )
+}`,
+    props: [
+      {
+        name: "text",
+        type: "string",
+        default: "—",
+        description: "The text to display.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "fontSize",
+        type: "number",
+        default: "64",
+        description: "Font size in pixels.",
+      },
+      {
+        name: "color",
+        type: "string",
+        default: "'var(--color-chalk)'",
+        description: "Text color.",
+      },
+      {
+        name: "shadowColor",
+        type: "string",
+        default: "'var(--color-ignite)'",
+        description: "Color of the 3D shadow.",
+      },
+      {
+        name: "depth",
+        type: "number",
+        default: "12",
+        description: "Maximum rotation and shadow offset in pixels/degrees.",
+      },
+    ],
+    component: () => import("@/app/components/ui/displacement-text"),
+    demo: () => import("@/app/components/demos/displacement-text-demo"),
+  },
 };
 
 // Helper: check if a slug is a component page
