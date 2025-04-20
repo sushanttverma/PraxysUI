@@ -1728,6 +1728,250 @@ export function Demo() {
     component: () => import("@/app/components/ui/displacement-text"),
     demo: () => import("@/app/components/demos/displacement-text-demo"),
   },
+
+  "spotlight-navbar": {
+    slug: "spotlight-navbar",
+    title: "Spotlight Navbar",
+    description:
+      "A horizontal navigation bar with a smooth animated spotlight background that follows the hovered item.",
+    category: "navigation",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface NavItem {
+  label: string
+  href: string
+}
+
+interface SpotlightNavbarProps {
+  items: NavItem[]
+  className?: string
+}
+
+const SpotlightNavbar: React.FC<SpotlightNavbarProps> = ({
+  items,
+  className = '',
+}) => {
+  const navRef = useRef<HTMLDivElement>(null)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [spotlightPos, setSpotlightPos] = useState({ x: 0, width: 0 })
+
+  function handleHover(e: React.MouseEvent<HTMLAnchorElement>, index: number) {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const navRect = navRef.current?.getBoundingClientRect()
+    if (!navRect) return
+
+    setSpotlightPos({
+      x: rect.left - navRect.left,
+      width: rect.width,
+    })
+    setHoveredIndex(index)
+  }
+
+  return (
+    <div
+      ref={navRef}
+      className={cn(
+        'relative inline-flex items-center gap-1 rounded-xl border border-border bg-obsidian p-1.5',
+        className
+      )}
+    >
+      {/* Spotlight background */}
+      {hoveredIndex !== null && (
+        <motion.div
+          className="absolute top-1.5 bottom-1.5 rounded-lg bg-ignite/10 border border-ignite/20"
+          initial={false}
+          animate={{
+            x: spotlightPos.x - 6,
+            width: spotlightPos.width,
+          }}
+          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+        />
+      )}
+
+      {items.map((item, i) => (
+        <a
+          key={item.href}
+          href={item.href}
+          onMouseEnter={(e) => handleHover(e, i)}
+          onMouseLeave={() => setHoveredIndex(null)}
+          className={cn(
+            'relative z-10 rounded-lg px-4 py-2 text-sm font-medium transition-colors',
+            hoveredIndex === i ? 'text-ignite' : 'text-blush hover:text-chalk'
+          )}
+        >
+          {item.label}
+        </a>
+      ))}
+    </div>
+  )
+}
+
+export default SpotlightNavbar`,
+    usage: `import SpotlightNavbar from "@/app/components/ui/spotlight-navbar"
+
+export function Demo() {
+  return (
+    <SpotlightNavbar
+      items={[
+        { label: "Home", href: "#" },
+        { label: "About", href: "#" },
+        { label: "Projects", href: "#" },
+        { label: "Contact", href: "#" },
+      ]}
+    />
+  )
+}`,
+    props: [
+      {
+        name: "items",
+        type: "NavItem[]",
+        default: "—",
+        description: "Array of navigation items with label and href.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+    ],
+    component: () => import("@/app/components/ui/spotlight-navbar"),
+    demo: () => import("@/app/components/demos/spotlight-navbar-demo"),
+  },
+
+  "glass-dock": {
+    slug: "glass-dock",
+    title: "Glass Dock",
+    description:
+      "A macOS-inspired dock with glassmorphism styling, spring-animated hover magnification, and tooltips.",
+    category: "navigation",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface DockItem {
+  icon: React.ReactNode
+  label: string
+  onClick?: () => void
+}
+
+interface GlassDockProps {
+  items: DockItem[]
+  className?: string
+  iconSize?: number
+}
+
+const GlassDock: React.FC<GlassDockProps> = ({
+  items,
+  className = '',
+  iconSize = 24,
+}) => {
+  return (
+    <div
+      className={cn(
+        'inline-flex items-end gap-2 rounded-2xl border border-border/60 px-3 py-2',
+        'bg-obsidian/60 backdrop-blur-xl shadow-lg',
+        className
+      )}
+    >
+      {items.map((item, i) => (
+        <DockIcon key={i} item={item} iconSize={iconSize} />
+      ))}
+    </div>
+  )
+}
+
+function DockIcon({
+  item,
+  iconSize,
+}: {
+  item: DockItem
+  iconSize: number
+}) {
+  return (
+    <motion.button
+      onClick={item.onClick}
+      whileHover={{ scale: 1.4, y: -8 }}
+      whileTap={{ scale: 1.2 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+      className="group relative flex flex-col items-center cursor-pointer"
+    >
+      {/* Tooltip */}
+      <motion.span
+        initial={{ opacity: 0, y: 4, scale: 0.8 }}
+        whileHover={{ opacity: 1, y: -4, scale: 1 }}
+        className="pointer-events-none absolute -top-8 whitespace-nowrap rounded-md bg-void border border-border px-2 py-0.5 text-xs text-chalk shadow-md"
+      >
+        {item.label}
+      </motion.span>
+
+      <div
+        className="flex items-center justify-center rounded-xl bg-obsidian border border-border/50 p-2.5 transition-colors group-hover:border-ignite/30 group-hover:bg-ignite/10"
+        style={{ width: iconSize + 20, height: iconSize + 20 }}
+      >
+        <div className="text-blush transition-colors group-hover:text-ignite" style={{ width: iconSize, height: iconSize }}>
+          {item.icon}
+        </div>
+      </div>
+
+      {/* Reflection dot */}
+      <motion.div
+        className="mt-1 h-1 w-1 rounded-full bg-ignite/50"
+        initial={{ opacity: 0 }}
+        whileHover={{ opacity: 1 }}
+      />
+    </motion.button>
+  )
+}
+
+export default GlassDock`,
+    usage: `import GlassDock from "@/app/components/ui/glass-dock"
+import { Home, Search, Settings, User } from "lucide-react"
+
+export function Demo() {
+  return (
+    <GlassDock
+      items={[
+        { icon: <Home className="h-full w-full" />, label: "Home" },
+        { icon: <Search className="h-full w-full" />, label: "Search" },
+        { icon: <User className="h-full w-full" />, label: "Profile" },
+        { icon: <Settings className="h-full w-full" />, label: "Settings" },
+      ]}
+    />
+  )
+}`,
+    props: [
+      {
+        name: "items",
+        type: "DockItem[]",
+        default: "—",
+        description:
+          "Array of dock items with icon (ReactNode), label, and optional onClick handler.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "iconSize",
+        type: "number",
+        default: "24",
+        description: "Size of the icons in pixels.",
+      },
+    ],
+    component: () => import("@/app/components/ui/glass-dock"),
+    demo: () => import("@/app/components/demos/glass-dock-demo"),
+  },
 };
 
 // Helper: check if a slug is a component page
