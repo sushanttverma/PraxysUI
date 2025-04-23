@@ -1972,6 +1972,410 @@ export function Demo() {
     component: () => import("@/app/components/ui/glass-dock"),
     demo: () => import("@/app/components/demos/glass-dock-demo"),
   },
+
+  "liquid-ocean": {
+    slug: "liquid-ocean",
+    title: "Liquid Ocean",
+    description:
+      "Animated layered SVG waves with configurable colors, wave count, and speed for a mesmerizing ocean effect.",
+    category: "visual",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface LiquidOceanProps {
+  className?: string
+  color?: string
+  waveCount?: number
+  speed?: number
+}
+
+const LiquidOcean: React.FC<LiquidOceanProps> = ({
+  className = '',
+  color = 'var(--color-ignite)',
+  waveCount = 4,
+  speed = 6,
+}) => {
+  return (
+    <div
+      className={cn(
+        'relative w-full h-64 overflow-hidden rounded-xl bg-obsidian border border-border',
+        className
+      )}
+    >
+      {Array.from({ length: waveCount }).map((_, i) => {
+        const opacity = 0.08 + i * 0.04
+        const yOffset = 40 + i * 20
+        const dur = speed + i * 1.5
+
+        return (
+          <motion.div
+            key={i}
+            className="absolute left-0 right-0"
+            style={{
+              bottom: 0,
+              height: \`\${yOffset}%\`,
+            }}
+          >
+            <svg
+              viewBox="0 0 1200 120"
+              preserveAspectRatio="none"
+              className="absolute bottom-0 w-[200%] h-full"
+            >
+              <motion.path
+                d="M0,60 C200,20 400,100 600,60 C800,20 1000,100 1200,60 L1200,120 L0,120 Z"
+                fill={color}
+                fillOpacity={opacity}
+                animate={{ x: [0, -600] }}
+                transition={{
+                  duration: dur,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+              />
+            </svg>
+          </motion.div>
+        )
+      })}
+
+      {/* Surface shimmer */}
+      <motion.div
+        className="absolute inset-0"
+        style={{
+          background: \`linear-gradient(180deg, transparent 40%, \${color}08 100%)\`,
+        }}
+        animate={{ opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: speed, repeat: Infinity, ease: 'easeInOut' }}
+      />
+    </div>
+  )
+}
+
+export default LiquidOcean`,
+    usage: `import LiquidOcean from "@/app/components/ui/liquid-ocean"
+
+export function Demo() {
+  return <LiquidOcean waveCount={4} speed={6} />
+}`,
+    props: [
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "color",
+        type: "string",
+        default: "'var(--color-ignite)'",
+        description: "Color of the waves.",
+      },
+      {
+        name: "waveCount",
+        type: "number",
+        default: "4",
+        description: "Number of wave layers.",
+      },
+      {
+        name: "speed",
+        type: "number",
+        default: "6",
+        description: "Base animation speed in seconds.",
+      },
+    ],
+    component: () => import("@/app/components/ui/liquid-ocean"),
+    demo: () => import("@/app/components/demos/liquid-ocean-demo"),
+  },
+
+  "liquid-metal": {
+    slug: "liquid-metal",
+    title: "Liquid Metal",
+    description:
+      "A cursor-reactive surface with chrome-like liquid metal reflections that follow mouse movement.",
+    category: "visual",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useRef } from 'react'
+import { motion, useMotionTemplate, useMotionValue } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface LiquidMetalProps {
+  className?: string
+  children?: React.ReactNode
+  baseColor?: string
+  highlightColor?: string
+}
+
+const LiquidMetal: React.FC<LiquidMetalProps> = ({
+  className = '',
+  children,
+  baseColor = '#1c1a17',
+  highlightColor = '#E84E2D',
+}) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const mouseX = useMotionValue(50)
+  const mouseY = useMotionValue(50)
+
+  const background = useMotionTemplate\`
+    radial-gradient(circle at \${mouseX}% \${mouseY}%, \${highlightColor}30 0%, transparent 50%),
+    radial-gradient(circle at \${mouseX}% \${mouseY}%, \${highlightColor}15 0%, transparent 70%),
+    linear-gradient(135deg, \${baseColor} 0%, \${baseColor}dd 50%, \${baseColor} 100%)
+  \`
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = ref.current?.getBoundingClientRect()
+    if (!rect) return
+    mouseX.set(((e.clientX - rect.left) / rect.width) * 100)
+    mouseY.set(((e.clientY - rect.top) / rect.height) * 100)
+  }
+
+  function handleMouseLeave() {
+    mouseX.set(50)
+    mouseY.set(50)
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={cn(
+        'relative w-full h-64 overflow-hidden rounded-xl border border-border cursor-crosshair',
+        className
+      )}
+      style={{ background }}
+    >
+      {/* Chrome-like reflections */}
+      <motion.div
+        className="absolute inset-0 opacity-20"
+        style={{
+          background: useMotionTemplate\`
+            linear-gradient(
+              \${mouseX}deg,
+              transparent 20%,
+              \${highlightColor}20 45%,
+              \${highlightColor}40 50%,
+              \${highlightColor}20 55%,
+              transparent 80%
+            )
+          \`,
+        }}
+      />
+
+      {/* Content */}
+      {children && (
+        <div className="relative z-10 flex h-full items-center justify-center">
+          {children}
+        </div>
+      )}
+    </motion.div>
+  )
+}
+
+export default LiquidMetal`,
+    usage: `import LiquidMetal from "@/app/components/ui/liquid-metal"
+
+export function Demo() {
+  return (
+    <LiquidMetal>
+      <span className="font-pixel text-2xl text-chalk">
+        Move your cursor
+      </span>
+    </LiquidMetal>
+  )
+}`,
+    props: [
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "children",
+        type: "React.ReactNode",
+        default: "—",
+        description: "Content to display inside the metal surface.",
+      },
+      {
+        name: "baseColor",
+        type: "string",
+        default: "'#1c1a17'",
+        description: "Base background color of the surface.",
+      },
+      {
+        name: "highlightColor",
+        type: "string",
+        default: "'#E84E2D'",
+        description: "Color of the metallic highlight reflections.",
+      },
+    ],
+    component: () => import("@/app/components/ui/liquid-metal"),
+    demo: () => import("@/app/components/demos/liquid-metal-demo"),
+  },
+
+  "reveal-loader": {
+    slug: "reveal-loader",
+    title: "Reveal Loader",
+    description:
+      "A loading animation with a curtain reveal effect — shows a progress bar, then slides away to reveal content underneath.",
+    category: "visual",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface RevealLoaderProps {
+  className?: string
+  duration?: number
+  color?: string
+  onComplete?: () => void
+  children?: React.ReactNode
+}
+
+const RevealLoader: React.FC<RevealLoaderProps> = ({
+  className = '',
+  duration = 2,
+  color = 'var(--color-ignite)',
+  onComplete,
+  children,
+}) => {
+  const [phase, setPhase] = useState<'loading' | 'revealing' | 'done'>('loading')
+
+  useEffect(() => {
+    const loadTimer = setTimeout(() => setPhase('revealing'), duration * 500)
+    const revealTimer = setTimeout(() => {
+      setPhase('done')
+      onComplete?.()
+    }, duration * 1000)
+
+    return () => {
+      clearTimeout(loadTimer)
+      clearTimeout(revealTimer)
+    }
+  }, [duration, onComplete])
+
+  return (
+    <div
+      className={cn(
+        'relative w-full h-64 overflow-hidden rounded-xl border border-border bg-obsidian',
+        className
+      )}
+    >
+      {/* Content behind the curtain */}
+      <div className="relative z-0 flex h-full items-center justify-center">
+        {children || (
+          <span className="font-pixel text-xl text-chalk">Content Revealed</span>
+        )}
+      </div>
+
+      {/* Reveal curtain */}
+      <AnimatePresence>
+        {phase !== 'done' && (
+          <motion.div
+            className="absolute inset-0 z-10 flex items-center justify-center bg-obsidian"
+            initial={{ clipPath: 'inset(0 0 0 0)' }}
+            animate={
+              phase === 'revealing'
+                ? { clipPath: 'inset(0 0 100% 0)' }
+                : { clipPath: 'inset(0 0 0 0)' }
+            }
+            exit={{ clipPath: 'inset(0 0 100% 0)' }}
+            transition={{ duration: duration * 0.5, ease: [0.7, 0, 0.3, 1] }}
+          >
+            {/* Loading indicator */}
+            <div className="flex flex-col items-center gap-4">
+              <div className="flex gap-1.5">
+                {[0, 1, 2].map((i) => (
+                  <motion.div
+                    key={i}
+                    className="h-2 w-2 rounded-full"
+                    style={{ backgroundColor: color }}
+                    animate={{
+                      scale: [1, 1.4, 1],
+                      opacity: [0.4, 1, 0.4],
+                    }}
+                    transition={{
+                      duration: 0.8,
+                      delay: i * 0.15,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                    }}
+                  />
+                ))}
+              </div>
+              <motion.div
+                className="h-0.5 w-32 overflow-hidden rounded-full bg-border"
+              >
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{ backgroundColor: color }}
+                  initial={{ width: '0%' }}
+                  animate={{ width: '100%' }}
+                  transition={{ duration: duration * 0.5, ease: 'easeInOut' }}
+                />
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+export default RevealLoader`,
+    usage: `import RevealLoader from "@/app/components/ui/reveal-loader"
+
+export function Demo() {
+  return (
+    <RevealLoader duration={2.5}>
+      <span className="font-pixel text-2xl text-ignite">
+        Content Revealed!
+      </span>
+    </RevealLoader>
+  )
+}`,
+    props: [
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "duration",
+        type: "number",
+        default: "2",
+        description: "Total animation duration in seconds.",
+      },
+      {
+        name: "color",
+        type: "string",
+        default: "'var(--color-ignite)'",
+        description: "Color of the loading indicator.",
+      },
+      {
+        name: "onComplete",
+        type: "() => void",
+        default: "—",
+        description: "Callback fired when the reveal animation completes.",
+      },
+      {
+        name: "children",
+        type: "React.ReactNode",
+        default: "—",
+        description: "Content revealed after loading.",
+      },
+    ],
+    component: () => import("@/app/components/ui/reveal-loader"),
+    demo: () => import("@/app/components/demos/reveal-loader-demo"),
+  },
 };
 
 // Helper: check if a slug is a component page
