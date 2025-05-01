@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, Github, Menu } from "lucide-react";
+import { Github, Menu } from "lucide-react";
 import Sidebar from "./components/Sidebar";
 import ThemeToggle from "../components/ThemeToggle";
+import CommandPalette from "../components/CommandPalette";
 
 export default function DocsLayout({
   children,
@@ -64,16 +65,12 @@ export default function DocsLayout({
 
           {/* Right side */}
           <div className="flex items-center gap-3">
-            <button className="hidden h-9 items-center gap-2 rounded-lg border border-border bg-obsidian px-3 text-sm text-text-faint transition-colors hover:border-border-light hover:text-blush sm:flex">
-              <Search className="h-3.5 w-3.5" />
-              <span>Search...</span>
-              <kbd className="ml-4 rounded border border-border bg-void px-1.5 py-0.5 font-mono text-[10px] text-text-faint">
-                Ctrl K
-              </kbd>
-            </button>
+            <div className="hidden sm:flex">
+              <CommandPalette />
+            </div>
             <ThemeToggle />
             <a
-              href="https://github.com"
+              href="https://github.com/sushanttverma/Praxys-UI"
               target="_blank"
               rel="noopener noreferrer"
               className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-blush transition-colors hover:border-border-light hover:text-chalk"

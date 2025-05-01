@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, Github, Menu, X } from "lucide-react";
+import { Github, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "./ThemeToggle";
+import CommandPalette from "./CommandPalette";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -46,16 +47,10 @@ export default function Navbar() {
 
         {/* Right side */}
         <div className="hidden items-center gap-3 md:flex">
-          <button className="flex h-9 items-center gap-2 rounded-lg border border-border bg-obsidian px-3 text-sm text-text-faint transition-colors hover:border-border-light hover:text-blush">
-            <Search className="h-3.5 w-3.5" />
-            <span>Search...</span>
-            <kbd className="ml-4 rounded border border-border bg-void px-1.5 py-0.5 font-mono text-[10px] text-text-faint">
-              Ctrl K
-            </kbd>
-          </button>
+          <CommandPalette />
           <ThemeToggle />
           <a
-            href="https://github.com"
+            href="https://github.com/sushanttverma/Praxys-UI"
             target="_blank"
             rel="noopener noreferrer"
             className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-blush transition-colors hover:border-border-light hover:text-chalk"
@@ -110,7 +105,7 @@ export default function Navbar() {
               <div className="flex items-center gap-3 px-3 py-2.5">
                 <ThemeToggle />
                 <a
-                  href="https://github.com"
+            href="https://github.com/sushanttverma/Praxys-UI"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-sm text-blush transition-colors hover:text-chalk"
