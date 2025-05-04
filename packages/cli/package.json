@@ -1,0 +1,26 @@
+{
+  "name": "praxys-ui",
+  "version": "0.1.0",
+  "description": "CLI for scaffolding Praxys UI components into your project",
+  "bin": {
+    "praxys-ui": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts"
+  },
+  "keywords": ["react", "components", "ui", "cli", "tailwind", "framer-motion"],
+  "author": "Sushant Verma",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "ora": "^8.1.0",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/prompts": "^2.4.9",
+    "typescript": "^5.7.0"
+  }
+}
