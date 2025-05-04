@@ -26,7 +26,7 @@ export default function Navbar() {
         {/* Desktop Nav */}
         <div className="hidden items-center gap-8 md:flex">
           <Link
-            href="/docs/components"
+            href="/docs/components-overview"
             className="text-sm text-blush transition-colors hover:text-chalk"
           >
             Components
@@ -84,19 +84,22 @@ export default function Navbar() {
           >
             <div className="flex flex-col gap-1 bg-obsidian p-4">
               <Link
-                href="/docs/components"
+                href="/docs/components-overview"
+                onClick={() => setMobileOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm text-blush transition-colors hover:bg-void hover:text-chalk"
               >
                 Components
               </Link>
               <Link
                 href="/templates"
+                onClick={() => setMobileOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm text-blush transition-colors hover:bg-void hover:text-chalk"
               >
                 Templates
               </Link>
               <Link
                 href="/docs"
+                onClick={() => setMobileOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm text-blush transition-colors hover:bg-void hover:text-chalk"
               >
                 Docs

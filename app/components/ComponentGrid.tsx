@@ -43,12 +43,13 @@ const componentCategories = [
   },
   {
     name: "Media & Content",
-    count: 4,
+    count: 5,
     items: [
       "Animated Hero",
       "Masked Avatars",
       "Folder Preview",
       "Interactive Book",
+      "Logo Slider",
     ],
   },
 ];
@@ -74,7 +75,7 @@ export default function ComponentGrid() {
             transition={{ delay: 0.1 }}
             className="font-pixel text-3xl font-bold text-chalk md:text-5xl"
           >
-            25+ Components
+            24 Components
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -130,7 +131,7 @@ export default function ComponentGrid() {
           className="mt-16 text-center"
         >
           <Link
-            href="/docs/components"
+            href="/docs/components-overview"
             className="group inline-flex items-center gap-2 text-sm font-medium text-ignite transition-colors hover:text-blush"
           >
             View all components

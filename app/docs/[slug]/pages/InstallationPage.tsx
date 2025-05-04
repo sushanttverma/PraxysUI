@@ -1,6 +1,6 @@
 import { CodeBlock } from "../../components/CodeBlock";
 
-export default async function InstallationPage() {
+export default function InstallationPage() {
   return (
     <div className="space-y-10">
       <div>

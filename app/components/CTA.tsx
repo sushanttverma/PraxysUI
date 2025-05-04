@@ -34,7 +34,7 @@ export default function CTA() {
 
           <div className="relative mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
-              href="/docs/components"
+              href="/docs/components-overview"
               className="group flex h-12 items-center gap-2 rounded-xl bg-ignite px-7 text-sm font-medium text-void transition-all hover:brightness-110"
             >
               Get Started

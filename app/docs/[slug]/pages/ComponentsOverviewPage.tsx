@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { componentRegistry } from "@/lib/registry";
+import { sidebarGroups, componentRegistry } from "@/lib/registry";
 
 const categoryLabels: Record<string, string> = {
   buttons: "Buttons",
@@ -20,17 +20,17 @@ const categoryColors: Record<string, string> = {
 };
 
 export default function ComponentsOverviewPage() {
-  const components = Object.values(componentRegistry);
+  // Use sidebar order (not registry insertion order) for consistent ordering
+  const componentsGroup = sidebarGroups.find((g) => g.title === "Components");
+  const componentSlugs = componentsGroup
+    ? componentsGroup.items
+        .filter((item) => item.slug !== "components-overview")
+        .map((item) => item.slug)
+    : [];
 
-  // Group by category
-  const grouped = components.reduce(
-    (acc, comp) => {
-      if (!acc[comp.category]) acc[comp.category] = [];
-      acc[comp.category].push(comp);
-      return acc;
-    },
-    {} as Record<string, typeof components>
-  );
+  const components = componentSlugs
+    .map((slug) => componentRegistry[slug])
+    .filter(Boolean);
 
   return (
     <div className="space-y-10">
@@ -42,8 +42,8 @@ export default function ComponentsOverviewPage() {
           Components Overview
         </h1>
         <p className="mt-3 text-lg text-blush">
-          Explore our collection of beautifully crafted, animated React
-          components.
+          Explore our collection of {components.length} beautifully crafted,
+          animated React components.
         </p>
       </div>
 
@@ -74,7 +74,7 @@ export default function ComponentsOverviewPage() {
         ))}
       </div>
 
-      {/* Upcoming components note */}
+      {/* Note */}
       <div className="rounded-xl border border-border bg-obsidian/50 p-6 text-center">
         <p className="font-pixel text-sm text-text-faint">
           More components coming soon. Check back for updates.

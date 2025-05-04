@@ -5,7 +5,7 @@ const footerLinks = [
   {
     title: "Product",
     links: [
-      { label: "Components", href: "/docs/components" },
+      { label: "Components", href: "/docs/components-overview" },
       { label: "Templates", href: "/templates" },
       { label: "Documentation", href: "/docs" },
       { label: "Changelog", href: "/changelog" },
@@ -23,7 +23,7 @@ const footerLinks = [
   {
     title: "Community",
     links: [
-      { label: "GitHub", href: "https://github.com" },
+      { label: "GitHub", href: "https://github.com/sushanttverma/Praxys-UI" },
       { label: "Discord", href: "#" },
       { label: "Twitter", href: "#" },
       { label: "Contributing", href: "#" },
@@ -52,7 +52,7 @@ export default function Footer() {
             </p>
             <div className="mt-5 flex gap-3">
               <a
-                href="https://github.com"
+                href="https://github.com/sushanttverma/Praxys-UI"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-text-faint transition-colors hover:border-border-light hover:text-blush"

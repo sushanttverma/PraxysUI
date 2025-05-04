@@ -1,6 +1,6 @@
 import { CodeBlock } from "../../components/CodeBlock";
 
-export default async function InstallTailwindPage() {
+export default function InstallTailwindPage() {
   return (
     <div className="space-y-10">
       <div>

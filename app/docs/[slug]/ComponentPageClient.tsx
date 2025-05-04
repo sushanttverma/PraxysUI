@@ -12,20 +12,41 @@ export default function ComponentPageClient({ slug }: ComponentPageClientProps) 
   const [DemoComponent, setDemoComponent] = useState<ComponentType<any> | null>(
     null
   );
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const entry = componentRegistry[slug];
-    if (entry) {
-      entry.demo().then((mod) => {
-        setDemoComponent(() => mod.default);
-      });
+    if (!entry) {
+      setError(`Component "${slug}" not found in registry.`);
+      return;
     }
+
+    entry
+      .demo()
+      .then((mod) => {
+        setDemoComponent(() => mod.default);
+      })
+      .catch((err) => {
+        console.error(`Failed to load demo for "${slug}":`, err);
+        setError(`Failed to load preview for "${slug}".`);
+      });
   }, [slug]);
+
+  if (error) {
+    return (
+      <div className="flex h-32 items-center justify-center text-sm text-ignite/70">
+        {error}
+      </div>
+    );
+  }
 
   if (!DemoComponent) {
     return (
       <div className="flex h-32 items-center justify-center text-text-faint">
-        Loading preview...
+        <div className="flex items-center gap-2">
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-ignite/30 border-t-ignite" />
+          Loading preview...
+        </div>
       </div>
     );
   }

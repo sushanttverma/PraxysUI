@@ -24,14 +24,6 @@ export type ComponentEntry = {
   demo: () => Promise<{ default: ComponentType<any> }>;
 };
 
-export type DocPage = {
-  slug: string;
-  title: string;
-  description: string;
-  type: "doc";
-  content: () => Promise<{ default: ComponentType }>;
-};
-
 export type SidebarGroup = {
   title: string;
   items: { slug: string; title: string }[];

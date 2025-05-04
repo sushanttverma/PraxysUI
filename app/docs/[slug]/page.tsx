@@ -16,7 +16,6 @@ import ComponentPageClient from "./ComponentPageClient";
 
 // ─── Doc pages (non-component pages) ────────────────────
 
-import IntroductionPage from "./pages/IntroductionPage";
 import InstallationPage from "./pages/InstallationPage";
 import InstallTailwindPage from "./pages/InstallTailwindPage";
 import AddUtilitiesPage from "./pages/AddUtilitiesPage";
@@ -24,7 +23,6 @@ import CliPage from "./pages/CliPage";
 import ComponentsOverviewPage from "./pages/ComponentsOverviewPage";
 
 const docPages: Record<string, React.ComponentType> = {
-  introduction: IntroductionPage,
   installation: InstallationPage,
   "install-tailwind": InstallTailwindPage,
   "add-utilities": AddUtilitiesPage,
@@ -49,8 +47,8 @@ export default async function DocsSlugPage({
 }) {
   const { slug } = await params;
 
-  // Check if it's a valid slug
-  if (!allSlugs.includes(slug) && slug !== "introduction") {
+  // Check if it's a valid slug (introduction is handled by /docs, not this route)
+  if (!allSlugs.includes(slug) || slug === "introduction") {
     notFound();
   }
 

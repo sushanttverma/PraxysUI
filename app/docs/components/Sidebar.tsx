@@ -15,7 +15,10 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname();
 
   // Extract current slug from pathname
-  const currentSlug = pathname.replace("/docs/", "").replace("/docs", "introduction");
+  // /docs or /docs/ → "introduction"
+  // /docs/some-slug → "some-slug"
+  const stripped = pathname.replace(/\/docs\/?/, "");
+  const currentSlug = stripped === "" ? "introduction" : stripped;
 
   return (
     <>

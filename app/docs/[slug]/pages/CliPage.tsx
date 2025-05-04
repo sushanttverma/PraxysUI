@@ -1,6 +1,6 @@
 import { CodeBlock } from "../../components/CodeBlock";
 
-export default async function CliPage() {
+export default function CliPage() {
   return (
     <div className="space-y-10">
       <div>
