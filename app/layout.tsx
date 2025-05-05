@@ -48,7 +48,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="noise-overlay antialiased">
+      <body className="noise-overlay antialiased" suppressHydrationWarning>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
