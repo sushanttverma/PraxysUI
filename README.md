@@ -2,9 +2,9 @@
 
 # Praxys UI
 
-**A curated collection of beautifully crafted, animated React components.**
+**A curated collection of 24 beautifully crafted, animated React components.**
 
-Build stunning interfaces with precision and speed. Copy, paste, and customize.
+Browse. Copy. Paste. Ship.
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)](https://nextjs.org)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)](https://react.dev)
@@ -13,7 +13,7 @@ Build stunning interfaces with precision and speed. Copy, paste, and customize.
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-FF0050?style=flat-square&logo=framer)](https://www.framer.com/motion)
 [![License](https://img.shields.io/badge/License-MIT-E84E2D?style=flat-square)](LICENSE)
 
-[Live Demo](https://praxys-ui.vercel.app) &bull; [Documentation](https://praxys-ui.vercel.app/docs) &bull; [Components](https://praxys-ui.vercel.app/docs/components-overview)
+[Live Demo](https://praxys-ui.vercel.app) · [Documentation](https://praxys-ui.vercel.app/docs) · [Components](https://praxys-ui.vercel.app/docs/components-overview)
 
 </div>
 
@@ -21,81 +21,54 @@ Build stunning interfaces with precision and speed. Copy, paste, and customize.
 
 ## About
 
-Praxys UI is an open-source component library and documentation site for animated React components. No npm package to install — just browse the docs, copy the source code, and drop it into your project.
-
-Every component is:
+Praxys UI is an open-source component library and documentation site for animated React components. No npm package to install — browse the docs, copy the source code, and drop it into your project.
 
 - **Copy & Paste** — No dependency on a package registry. Own the code.
-- **Fully Customizable** — Built with Tailwind CSS, accepts `className` props.
 - **TypeScript First** — Full type safety with well-defined interfaces.
 - **Animated** — Powered by Framer Motion for smooth, performant animations.
+- **Themeable** — Light and dark mode with CSS custom properties.
+- **CLI Available** — Scaffold components directly from the terminal.
 
 ## Components
 
-### Available Now
+24 production-ready components across 6 categories:
 
-| Component | Category | Description |
-|-----------|----------|-------------|
-| **Animated Button** | Buttons | Shiny border sweep + text reveal effect |
-| **Flip Text** | Text Effects | 3D character-by-character flip animation |
-| **Glow Border Card** | Cards | Cursor-tracking radial glow border |
-| **Animated Number** | Text Effects | Spring-animated number counter |
-| **Line Hover Link** | Navigation | Sliding underline on hover |
-| **Light Lines** | Visual Effects | Animated vertical light beams |
+| Category | Components |
+|----------|-----------|
+| **Buttons** | Animated Button, Creepy Button, Social Flip Button |
+| **Cards & Layout** | Glow Border Card, Testimonials Card, Staggered Grid, Expandable Bento Grid, Perspective Grid |
+| **Text Effects** | Flip Text, Animated Number, Flip Fade Text, Displacement Text |
+| **Navigation** | Line Hover Link, Spotlight Navbar, Glass Dock |
+| **Visual Effects** | Light Lines, Liquid Ocean, Liquid Metal, Reveal Loader |
+| **Media & Content** | Animated Hero, Masked Avatars, Folder Preview, Interactive Book, Logo Slider |
 
-### Coming Soon
-
-| Component | Category |
-|-----------|----------|
-| Creepy Button | Buttons |
-| Social Flip Button | Buttons |
-| Testimonials Card | Cards & Layout |
-| Staggered Grid | Cards & Layout |
-| Expandable Bento Grid | Cards & Layout |
-| Perspective Grid | Cards & Layout |
-| Flip Fade Text | Text Effects |
-| 3D Displacement Text | Text Effects |
-| Spotlight Navbar | Navigation |
-| Glass Dock | Navigation |
-| Liquid Ocean | Visual Effects |
-| Liquid Metal | Visual Effects |
-| Animated Hero | Media & Content |
-| Masked Avatars | Media & Content |
-| Folder Preview | Media & Content |
-| Interactive Book | Media & Content |
-| Reveal Loader | Visual Effects |
-| Logo Slider | Media & Content |
+Every component includes a live preview, full source code, installation steps, usage example, and props table.
 
 ## Quick Start
 
-### 1. Clone and install
+### Option A: Use the CLI
 
 ```bash
-git clone https://github.com/sushanttverma/Praxys-UI.git
-cd Praxys-UI
-npm install
+npx praxys-ui init
+npx praxys-ui add animated-button
+npx praxys-ui list
 ```
 
-### 2. Run development server
+The `init` command installs shared dependencies (`clsx`, `tailwind-merge`, `framer-motion`) and creates the `cn()` utility. Then use `add` to pull any component directly into your project.
+
+### Option B: Manual setup
+
+**1. Install dependencies**
 
 ```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to see the landing page, or [http://localhost:3000/docs](http://localhost:3000/docs) for the documentation.
-
-### 3. Use a component in your own project
-
-```bash
-# In your project, install the shared dependencies
 npm install framer-motion clsx tailwind-merge
 ```
 
-Add the `cn()` utility:
+**2. Add the `cn()` utility**
 
 ```ts
 // lib/utils.ts
-import { type ClassValue, clsx } from "clsx";
+import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -103,84 +76,119 @@ export function cn(...inputs: ClassValue[]) {
 }
 ```
 
-Then copy any component from `app/components/ui/` into your project and import it.
+**3. Copy any component** from `app/components/ui/` into your project and import it.
+
+## Running Locally
+
+```bash
+git clone https://github.com/sushanttverma/Praxys-UI.git
+cd Praxys-UI
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) for the landing page, or [http://localhost:3000/docs](http://localhost:3000/docs) for documentation.
+
+## Features
+
+- **24 Animated Components** — Buttons, cards, text effects, navigation, visual effects, and media components
+- **Light / Dark Mode** — Theme toggle with CSS custom properties, persisted to localStorage, no FOUC
+- **Command Palette** — Press `Ctrl+K` to fuzzy-search across all components and docs pages
+- **Shiki Syntax Highlighting** — Server-rendered code blocks with dual themes (vitesse-dark / vitesse-light)
+- **Dynamic Docs** — Single `[slug]` route with a component registry, no per-page files needed
+- **Templates Gallery** — Curated page templates to jumpstart full layouts
+- **CLI Tool** — `npx praxys-ui init` / `add` / `list` to scaffold components from the terminal
 
 ## Project Structure
 
 ```
 praxys-ui/
 ├── app/
+│   ├── globals.css              # Design system — brand palette, fonts, scrollbar, noise, glow
+│   ├── layout.tsx               # Root layout — font loading, ThemeProvider, FOUC prevention
+│   ├── page.tsx                 # Landing page
+│   ├── fonts/
+│   │   └── GeistPixel-Square.woff2
 │   ├── components/
-│   │   ├── ui/               # Reusable animated components
-│   │   ├── demos/            # Demo wrappers for docs previews
-│   │   ├── Navbar.tsx        # Landing page sections
-│   │   ├── Hero.tsx
-│   │   ├── Features.tsx
-│   │   └── ...
+│   │   ├── ui/                  # 24 reusable animated components
+│   │   ├── demos/               # Demo wrappers for docs previews
+│   │   ├── ThemeProvider.tsx     # React context + localStorage + system preference
+│   │   ├── ThemeToggle.tsx       # Animated sun/moon toggle
+│   │   ├── CommandPalette.tsx    # Ctrl+K search modal
+│   │   ├── Navbar.tsx            # Landing navbar
+│   │   ├── Hero.tsx, Features.tsx, ComponentGrid.tsx, CTA.tsx, Footer.tsx
+│   │   └── ComponentShowcase.tsx # Landing marquee carousel
 │   ├── docs/
-│   │   ├── layout.tsx        # Docs shell (sidebar + navbar)
-│   │   ├── page.tsx          # /docs intro page
-│   │   ├── [slug]/
-│   │   │   ├── page.tsx      # Dynamic route for all doc/component pages
-│   │   │   └── pages/        # Static doc page content
-│   │   └── components/       # Docs UI (CodeBlock, Sidebar, etc.)
-│   ├── globals.css           # Design system & brand palette
-│   ├── layout.tsx            # Root layout with font loading
-│   └── page.tsx              # Landing page
+│   │   ├── layout.tsx           # Server layout
+│   │   ├── DocsShell.tsx        # Client shell — navbar + sidebar toggle
+│   │   ├── page.tsx             # /docs — introduction
+│   │   ├── components/          # Sidebar, CodeBlock, CopyButton, PropsTable, etc.
+│   │   └── [slug]/
+│   │       ├── page.tsx         # Dynamic route for all doc + component pages
+│   │       ├── ComponentPageClient.tsx
+│   │       └── pages/           # Static doc page content (intro, installation, etc.)
+│   └── templates/
+│       └── page.tsx             # Templates gallery
 ├── lib/
-│   ├── utils.ts              # cn() utility
-│   └── registry.ts           # Component registry & sidebar config
-└── package.json
+│   ├── utils.ts                 # cn() utility
+│   └── registry.ts              # Component registry + sidebar configuration
+├── packages/
+│   └── cli/                     # npx praxys-ui CLI tool
+│       ├── package.json
+│       ├── tsconfig.json
+│       └── src/index.ts
+├── package.json
+└── README.md
 ```
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Framework | [Next.js 16](https://nextjs.org) (App Router) |
+| Framework | [Next.js 16](https://nextjs.org) (App Router, Turbopack) |
 | Language | [TypeScript 5](https://www.typescriptlang.org) |
 | Styling | [Tailwind CSS 4](https://tailwindcss.com) |
 | Animation | [Framer Motion 12](https://www.framer.com/motion) |
-| Syntax Highlighting | [Shiki](https://shiki.style) |
+| Syntax Highlighting | [Shiki](https://shiki.style) (dual-theme, server-rendered) |
 | Icons | [Lucide React](https://lucide.dev) |
-| Fonts | Geist Pixel Square, Satoshi, JetBrains Mono |
+| Fonts | Geist Pixel Square · Satoshi · JetBrains Mono |
 
 ## Design System
 
-Praxys UI uses a warm, dark palette with five intentional brand colors:
+Praxys UI uses a warm palette with five intentional brand colors and full light/dark mode support:
 
-| Token | Hex | Role |
-|-------|-----|------|
-| **Void** | `#050505` | Primary background |
-| **Obsidian** | `#0B0A08` | Warm dark surface |
-| **Ignite** | `#E84E2D` | Brand accent (red-orange) |
-| **Blush** | `#C9958A` | Secondary text, hover states |
-| **Chalk** | `#F2ECE2` | Primary text (warm off-white) |
+| Token | Dark | Light | Role |
+|-------|------|-------|------|
+| **Void** | `#050505` | `#FAFAF8` | Primary background |
+| **Obsidian** | `#0B0A08` | `#F0EDE8` | Surface / card background |
+| **Ignite** | `#E84E2D` | `#D4432A` | Brand accent |
+| **Blush** | `#C9958A` | `#8B6B62` | Secondary text, hover states |
+| **Chalk** | `#F2ECE2` | `#1A1714` | Primary text |
 
-All colors are available as Tailwind utilities: `bg-void`, `text-ignite`, `border-blush`, etc.
-
-## Contributing
-
-Contributions are welcome! Here's how you can help:
-
-1. **Add a new component** — Create the component in `app/components/ui/`, add a demo in `app/components/demos/`, and register it in `lib/registry.ts`.
-2. **Improve existing components** — Better animations, accessibility, or customization options.
-3. **Fix bugs** — Found something broken? Open an issue or submit a PR.
-
-```bash
-# Fork the repo, create a branch, make changes, then:
-npm run build    # Verify build passes
-npm run lint     # Check for lint errors
-```
+All colors are available as CSS custom properties and Tailwind utilities.
 
 ## Scripts
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Start development server |
+| `npm run dev` | Start dev server (Turbopack) |
 | `npm run build` | Production build |
 | `npm run start` | Start production server |
 | `npm run lint` | Run ESLint |
+
+## Contributing
+
+Contributions are welcome.
+
+1. **Add a component** — Create it in `app/components/ui/`, add a demo in `app/components/demos/`, register it in `lib/registry.ts`, and add its slug to `packages/cli/src/index.ts`.
+2. **Improve existing components** — Better animations, accessibility, or customization.
+3. **Fix bugs** — Open an issue or submit a PR.
+
+```bash
+git checkout -b feature/my-component
+npm run build   # Verify build passes
+npm run lint    # Check for lint errors
+```
 
 ## License
 

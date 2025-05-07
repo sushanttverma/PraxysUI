@@ -235,11 +235,8 @@ program
     try {
       const source = await fetchComponent(component);
 
-      // Rewrite import path: @/lib/utils → relative or user's path
-      const rewritten = source.replace(
-        /@\/lib\/utils/g,
-        "@/lib/utils"
-      );
+      // Keep source as-is; import path @/lib/utils works with standard Next.js alias
+      const rewritten = source;
 
       const compDir = join(process.cwd(), opts.dir);
       ensureDir(compDir);
