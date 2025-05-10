@@ -107,6 +107,13 @@ export default function Navbar() {
               >
                 Docs
               </Link>
+              <Link
+                href="/changelog"
+                onClick={() => setMobileOpen(false)}
+                className="rounded-lg px-3 py-2.5 text-sm text-blush transition-colors hover:bg-void hover:text-chalk"
+              >
+                Changelog
+              </Link>
               <div className="my-2 border-t border-border" />
               <div className="flex items-center gap-3 px-3 py-2.5">
                 <ThemeToggle />
