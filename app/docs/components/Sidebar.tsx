@@ -31,6 +31,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       )}
 
       <aside
+        aria-label="Documentation navigation"
         className={cn(
           "fixed top-16 bottom-0 z-50 w-72 border-r border-border bg-void/95 backdrop-blur-xl overflow-y-auto",
           "transition-transform duration-300 ease-in-out",
@@ -43,13 +44,14 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
           <span className="font-pixel text-sm text-chalk">Navigation</span>
           <button
             onClick={onClose}
+            aria-label="Close sidebar"
             className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-blush hover:text-chalk"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <nav className="px-4 py-6 lg:py-8">
+        <nav aria-label="Docs sidebar" className="px-4 py-6 lg:py-8">
           {sidebarGroups.map((group) => (
             <div key={group.title} className="mb-6">
               <h4 className="mb-2 px-3 font-pixel text-xs font-semibold uppercase tracking-wider text-text-faint">
@@ -68,6 +70,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
                       <Link
                         href={href}
                         onClick={onClose}
+                        aria-current={isActive ? "page" : undefined}
                         className={cn(
                           "group flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-all duration-150",
                           isActive

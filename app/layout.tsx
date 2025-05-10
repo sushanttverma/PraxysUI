@@ -10,10 +10,48 @@ const geistPixel = localFont({
   display: "swap",
 });
 
+const SITE_URL = "https://praxys-ui.vercel.app";
+
 export const metadata: Metadata = {
-  title: "Praxys UI - Premium React Components",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Praxys UI - Animated React Components",
+    template: "%s | Praxys UI",
+  },
   description:
-    "A curated collection of beautifully crafted, animated React components. Build stunning interfaces with precision and speed.",
+    "A curated collection of 24 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+  keywords: [
+    "React",
+    "components",
+    "UI library",
+    "Tailwind CSS",
+    "Framer Motion",
+    "animated components",
+    "Next.js",
+    "TypeScript",
+    "open source",
+  ],
+  authors: [{ name: "Sushant Verma", url: "https://github.com/sushanttverma" }],
+  creator: "Sushant Verma",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: SITE_URL,
+    siteName: "Praxys UI",
+    title: "Praxys UI - Animated React Components",
+    description:
+      "A curated collection of 24 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Praxys UI - Animated React Components",
+    description:
+      "A curated collection of 24 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

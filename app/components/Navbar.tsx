@@ -11,7 +11,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-40 border-b border-border/60 bg-void/85 backdrop-blur-xl">
+    <nav aria-label="Main navigation" className="fixed top-0 left-0 right-0 z-40 border-b border-border/60 bg-void/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5">
@@ -53,6 +53,7 @@ export default function Navbar() {
             href="https://github.com/sushanttverma/Praxys-UI"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Praxys UI on GitHub"
             className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-blush transition-colors hover:border-border-light hover:text-chalk"
           >
             <Github className="h-4 w-4" />
@@ -63,6 +64,8 @@ export default function Navbar() {
         <button
           className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-blush md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileOpen}
         >
           {mobileOpen ? (
             <X className="h-4 w-4" />

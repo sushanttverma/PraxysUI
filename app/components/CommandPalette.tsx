@@ -139,9 +139,10 @@ export default function CommandPalette() {
 
   return (
     <>
-      {/* Trigger — exposed for navbars to call */}
+      {/* Trigger */}
       <button
         onClick={openPalette}
+        aria-haspopup="dialog"
         className="flex h-9 items-center gap-2 rounded-lg border border-border bg-obsidian px-3 text-sm text-text-faint transition-colors hover:border-border-light hover:text-blush cursor-pointer"
       >
         <Search className="h-3.5 w-3.5" />
@@ -171,7 +172,16 @@ export default function CommandPalette() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: -10 }}
               transition={{ duration: 0.15, ease: 'easeOut' }}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Search components and pages"
               className="fixed left-1/2 top-[15vh] z-50 w-[90vw] max-w-lg -translate-x-1/2 overflow-hidden rounded-xl border border-border bg-obsidian shadow-2xl"
+              onKeyDown={(e: React.KeyboardEvent) => {
+                // Focus trap: prevent Tab from escaping the dialog
+                if (e.key === 'Tab') {
+                  e.preventDefault()
+                }
+              }}
             >
               {/* Input */}
               <div className="flex items-center gap-3 border-b border-border px-4">
@@ -183,6 +193,11 @@ export default function CommandPalette() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
+                  role="combobox"
+                  aria-expanded={results.length > 0}
+                  aria-controls="command-palette-list"
+                  aria-activedescendant={results[selectedIndex] ? `command-item-${results[selectedIndex].slug}` : undefined}
+                  aria-autocomplete="list"
                   className="h-12 flex-1 bg-transparent text-sm text-chalk placeholder:text-text-faint outline-none"
                 />
                 <kbd className="rounded border border-border bg-void px-1.5 py-0.5 font-mono text-[10px] text-text-faint">
@@ -191,7 +206,7 @@ export default function CommandPalette() {
               </div>
 
               {/* Results */}
-              <div ref={listRef} className="max-h-[50vh] overflow-y-auto p-2">
+              <div ref={listRef} id="command-palette-list" role="listbox" aria-label="Search results" className="max-h-[50vh] overflow-y-auto p-2">
                 {results.length === 0 ? (
                   <div className="px-4 py-8 text-center text-sm text-text-faint">
                     No results found for &quot;{query}&quot;
@@ -200,6 +215,9 @@ export default function CommandPalette() {
                   results.map((item, i) => (
                     <button
                       key={item.slug}
+                      id={`command-item-${item.slug}`}
+                      role="option"
+                      aria-selected={i === selectedIndex}
                       data-selected={i === selectedIndex}
                       onClick={() => navigate(item.href)}
                       onMouseEnter={() => setSelectedIndex(i)}

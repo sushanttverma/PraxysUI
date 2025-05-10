@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { getPrevNext, getTitle } from "@/lib/registry";
 import IntroductionPage from "./[slug]/pages/IntroductionPage";
+
+export const metadata: Metadata = {
+  title: "Documentation",
+  description:
+    "Get started with Praxys UI. Learn how to install, configure, and use 24 animated React components in your project.",
+};
 
 export default function DocsIndexPage() {
   const { next } = getPrevNext("introduction");

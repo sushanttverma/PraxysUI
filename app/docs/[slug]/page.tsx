@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -29,6 +30,40 @@ const docPages: Record<string, React.ComponentType> = {
   cli: CliPage,
   "components-overview": ComponentsOverviewPage,
 };
+
+// ─── Dynamic metadata ───────────────────────────────────
+
+const docPageTitles: Record<string, string> = {
+  installation: "Install Next.js",
+  "install-tailwind": "Install Tailwind CSS",
+  "add-utilities": "Add Utilities",
+  cli: "CLI",
+  "components-overview": "Components Overview",
+};
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+
+  if (isComponentSlug(slug)) {
+    const entry = componentRegistry[slug];
+    return {
+      title: entry.title,
+      description: entry.description,
+    };
+  }
+
+  if (docPageTitles[slug]) {
+    return {
+      title: docPageTitles[slug],
+    };
+  }
+
+  return {};
+}
 
 // ─── Generate static params ─────────────────────────────
 
