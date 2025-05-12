@@ -4,14 +4,23 @@
   "type": "module",
   "description": "CLI for scaffolding Praxys UI components into your project",
   "bin": {
-    "praxys-ui": "./dist/index.js"
+    "praxys-ui": "dist/index.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "ts-node src/index.ts"
   },
-  "keywords": ["react", "components", "ui", "cli", "tailwind", "framer-motion"],
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "cli",
+    "tailwind",
+    "framer-motion"
+  ],
   "author": "Sushant Verma",
   "license": "MIT",
   "dependencies": {
