@@ -52,7 +52,7 @@ const DisplacementText: React.FC<DisplacementTextProps> = ({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        'flex items-center justify-center cursor-crosshair select-none',
+        'flex items-center justify-center cursor-crosshair select-none overflow-hidden',
         className
       )}
       style={{ perspective: '800px' }}
@@ -60,7 +60,7 @@ const DisplacementText: React.FC<DisplacementTextProps> = ({
       <motion.span
         className="font-pixel font-bold"
         style={{
-          fontSize,
+          fontSize: `clamp(32px, 10vw, ${fontSize}px)`,
           color,
           rotateX,
           rotateY,

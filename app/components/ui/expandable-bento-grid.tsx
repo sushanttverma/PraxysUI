@@ -27,7 +27,7 @@ const ExpandableBentoGrid: React.FC<ExpandableBentoGridProps> = ({
     <>
       <div
         className={cn(
-          'grid auto-rows-[140px] grid-cols-3 gap-3',
+          'grid auto-rows-[140px] grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3',
           className
         )}
       >
@@ -40,7 +40,7 @@ const ExpandableBentoGrid: React.FC<ExpandableBentoGridProps> = ({
               onClick={() => setExpandedId(isExpanded ? null : item.id)}
               className={cn(
                 'group relative cursor-pointer rounded-xl border border-border bg-obsidian p-5 overflow-hidden transition-colors hover:border-border-light',
-                item.span === 'wide' && 'col-span-2',
+                item.span === 'wide' && 'sm:col-span-2',
                 item.span === 'tall' && 'row-span-2'
               )}
             >

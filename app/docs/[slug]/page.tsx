@@ -111,7 +111,7 @@ export default async function DocsSlugPage({
           <p className="mb-2 font-pixel text-xs uppercase tracking-wider text-ignite">
             Components
           </p>
-          <h1 className="font-pixel text-3xl font-bold text-chalk">
+          <h1 className="font-pixel text-2xl sm:text-3xl font-bold text-chalk">
             {entry.title}
           </h1>
           <p className="mt-3 text-lg text-blush">{entry.description}</p>
@@ -196,7 +196,7 @@ function PrevNextNav({
   next: string | null;
 }) {
   return (
-    <div className="mt-12 flex items-center justify-between border-t border-border pt-6">
+    <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-t border-border pt-6">
       {prev ? (
         <Link
           href={prev === "introduction" ? "/docs" : `/docs/${prev}`}
@@ -211,7 +211,7 @@ function PrevNextNav({
       {next ? (
         <Link
           href={`/docs/${next}`}
-          className="group flex items-center gap-2 text-sm text-blush transition-colors hover:text-chalk"
+          className="group flex items-center gap-2 text-sm text-blush transition-colors hover:text-chalk self-end sm:self-auto"
         >
           {getTitle(next)}
           <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />

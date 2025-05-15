@@ -21,7 +21,7 @@ const PerspectiveGrid: React.FC<PerspectiveGridProps> = ({
     <div
       className={cn('grid gap-4', className)}
       style={{
-        gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+        gridTemplateColumns: `repeat(auto-fit, minmax(min(200px, 100%), 1fr))`,
         perspective: '1000px',
       }}
     >

@@ -63,10 +63,10 @@ const InteractiveBook: React.FC<InteractiveBookProps> = ({
     <div className={cn('flex flex-col items-center gap-4', className)}>
       {/* Book */}
       <div
-        className="relative overflow-hidden rounded-xl border border-border bg-obsidian shadow-xl"
+        className="relative overflow-hidden rounded-xl border border-border bg-obsidian shadow-xl w-full"
         style={{
-          width,
-          height,
+          maxWidth: width,
+          aspectRatio: `${width}/${height}`,
           perspective: '1200px',
         }}
       >

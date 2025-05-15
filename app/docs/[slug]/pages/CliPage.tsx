@@ -104,48 +104,48 @@ export default function CliPage() {
               </thead>
               <tbody className="divide-y divide-border">
                 <tr>
-                  <td className="px-4 py-3">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
                     <code className="font-mono text-xs text-ignite">init</code>
                   </td>
-                  <td className="px-4 py-3 text-blush">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 text-blush">
                     Install deps & create utility files
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-3">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
                     <code className="font-mono text-xs text-ignite">
                       add &lt;name&gt;
                     </code>
                   </td>
-                  <td className="px-4 py-3 text-blush">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 text-blush">
                     Add a component to your project
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-3">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
                     <code className="font-mono text-xs text-ignite">
                       add &lt;name&gt; --dir &lt;path&gt;
                     </code>
                   </td>
-                  <td className="px-4 py-3 text-blush">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 text-blush">
                     Add to a custom directory
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-3">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
                     <code className="font-mono text-xs text-ignite">list</code>
                   </td>
-                  <td className="px-4 py-3 text-blush">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 text-blush">
                     List all available components
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-3">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
                     <code className="font-mono text-xs text-ignite">
                       --version
                     </code>
                   </td>
-                  <td className="px-4 py-3 text-blush">
+                  <td className="px-2 py-2 sm:px-4 sm:py-3 text-blush">
                     Show CLI version
                   </td>
                 </tr>

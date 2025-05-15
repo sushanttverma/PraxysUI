@@ -44,7 +44,7 @@ export default function ComponentPreview({
 
       {/* Content */}
       {activeTab === "preview" ? (
-        <div className="bg-void/50 p-6">
+        <div className="bg-void/50 p-4 sm:p-6 overflow-hidden">
           <Suspense
             fallback={
               <div className="flex h-32 items-center justify-center text-text-faint">

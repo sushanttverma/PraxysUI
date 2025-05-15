@@ -38,7 +38,7 @@ const SpotlightNavbar: React.FC<SpotlightNavbarProps> = ({
     <div
       ref={navRef}
       className={cn(
-        'relative inline-flex items-center gap-1 rounded-xl border border-border bg-obsidian p-1.5',
+        'relative inline-flex flex-wrap items-center gap-1 rounded-xl border border-border bg-obsidian p-1.5',
         className
       )}
     >

@@ -32,22 +32,22 @@ export function PropsTable({ props }: PropsTableProps) {
               key={prop.name}
               className="border-b border-border/50 last:border-0"
             >
-              <td className="px-4 py-3">
+              <td className="px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
                 <code className="rounded bg-ignite/10 px-1.5 py-0.5 font-mono text-xs text-ignite">
                   {prop.name}
                 </code>
               </td>
-              <td className="px-4 py-3">
+              <td className="px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
                 <code className="font-mono text-xs text-blush">
                   {prop.type}
                 </code>
               </td>
-              <td className="px-4 py-3">
+              <td className="px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
                 <code className="font-mono text-xs text-text-faint">
                   {prop.default}
                 </code>
               </td>
-              <td className="px-4 py-3 text-blush">{prop.description}</td>
+              <td className="px-2 py-2 sm:px-4 sm:py-3 text-blush">{prop.description}</td>
             </tr>
           ))}
         </tbody>
