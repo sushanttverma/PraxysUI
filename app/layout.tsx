@@ -10,7 +10,7 @@ const geistPixel = localFont({
   display: "swap",
 });
 
-const SITE_URL = "https://praxys-ui.vercel.app";
+const SITE_URL = "https://ui.praxys.xyz";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

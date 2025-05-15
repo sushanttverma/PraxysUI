@@ -13,7 +13,7 @@ Browse. Copy. Paste. Ship.
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-FF0050?style=flat-square&logo=framer)](https://www.framer.com/motion)
 [![License](https://img.shields.io/badge/License-MIT-E84E2D?style=flat-square)](LICENSE)
 
-[Live Demo](https://praxys-ui.vercel.app) · [Documentation](https://praxys-ui.vercel.app/docs) · [Components](https://praxys-ui.vercel.app/docs/components-overview)
+[Live Demo](https://ui.praxys.xyz) · [Documentation](https://ui.praxys.xyz/docs) · [Components](https://ui.praxys.xyz/docs/components-overview)
 
 </div>
 

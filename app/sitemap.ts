@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { allSlugs } from "@/lib/registry";
 
-const BASE_URL = "https://praxys-ui.vercel.app";
+const BASE_URL = "https://ui.praxys.xyz";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const docPages = allSlugs
