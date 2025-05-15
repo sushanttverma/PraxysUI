@@ -147,7 +147,7 @@ export default function CommandPalette() {
       >
         <Search className="h-3.5 w-3.5" />
         <span>Search...</span>
-        <kbd className="ml-4 rounded border border-border bg-void px-1.5 py-0.5 font-mono text-[10px] text-text-faint">
+        <kbd className="ml-4 rounded border border-border-light bg-void px-1.5 py-0.5 font-mono text-[10px] text-text-faint">
           Ctrl K
         </kbd>
       </button>
@@ -200,7 +200,7 @@ export default function CommandPalette() {
                   aria-autocomplete="list"
                   className="h-12 flex-1 bg-transparent text-sm text-chalk placeholder:text-text-faint outline-none"
                 />
-                <kbd className="rounded border border-border bg-void px-1.5 py-0.5 font-mono text-[10px] text-text-faint">
+                <kbd className="rounded border border-border-light bg-void px-1.5 py-0.5 font-mono text-[10px] text-text-faint">
                   ESC
                 </kbd>
               </div>
@@ -249,19 +249,19 @@ export default function CommandPalette() {
               {/* Footer hints */}
               <div className="flex items-center gap-4 border-t border-border px-4 py-2 text-[10px] text-text-faint">
                 <span className="flex items-center gap-1">
-                  <kbd className="rounded border border-border bg-void px-1 py-0.5 font-mono">
+                  <kbd className="rounded border border-border-light bg-void px-1 py-0.5 font-mono">
                     ↑↓
                   </kbd>
                   Navigate
                 </span>
                 <span className="flex items-center gap-1">
-                  <kbd className="rounded border border-border bg-void px-1 py-0.5 font-mono">
+                  <kbd className="rounded border border-border-light bg-void px-1 py-0.5 font-mono">
                     ↵
                   </kbd>
                   Open
                 </span>
                 <span className="flex items-center gap-1">
-                  <kbd className="rounded border border-border bg-void px-1 py-0.5 font-mono">
+                  <kbd className="rounded border border-border-light bg-void px-1 py-0.5 font-mono">
                     esc
                   </kbd>
                   Close

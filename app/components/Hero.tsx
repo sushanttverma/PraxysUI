@@ -1,10 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Copy, Check } from "lucide-react";
 import Link from "next/link";
 
 export default function Hero() {
+  const [copied, setCopied] = useState(false);
+
+  const copyCommand = () => {
+    navigator.clipboard.writeText("npx praxys-ui init");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-16">
       {/* Background radial glow */}
@@ -34,8 +43,8 @@ export default function Hero() {
           <span className="text-xs font-medium text-blush">
             Praxys UI 1.0
           </span>
-          <span className="text-text-faint">|</span>
-          <span className="text-xs text-text-faint">Now Available</span>
+          <span className="text-blush/40">|</span>
+          <span className="text-xs text-blush/70">Now Available</span>
         </div>
       </motion.div>
 
@@ -95,9 +104,19 @@ export default function Hero() {
         transition={{ duration: 0.6, delay: 0.65 }}
         className="mt-8"
       >
-        <code className="rounded-lg border border-border bg-obsidian px-4 py-2 font-mono text-sm text-text-faint">
-          npx praxys-ui init
-        </code>
+        <button
+          onClick={copyCommand}
+          className="group flex items-center gap-3 rounded-lg border border-border bg-obsidian px-4 py-2 font-mono text-sm text-blush transition-colors hover:border-border-light cursor-pointer"
+          aria-label={copied ? "Copied to clipboard" : "Copy install command"}
+        >
+          <span className="text-text-faint select-none">$</span>
+          <span>npx praxys-ui init</span>
+          {copied ? (
+            <Check className="h-3.5 w-3.5 text-ignite" />
+          ) : (
+            <Copy className="h-3.5 w-3.5 text-text-faint transition-colors group-hover:text-blush" />
+          )}
+        </button>
       </motion.div>
 
       {/* Bottom fade */}
