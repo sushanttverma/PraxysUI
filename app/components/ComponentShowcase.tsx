@@ -1,47 +1,147 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
-const showcaseCards = [
+// Inline mini-demos — lightweight versions rendered directly
+import AnimatedButton from "@/app/components/ui/animated-button";
+import FlipText from "@/app/components/ui/flip-text";
+import GlowBorderCard from "@/app/components/ui/glow-border-card";
+import AnimatedNumber from "@/app/components/ui/animated-number";
+import LineHoverLink from "@/app/components/ui/line-hover-link";
+import GlassDock from "@/app/components/ui/glass-dock";
+import SpotlightNavbar from "@/app/components/ui/spotlight-navbar";
+import CreepyButton from "@/app/components/ui/creepy-button";
+import { Home, Search, Palette, Code2, Settings } from "lucide-react";
+
+interface ShowcaseItem {
+  title: string;
+  slug: string;
+  category: string;
+  demo: React.ReactNode;
+}
+
+const showcaseItems: ShowcaseItem[] = [
   {
-    title: "Animated Hero",
-    description: "Eye-catching hero sections with smooth animations",
-    gradient: "from-ignite/20 to-blush/10",
-  },
-  {
-    title: "Glow Border Card",
-    description: "Cards with dynamic glowing border effects",
-    gradient: "from-blush/20 to-ignite/10",
-  },
-  {
-    title: "3D Displacement Text",
-    description: "Stunning 3D text effects with liquid displacement",
-    gradient: "from-ignite/15 to-transparent",
-  },
-  {
-    title: "Glass Dock",
-    description: "macOS-style dock with glassmorphism effects",
-    gradient: "from-blush/15 to-ignite/5",
+    title: "Animated Button",
+    slug: "animated-button",
+    category: "Buttons",
+    demo: (
+      <div className="flex items-center justify-center">
+        <AnimatedButton>Get Started</AnimatedButton>
+      </div>
+    ),
   },
   {
     title: "Flip Text",
-    description: "Animated text flip transitions and reveals",
-    gradient: "from-ignite/20 to-blush/10",
+    slug: "flip-text",
+    category: "Text Effects",
+    demo: (
+      <div className="flex items-center justify-center">
+        <FlipText
+          text="Praxys UI"
+          className="text-2xl font-bold text-chalk font-pixel"
+        />
+      </div>
+    ),
+  },
+  {
+    title: "Glow Border Card",
+    slug: "glow-border-card",
+    category: "Cards",
+    demo: (
+      <GlowBorderCard className="!p-4">
+        <p className="text-xs font-medium text-chalk">Hover me</p>
+        <p className="mt-1 text-[10px] text-blush">
+          Cursor-following glow effect
+        </p>
+      </GlowBorderCard>
+    ),
+  },
+  {
+    title: "Animated Number",
+    slug: "animated-number",
+    category: "Text Effects",
+    demo: (
+      <div className="flex items-center justify-center gap-6">
+        <div className="text-center">
+          <div className="text-2xl font-bold text-chalk">
+            <AnimatedNumber value={1234} />
+          </div>
+          <p className="text-[10px] text-blush">Users</p>
+        </div>
+        <div className="text-center">
+          <div className="text-2xl font-bold text-ignite">
+            <AnimatedNumber
+              value={99}
+              formatFn={(n) => `${Math.round(n)}%`}
+            />
+          </div>
+          <p className="text-[10px] text-blush">Uptime</p>
+        </div>
+      </div>
+    ),
+  },
+  {
+    title: "Line Hover Link",
+    slug: "line-hover-link",
+    category: "Navigation",
+    demo: (
+      <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
+        <LineHoverLink href="#">Documentation</LineHoverLink>
+        <LineHoverLink href="#" lineColor="var(--color-blush)">
+          Components
+        </LineHoverLink>
+      </div>
+    ),
+  },
+  {
+    title: "Glass Dock",
+    slug: "glass-dock",
+    category: "Navigation",
+    demo: (
+      <div className="flex items-center justify-center">
+        <GlassDock
+          items={[
+            { icon: <Home className="h-full w-full" />, label: "Home" },
+            { icon: <Search className="h-full w-full" />, label: "Search" },
+            { icon: <Palette className="h-full w-full" />, label: "Design" },
+            { icon: <Code2 className="h-full w-full" />, label: "Code" },
+            {
+              icon: <Settings className="h-full w-full" />,
+              label: "Settings",
+            },
+          ]}
+        />
+      </div>
+    ),
   },
   {
     title: "Spotlight Navbar",
-    description: "Navigation with interactive spotlight effect",
-    gradient: "from-blush/20 to-ignite/10",
+    slug: "spotlight-navbar",
+    category: "Navigation",
+    demo: (
+      <div className="flex items-center justify-center">
+        <SpotlightNavbar
+          items={[
+            { label: "Home", href: "#" },
+            { label: "Docs", href: "#" },
+            { label: "Blog", href: "#" },
+          ]}
+        />
+      </div>
+    ),
   },
   {
-    title: "Perspective Grid",
-    description: "3D perspective grid layout with hover effects",
-    gradient: "from-ignite/15 to-transparent",
-  },
-  {
-    title: "Staggered Grid",
-    description: "Grid layout with staggered entrance animations",
-    gradient: "from-blush/15 to-ignite/5",
+    title: "Creepy Button",
+    slug: "creepy-button",
+    category: "Buttons",
+    demo: (
+      <div className="flex items-center justify-center">
+        <CreepyButton>Enter</CreepyButton>
+      </div>
+    ),
   },
 ];
 
@@ -65,7 +165,7 @@ export default function ComponentShowcase() {
           transition={{ delay: 0.1 }}
           className="font-pixel text-3xl font-bold text-chalk md:text-5xl"
         >
-          Crafted with care
+          See them in action
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -74,17 +174,18 @@ export default function ComponentShowcase() {
           transition={{ delay: 0.2 }}
           className="mt-4 text-blush"
         >
-          Every component is designed to be beautiful, accessible, and easy to
-          customize.
+          Every component is interactive. Hover, click, and explore right here.
         </motion.p>
       </div>
 
       {/* Scrolling row 1 - left */}
       <div className="mb-4 flex overflow-hidden">
         <div className="animate-marquee flex gap-4">
-          {[...showcaseCards, ...showcaseCards].map((card, i) => (
-            <ShowcaseCard key={`row1-${i}`} card={card} />
-          ))}
+          {[...showcaseItems.slice(0, 4), ...showcaseItems.slice(0, 4)].map(
+            (item, i) => (
+              <ShowcaseCard key={`row1-${i}`} item={item} index={i} />
+            )
+          )}
         </div>
       </div>
 
@@ -94,9 +195,9 @@ export default function ComponentShowcase() {
           className="animate-marquee flex gap-4"
           style={{ animationDirection: "reverse", animationDuration: "35s" }}
         >
-          {[...showcaseCards.slice(4), ...showcaseCards.slice(0, 4), ...showcaseCards.slice(4), ...showcaseCards.slice(0, 4)].map(
-            (card, i) => (
-              <ShowcaseCard key={`row2-${i}`} card={card} />
+          {[...showcaseItems.slice(4), ...showcaseItems.slice(4)].map(
+            (item, i) => (
+              <ShowcaseCard key={`row2-${i}`} item={item} index={i} />
             )
           )}
         </div>
@@ -109,31 +210,48 @@ export default function ComponentShowcase() {
   );
 }
 
-function ShowcaseCard({ card }: { card: (typeof showcaseCards)[number] }) {
+function ShowcaseCard({
+  item,
+  index,
+}: {
+  item: ShowcaseItem;
+  index: number;
+}) {
   return (
-    <div className="card-glow group w-[320px] shrink-0 cursor-pointer rounded-2xl border border-border bg-obsidian p-6 transition-all hover:border-border-light">
-      {/* Preview area */}
-      <div
-        className={`mb-5 flex h-40 items-center justify-center rounded-xl bg-gradient-to-br ${card.gradient} border border-border/50`}
-      >
-        <div className="flex gap-1.5">
-          {[...Array(3)].map((_, i) => (
-            <div
-              key={i}
-              className="h-2 w-2 rounded-full bg-ignite/40 transition-all group-hover:bg-ignite/70"
-              style={{ animationDelay: `${i * 0.1}s` }}
-            />
-          ))}
+    <Link
+      href={`/docs/${item.slug}`}
+      className="card-glow group w-[320px] shrink-0 cursor-pointer rounded-2xl border border-border bg-obsidian transition-all hover:border-border-light block"
+    >
+      {/* Live demo area */}
+      <div className="relative h-44 overflow-hidden rounded-t-2xl border-b border-border/50 bg-void/50 p-4 flex items-center justify-center">
+        {/* Prevent click propagation on interactive elements */}
+        <div
+          className="w-full"
+          onClick={(e) => e.preventDefault()}
+          onMouseDown={(e) => e.stopPropagation()}
+        >
+          {item.demo}
+        </div>
+
+        {/* Hover overlay with arrow */}
+        <div className="absolute inset-0 flex items-center justify-center bg-void/0 opacity-0 transition-all duration-300 group-hover:bg-void/40 group-hover:opacity-100">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-ignite/30 bg-obsidian/90 text-ignite">
+            <ArrowUpRight className="h-4 w-4" />
+          </div>
         </div>
       </div>
 
       {/* Card content */}
-      <h3 className="font-pixel text-base font-semibold text-chalk transition-colors group-hover:text-ignite">
-        {card.title}
-      </h3>
-      <p className="mt-1.5 text-sm leading-relaxed text-text-faint">
-        {card.description}
-      </p>
-    </div>
+      <div className="p-5">
+        <div className="flex items-center justify-between">
+          <h3 className="font-pixel text-sm font-semibold text-chalk transition-colors group-hover:text-ignite">
+            {item.title}
+          </h3>
+          <span className="rounded-full bg-ignite-dim px-2 py-0.5 text-[10px] font-medium text-ignite">
+            {item.category}
+          </span>
+        </div>
+      </div>
+    </Link>
   );
 }
