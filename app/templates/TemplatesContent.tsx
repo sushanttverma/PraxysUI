@@ -9,45 +9,57 @@ import ThemeToggle from '../components/ThemeToggle'
 const templates = [
   {
     title: 'Startup Landing',
+    slug: 'startup-landing',
     description:
       'A high-converting landing page with hero section, feature grid, testimonials, and CTA. Uses Animated Hero, Glow Border Cards, and Testimonials Card.',
     components: ['animated-hero', 'glow-border-card', 'testimonials-card', 'animated-button'],
-    status: 'coming-soon' as const,
+    status: 'ready' as const,
+    category: 'Marketing',
   },
   {
     title: 'SaaS Dashboard',
+    slug: 'saas-dashboard',
     description:
       'A modern analytics dashboard with animated numbers, bento grid layout, and spotlight navigation. Uses Animated Number, Expandable Bento Grid, and Spotlight Navbar.',
     components: ['animated-number', 'expandable-bento-grid', 'spotlight-navbar', 'light-lines'],
-    status: 'coming-soon' as const,
+    status: 'ready' as const,
+    category: 'Application',
   },
   {
     title: 'Developer Portfolio',
+    slug: 'developer-portfolio',
     description:
       'A personal portfolio with 3D text effects, interactive project cards, and a glass dock navigation. Uses Displacement Text, Perspective Grid, and Glass Dock.',
     components: ['displacement-text', 'perspective-grid', 'glass-dock', 'flip-text'],
-    status: 'coming-soon' as const,
+    status: 'ready' as const,
+    category: 'Portfolio',
   },
   {
     title: 'Agency Showcase',
+    slug: 'agency-showcase',
     description:
       'A bold agency website with marquee logo sliders, staggered project grids, and liquid visual effects. Uses Logo Slider, Staggered Grid, and Liquid Ocean.',
     components: ['logo-slider', 'staggered-grid', 'liquid-ocean', 'creepy-button'],
-    status: 'coming-soon' as const,
+    status: 'ready' as const,
+    category: 'Agency',
   },
   {
     title: 'Documentation Site',
+    slug: 'documentation-site',
     description:
       'A clean docs site template with sidebar navigation, code blocks, interactive book, and folder previews. Uses Interactive Book, Folder Preview, and Line Hover Link.',
     components: ['interactive-book', 'folder-preview', 'line-hover-link', 'flip-fade-text'],
-    status: 'coming-soon' as const,
+    status: 'ready' as const,
+    category: 'Documentation',
   },
   {
     title: 'E-commerce Product',
+    slug: 'ecommerce-product',
     description:
       'A product-focused landing page with masked avatar testimonials, social sharing buttons, and animated reveals. Uses Masked Avatars, Social Flip Button, and Reveal Loader.',
     components: ['masked-avatars', 'social-flip-button', 'reveal-loader', 'animated-button'],
-    status: 'coming-soon' as const,
+    status: 'ready' as const,
+    category: 'E-commerce',
   },
 ]
 
@@ -109,6 +121,13 @@ export default function TemplatesContent() {
               variants={cardVariants}
               className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-obsidian transition-colors hover:border-ignite/30"
             >
+              {/* Clickable overlay */}
+              <Link
+                href={`/templates/${template.slug}`}
+                className="absolute inset-0 z-10"
+                aria-label={`Preview ${template.title} template`}
+              />
+
               {/* Preview placeholder */}
               <div className="relative flex h-44 items-center justify-center border-b border-border bg-void/50">
                 <div className="flex items-center gap-3 text-text-faint">
@@ -117,9 +136,9 @@ export default function TemplatesContent() {
                   <Smartphone className="h-6 w-6" />
                 </div>
 
-                {/* Coming soon badge */}
+                {/* Category badge */}
                 <div className="absolute top-3 right-3 rounded-full border border-ignite/30 bg-ignite/10 px-2.5 py-0.5 font-pixel text-[10px] text-ignite">
-                  Coming Soon
+                  {template.category}
                 </div>
               </div>
 
@@ -133,7 +152,7 @@ export default function TemplatesContent() {
                 </p>
 
                 {/* Component tags */}
-                <div className="mt-4 flex flex-wrap gap-1.5">
+                <div className="relative z-20 mt-4 flex flex-wrap gap-1.5">
                   {template.components.map((slug) => (
                     <Link
                       key={slug}
