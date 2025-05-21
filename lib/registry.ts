@@ -9,6 +9,24 @@ export type PropDef = {
   description: string;
 };
 
+export type PlaygroundPropDef = {
+  name: string;
+  label: string;
+} & (
+  | { type: "text"; default: string }
+  | { type: "number"; default: number; min?: number; max?: number; step?: number }
+  | { type: "boolean"; default: boolean }
+  | { type: "select"; default: string; options: string[] }
+  | { type: "color"; default: string }
+);
+
+export type PlaygroundConfig = {
+  controls: PlaygroundPropDef[];
+  /** Fixed props required by the component but not editable (e.g. complex arrays/objects) */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  defaults?: Record<string, any>;
+};
+
 export type ComponentEntry = {
   slug: string;
   title: string;
@@ -18,6 +36,7 @@ export type ComponentEntry = {
   code: string;
   usage: string;
   props: PropDef[];
+  playground?: PlaygroundConfig;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component: () => Promise<{ default: ComponentType<any> }>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -197,6 +216,11 @@ export function Demo() {
         description: "Additional CSS classes to apply.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "children", label: "Label", type: "text", default: "Browse Components" },
+      ],
+    },
     component: () => import("@/app/components/ui/animated-button"),
     demo: () => import("@/app/components/demos/animated-button-demo"),
   },
@@ -286,6 +310,13 @@ export function Demo() {
         description: "Duration of each character flip (seconds).",
       },
     ],
+    playground: {
+      controls: [
+        { name: "text", label: "Text", type: "text", default: "Hello World" },
+        { name: "staggerDelay", label: "Stagger Delay", type: "number", default: 0.05, min: 0.01, max: 0.3, step: 0.01 },
+        { name: "duration", label: "Duration", type: "number", default: 0.5, min: 0.1, max: 2, step: 0.1 },
+      ],
+    },
     component: () => import("@/app/components/ui/flip-text"),
     demo: () => import("@/app/components/demos/flip-text-demo"),
   },
@@ -384,6 +415,14 @@ export function Demo() {
         description: "Color of the glow effect.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "glowColor", label: "Glow Color", type: "color", default: "rgba(232, 78, 45, 0.35)" },
+      ],
+      defaults: {
+        children: null,
+      },
+    },
     component: () => import("@/app/components/ui/glow-border-card"),
     demo: () => import("@/app/components/demos/glow-border-card-demo"),
   },
@@ -481,6 +520,12 @@ export function Demo() {
         description: "Custom format function for the displayed number.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "value", label: "Target Value", type: "number", default: 1234, min: 0, max: 99999, step: 1 },
+        { name: "duration", label: "Duration (s)", type: "number", default: 1.5, min: 0.5, max: 5, step: 0.5 },
+      ],
+    },
     component: () => import("@/app/components/ui/animated-number"),
     demo: () => import("@/app/components/demos/animated-number-demo"),
   },
@@ -563,6 +608,12 @@ export function Demo() {
         description: "Color of the underline.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "children", label: "Link Text", type: "text", default: "Hover over me" },
+        { name: "lineColor", label: "Line Color", type: "color", default: "#E84E2D" },
+      ],
+    },
     component: () => import("@/app/components/ui/line-hover-link"),
     demo: () => import("@/app/components/demos/line-hover-link-demo"),
   },
@@ -678,6 +729,13 @@ export function Demo() {
         description: "Animation cycle duration in seconds.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "lineCount", label: "Line Count", type: "number", default: 5, min: 1, max: 12, step: 1 },
+        { name: "color", label: "Color", type: "color", default: "rgba(232, 78, 45, 0.15)" },
+        { name: "duration", label: "Duration (s)", type: "number", default: 3, min: 1, max: 10, step: 0.5 },
+      ],
+    },
     component: () => import("@/app/components/ui/light-lines"),
     demo: () => import("@/app/components/demos/light-lines-demo"),
   },
@@ -835,6 +893,11 @@ export function Demo() {
         description: "Click handler function.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "children", label: "Label", type: "text", default: "Enter" },
+      ],
+    },
     component: () => import("@/app/components/ui/creepy-button"),
     demo: () => import("@/app/components/demos/creepy-button-demo"),
   },
@@ -958,6 +1021,18 @@ export function Demo() {
         description: "Additional CSS classes to apply.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "frontLabel", label: "Front Label", type: "text", default: "Follow" },
+      ],
+      defaults: {
+        links: [
+          { icon: null, href: "#", label: "GitHub" },
+          { icon: null, href: "#", label: "Twitter" },
+          { icon: null, href: "#", label: "LinkedIn" },
+        ],
+      },
+    },
     component: () => import("@/app/components/ui/social-flip-button"),
     demo: () => import("@/app/components/demos/social-flip-button-demo"),
   },
@@ -1114,6 +1189,19 @@ export function Demo() {
         description: "Auto-rotation interval in milliseconds.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "autoPlay", label: "Auto Play", type: "boolean", default: true },
+        { name: "interval", label: "Interval (ms)", type: "number", default: 5000, min: 1000, max: 15000, step: 500 },
+      ],
+      defaults: {
+        testimonials: [
+          { quote: "Amazing components! Saved me hours of development time.", author: "Jane Doe", role: "Frontend Developer" },
+          { quote: "The animations are incredibly smooth and polished.", author: "John Smith", role: "UI Designer" },
+          { quote: "Best component library I've used this year.", author: "Sarah Chen", role: "Full Stack Engineer" },
+        ],
+      },
+    },
     component: () => import("@/app/components/ui/testimonials-card"),
     demo: () => import("@/app/components/demos/testimonials-card-demo"),
   },
@@ -1209,6 +1297,12 @@ export function Demo() {
         description: "Delay between each child animation in seconds.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "columns", label: "Columns", type: "number", default: 3, min: 1, max: 6, step: 1 },
+        { name: "staggerDelay", label: "Stagger Delay", type: "number", default: 0.08, min: 0.01, max: 0.5, step: 0.01 },
+      ],
+    },
     component: () => import("@/app/components/ui/staggered-grid"),
     demo: () => import("@/app/components/demos/staggered-grid-demo"),
   },
@@ -1357,6 +1451,17 @@ export function Demo() {
         description: "Additional CSS classes.",
       },
     ],
+    playground: {
+      controls: [],
+      defaults: {
+        items: [
+          { id: "1", title: "Analytics", description: "Track your performance metrics in real-time.", span: "wide" },
+          { id: "2", title: "Settings", description: "Configure your preferences." },
+          { id: "3", title: "Users", description: "Manage team members and permissions.", span: "tall" },
+          { id: "4", title: "Reports", description: "Generate detailed reports." },
+        ],
+      },
+    },
     component: () => import("@/app/components/ui/expandable-bento-grid"),
     demo: () => import("@/app/components/demos/expandable-bento-grid-demo"),
   },
@@ -1476,6 +1581,12 @@ export function Demo() {
         description: "Degrees of 3D tilt on hover.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "columns", label: "Columns", type: "number", default: 3, min: 1, max: 6, step: 1 },
+        { name: "tiltAmount", label: "Tilt (deg)", type: "number", default: 8, min: 0, max: 25, step: 1 },
+      ],
+    },
     component: () => import("@/app/components/ui/perspective-grid"),
     demo: () => import("@/app/components/demos/perspective-grid-demo"),
   },
@@ -1576,6 +1687,15 @@ export function Demo() {
         description: "Duration of the flip animation in seconds.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "interval", label: "Interval (ms)", type: "number", default: 3000, min: 500, max: 10000, step: 250 },
+        { name: "duration", label: "Flip Duration (s)", type: "number", default: 0.5, min: 0.1, max: 2, step: 0.1 },
+      ],
+      defaults: {
+        words: ["faster", "better", "smarter", "bolder"],
+      },
+    },
     component: () => import("@/app/components/ui/flip-fade-text"),
     demo: () => import("@/app/components/demos/flip-fade-text-demo"),
   },
@@ -1717,6 +1837,15 @@ export function Demo() {
         description: "Maximum rotation and shadow offset in pixels/degrees.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "text", label: "Text", type: "text", default: "PRAXYS" },
+        { name: "fontSize", label: "Font Size", type: "number", default: 64, min: 24, max: 120, step: 4 },
+        { name: "depth", label: "Depth", type: "number", default: 12, min: 0, max: 30, step: 1 },
+        { name: "color", label: "Text Color", type: "color", default: "#F2ECE2" },
+        { name: "shadowColor", label: "Shadow Color", type: "color", default: "#E84E2D" },
+      ],
+    },
     component: () => import("@/app/components/ui/displacement-text"),
     demo: () => import("@/app/components/demos/displacement-text-demo"),
   },
@@ -1832,6 +1961,17 @@ export function Demo() {
         description: "Additional CSS classes.",
       },
     ],
+    playground: {
+      controls: [],
+      defaults: {
+        items: [
+          { label: "Home", href: "#" },
+          { label: "About", href: "#" },
+          { label: "Projects", href: "#" },
+          { label: "Contact", href: "#" },
+        ],
+      },
+    },
     component: () => import("@/app/components/ui/spotlight-navbar"),
     demo: () => import("@/app/components/demos/spotlight-navbar-demo"),
   },
@@ -1961,6 +2101,11 @@ export function Demo() {
         description: "Size of the icons in pixels.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "iconSize", label: "Icon Size", type: "number", default: 24, min: 16, max: 48, step: 2 },
+      ],
+    },
     component: () => import("@/app/components/ui/glass-dock"),
     demo: () => import("@/app/components/demos/glass-dock-demo"),
   },
@@ -2078,6 +2223,13 @@ export function Demo() {
         description: "Base animation speed in seconds.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "waveCount", label: "Wave Count", type: "number", default: 4, min: 1, max: 8, step: 1 },
+        { name: "speed", label: "Speed (s)", type: "number", default: 6, min: 2, max: 15, step: 0.5 },
+        { name: "color", label: "Wave Color", type: "color", default: "#E84E2D" },
+      ],
+    },
     component: () => import("@/app/components/ui/liquid-ocean"),
     demo: () => import("@/app/components/demos/liquid-ocean-demo"),
   },
@@ -2206,6 +2358,12 @@ export function Demo() {
         description: "Color of the metallic highlight reflections.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "baseColor", label: "Base Color", type: "color", default: "#1c1a17" },
+        { name: "highlightColor", label: "Highlight Color", type: "color", default: "#E84E2D" },
+      ],
+    },
     component: () => import("@/app/components/ui/liquid-metal"),
     demo: () => import("@/app/components/demos/liquid-metal-demo"),
   },
@@ -2365,6 +2523,12 @@ export function Demo() {
         description: "Content revealed after loading.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "duration", label: "Duration (s)", type: "number", default: 2, min: 0.5, max: 6, step: 0.5 },
+        { name: "color", label: "Loader Color", type: "color", default: "#E84E2D" },
+      ],
+    },
     component: () => import("@/app/components/ui/reveal-loader"),
     demo: () => import("@/app/components/demos/reveal-loader-demo"),
   },
@@ -2551,6 +2715,17 @@ export function Demo() {
         description: "Additional CSS classes.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "title", label: "Title", type: "text", default: "Build Stunning Interfaces" },
+        { name: "subtitle", label: "Subtitle", type: "text", default: "Copy-paste animated components for your Next.js projects." },
+        { name: "badge", label: "Badge", type: "text", default: "New Release" },
+      ],
+      defaults: {
+        primaryCta: { label: "Get Started", href: "#" },
+        secondaryCta: { label: "Browse Components", href: "#" },
+      },
+    },
     component: () => import("@/app/components/ui/animated-hero"),
     demo: () => import("@/app/components/demos/animated-hero-demo"),
   },
@@ -2702,6 +2877,23 @@ export function Demo() {
         description: "Additional CSS classes.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "max", label: "Max Visible", type: "number", default: 5, min: 1, max: 10, step: 1 },
+        { name: "size", label: "Avatar Size (px)", type: "number", default: 44, min: 24, max: 72, step: 4 },
+      ],
+      defaults: {
+        avatars: [
+          { name: "Alice" },
+          { name: "Bob" },
+          { name: "Charlie" },
+          { name: "Diana" },
+          { name: "Eve" },
+          { name: "Frank" },
+          { name: "Grace" },
+        ],
+      },
+    },
     component: () => import("@/app/components/ui/masked-avatars"),
     demo: () => import("@/app/components/demos/masked-avatars-demo"),
   },
@@ -2856,6 +3048,19 @@ export function Demo() {
         description: "Additional CSS classes.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "name", label: "Folder Name", type: "text", default: "components" },
+      ],
+      defaults: {
+        files: [
+          { name: "ui", type: "folder" },
+          { name: "Navbar.tsx", type: "file" },
+          { name: "Hero.tsx", type: "file" },
+          { name: "Footer.tsx", type: "file" },
+        ],
+      },
+    },
     component: () => import("@/app/components/ui/folder-preview"),
     demo: () => import("@/app/components/demos/folder-preview-demo"),
   },
@@ -3064,6 +3269,19 @@ const pages = [
         description: "Height of the book in pixels.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "width", label: "Width (px)", type: "number", default: 320, min: 200, max: 500, step: 20 },
+        { name: "height", label: "Height (px)", type: "number", default: 420, min: 280, max: 600, step: 20 },
+      ],
+      defaults: {
+        pages: [
+          { title: "Welcome", content: "This is the first page of the book. Flip through to explore more content." },
+          { title: "Features", content: "Interactive 3D page-flip animation, dot navigation, and smooth transitions." },
+          { title: "Conclusion", content: "Thanks for reading! This component is fully customizable." },
+        ],
+      },
+    },
     component: () => import("@/app/components/ui/interactive-book"),
     demo: () => import("@/app/components/demos/interactive-book-demo"),
   },
@@ -3240,6 +3458,14 @@ const logos = [
         description: "Additional CSS classes for the outer container.",
       },
     ],
+    playground: {
+      controls: [
+        { name: "speed", label: "Speed (px/s)", type: "number", default: 30, min: 10, max: 100, step: 5 },
+        { name: "pauseOnHover", label: "Pause on Hover", type: "boolean", default: true },
+        { name: "direction", label: "Direction", type: "select", default: "left", options: ["left", "right"] },
+        { name: "gap", label: "Gap (px)", type: "number", default: 48, min: 16, max: 96, step: 8 },
+      ],
+    },
     component: () => import("@/app/components/ui/logo-slider"),
     demo: () => import("@/app/components/demos/logo-slider-demo"),
   },

@@ -14,6 +14,7 @@ import { PropsTable } from "../components/PropsTable";
 import { InstallSteps } from "../components/InstallSteps";
 import ComponentPreview from "../components/ComponentPreview";
 import ComponentPageClient from "./ComponentPageClient";
+import PropsPlayground from "../components/PropsPlayground";
 
 // ─── Doc pages (non-component pages) ────────────────────
 
@@ -128,6 +129,19 @@ export default async function DocsSlugPage({
             />
           }
         />
+
+        {/* Playground */}
+        {entry.playground && entry.playground.controls.length > 0 && (
+          <div>
+            <h2 className="mb-4 font-pixel text-xl font-semibold text-chalk">
+              Playground
+            </h2>
+            <p className="mb-4 text-sm text-blush">
+              Tweak the props below and see the component update in real time.
+            </p>
+            <PropsPlayground slug={slug} playground={entry.playground} />
+          </div>
+        )}
 
         {/* Install */}
         <div>
