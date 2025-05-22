@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 
 // Inline mini-demos — lightweight versions rendered directly
@@ -125,9 +125,9 @@ const showcaseItems: ShowcaseItem[] = [
       <div className="flex items-center justify-center">
         <SpotlightNavbar
           items={[
-            { label: "Home", href: "#" },
-            { label: "Docs", href: "#" },
-            { label: "Blog", href: "#" },
+            { label: "Home", href: "#home" },
+            { label: "Docs", href: "#docs" },
+            { label: "Blog", href: "#blog" },
           ]}
         />
       </div>
@@ -217,9 +217,19 @@ function ShowcaseCard({
   item: ShowcaseItem;
   index: number;
 }) {
+  const router = useRouter();
+
   return (
-    <Link
-      href={`/docs/${item.slug}`}
+    <div
+      role="link"
+      tabIndex={0}
+      onClick={() => router.push(`/docs/${item.slug}`)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          router.push(`/docs/${item.slug}`);
+        }
+      }}
       className="card-glow group w-[320px] shrink-0 cursor-pointer rounded-2xl border border-border bg-obsidian transition-all hover:border-border-light block"
     >
       {/* Live demo area */}
@@ -227,14 +237,14 @@ function ShowcaseCard({
         {/* Prevent click propagation on interactive elements */}
         <div
           className="w-full"
-          onClick={(e) => e.preventDefault()}
+          onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
         >
           {item.demo}
         </div>
 
         {/* Hover overlay with arrow */}
-        <div className="absolute inset-0 flex items-center justify-center bg-void/0 opacity-0 transition-all duration-300 group-hover:bg-void/40 group-hover:opacity-100">
+        <div className="absolute inset-0 flex items-center justify-center bg-void/0 opacity-0 transition-all duration-300 group-hover:bg-void/40 group-hover:opacity-100 pointer-events-none">
           <div className="flex h-10 w-10 items-center justify-center rounded-full border border-ignite/30 bg-obsidian/90 text-ignite">
             <ArrowUpRight className="h-4 w-4" />
           </div>
@@ -252,6 +262,6 @@ function ShowcaseCard({
           </span>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }

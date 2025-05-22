@@ -2105,6 +2105,14 @@ export function Demo() {
       controls: [
         { name: "iconSize", label: "Icon Size", type: "number", default: 24, min: 16, max: 48, step: 2 },
       ],
+      defaults: {
+        items: [
+          { icon: null, label: "Home" },
+          { icon: null, label: "Search" },
+          { icon: null, label: "Profile" },
+          { icon: null, label: "Settings" },
+        ],
+      },
     },
     component: () => import("@/app/components/ui/glass-dock"),
     demo: () => import("@/app/components/demos/glass-dock-demo"),
@@ -3465,6 +3473,9 @@ const logos = [
         { name: "direction", label: "Direction", type: "select", default: "left", options: ["left", "right"] },
         { name: "gap", label: "Gap (px)", type: "number", default: 48, min: 16, max: 96, step: 8 },
       ],
+      defaults: {
+        logos: ["Vercel", "Next.js", "React", "Tailwind", "TypeScript", "Prisma"],
+      },
     },
     component: () => import("@/app/components/ui/logo-slider"),
     demo: () => import("@/app/components/demos/logo-slider-demo"),
