@@ -89,6 +89,16 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "interactive-book", title: "Interactive Book" },
       { slug: "reveal-loader", title: "Reveal Loader" },
       { slug: "logo-slider", title: "Logo Slider" },
+      { slug: "typewriter-text", title: "Typewriter Text" },
+      { slug: "toast-notification", title: "Toast Notification" },
+      { slug: "accordion", title: "Accordion" },
+      { slug: "animated-tabs", title: "Animated Tabs" },
+      { slug: "magnetic-cursor", title: "Magnetic Cursor" },
+      { slug: "parallax-scroll", title: "Parallax Scroll" },
+      { slug: "gradient-mesh", title: "Gradient Mesh" },
+      { slug: "skeleton-loader", title: "Skeleton Loader" },
+      { slug: "morphing-text", title: "Morphing Text" },
+      { slug: "spotlight-card", title: "Spotlight Card" },
     ],
   },
 ];
@@ -3479,6 +3489,1342 @@ const logos = [
     },
     component: () => import("@/app/components/ui/logo-slider"),
     demo: () => import("@/app/components/demos/logo-slider-demo"),
+  },
+
+  "typewriter-text": {
+    slug: "typewriter-text",
+    title: "Typewriter Text",
+    description:
+      "An animated typing effect that cycles through strings, typing and deleting characters with a blinking cursor.",
+    category: "text",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useState, useEffect, useCallback } from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface TypewriterTextProps {
+  strings: string[]
+  typingSpeed?: number
+  deletingSpeed?: number
+  pauseDuration?: number
+  className?: string
+  cursorColor?: string
+}
+
+const TypewriterText: React.FC<TypewriterTextProps> = ({
+  strings,
+  typingSpeed = 80,
+  deletingSpeed = 50,
+  pauseDuration = 1500,
+  className = '',
+  cursorColor = 'var(--color-ignite)',
+}) => {
+  const [stringIndex, setStringIndex] = useState(0)
+  const [text, setText] = useState('')
+  const [phase, setPhase] = useState<'typing' | 'pausing' | 'deleting'>('typing')
+
+  const currentString = strings[stringIndex]
+
+  const handleTyping = useCallback(() => {
+    if (phase === 'typing') {
+      if (text.length < currentString.length) {
+        const timeout = setTimeout(() => {
+          setText(currentString.slice(0, text.length + 1))
+        }, typingSpeed)
+        return () => clearTimeout(timeout)
+      } else {
+        setPhase('pausing')
+      }
+    }
+
+    if (phase === 'pausing') {
+      const timeout = setTimeout(() => {
+        setPhase('deleting')
+      }, pauseDuration)
+      return () => clearTimeout(timeout)
+    }
+
+    if (phase === 'deleting') {
+      if (text.length > 0) {
+        const timeout = setTimeout(() => {
+          setText(text.slice(0, -1))
+        }, deletingSpeed)
+        return () => clearTimeout(timeout)
+      } else {
+        setStringIndex((prev) => (prev + 1) % strings.length)
+        setPhase('typing')
+      }
+    }
+  }, [phase, text, currentString, typingSpeed, deletingSpeed, pauseDuration, strings.length])
+
+  useEffect(() => {
+    const cleanup = handleTyping()
+    return cleanup
+  }, [handleTyping])
+
+  return (
+    <span className={cn('inline', className)}>
+      {text}
+      <motion.span
+        animate={{ opacity: [1, 0] }}
+        transition={{
+          duration: 0.53,
+          repeat: Infinity,
+          repeatType: 'reverse',
+          ease: 'easeInOut',
+        }}
+        style={{ color: cursorColor }}
+        className="inline"
+      >
+        |
+      </motion.span>
+    </span>
+  )
+}
+
+export default TypewriterText`,
+    usage: `import TypewriterText from "@/app/components/ui/typewriter-text"
+
+export function Demo() {
+  return (
+    <div className="text-2xl font-bold text-chalk">
+      I build{" "}
+      <TypewriterText
+        strings={["websites", "components", "experiences"]}
+        className="text-ignite"
+      />
+    </div>
+  )
+}`,
+    props: [
+      {
+        name: "strings",
+        type: "string[]",
+        default: "—",
+        description: "Array of strings to cycle through.",
+      },
+      {
+        name: "typingSpeed",
+        type: "number",
+        default: "80",
+        description: "Milliseconds per character when typing.",
+      },
+      {
+        name: "deletingSpeed",
+        type: "number",
+        default: "50",
+        description: "Milliseconds per character when deleting.",
+      },
+      {
+        name: "pauseDuration",
+        type: "number",
+        default: "1500",
+        description: "Pause duration in ms after finishing a string.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "cursorColor",
+        type: "string",
+        default: "'var(--color-ignite)'",
+        description: "Color of the blinking cursor.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "typingSpeed", label: "Typing Speed (ms)", type: "number", default: 80, min: 20, max: 200, step: 10 },
+        { name: "deletingSpeed", label: "Deleting Speed (ms)", type: "number", default: 50, min: 10, max: 150, step: 10 },
+        { name: "pauseDuration", label: "Pause (ms)", type: "number", default: 1500, min: 500, max: 5000, step: 250 },
+        { name: "cursorColor", label: "Cursor Color", type: "color", default: "#E84E2D" },
+      ],
+      defaults: {
+        strings: ["websites", "components", "experiences", "interfaces"],
+      },
+    },
+    component: () => import("@/app/components/ui/typewriter-text"),
+    demo: () => import("@/app/components/demos/typewriter-text-demo"),
+  },
+
+  "toast-notification": {
+    slug: "toast-notification",
+    title: "Toast Notification",
+    description:
+      "Stackable animated toast notifications with variants (success, error, warning, info), auto-dismiss, and manual dismiss.",
+    category: "visual",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface Toast {
+  id: string
+  message: string
+  variant?: 'default' | 'success' | 'error' | 'warning'
+  duration?: number
+}
+
+interface ToastProps {
+  toasts: Toast[]
+  onDismiss: (id: string) => void
+  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
+  className?: string
+}
+
+const variantStyles: Record<NonNullable<Toast['variant']>, string> = {
+  default: 'border-border bg-obsidian text-chalk',
+  success: 'border-green-500/30 bg-green-500/10 text-green-400',
+  error: 'border-red-500/30 bg-red-500/10 text-red-400',
+  warning: 'border-yellow-500/30 bg-yellow-500/10 text-yellow-400',
+}
+
+const positionStyles: Record<NonNullable<ToastProps['position']>, string> = {
+  'top-right': 'top-4 right-4',
+  'top-left': 'top-4 left-4',
+  'bottom-right': 'bottom-4 right-4',
+  'bottom-left': 'bottom-4 left-4',
+}
+
+function ToastIcon({ variant }: { variant: NonNullable<Toast['variant']> }) {
+  switch (variant) {
+    case 'success':
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 shrink-0">
+          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+        </svg>
+      )
+    case 'error':
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 shrink-0">
+          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" />
+        </svg>
+      )
+    case 'warning':
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 shrink-0">
+          <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.168 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+        </svg>
+      )
+    default:
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 shrink-0">
+          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clipRule="evenodd" />
+        </svg>
+      )
+  }
+}
+
+const ToastItem: React.FC<{ toast: Toast; onDismiss: (id: string) => void }> = ({ toast, onDismiss }) => {
+  const variant = toast.variant || 'default'
+  const duration = toast.duration || 4000
+
+  useEffect(() => {
+    const timer = setTimeout(() => onDismiss(toast.id), duration)
+    return () => clearTimeout(timer)
+  }, [toast.id, duration, onDismiss])
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, x: 50, scale: 0.95 }}
+      animate={{ opacity: 1, x: 0, scale: 1 }}
+      exit={{ opacity: 0, x: 50, scale: 0.95 }}
+      transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+      className={cn('pointer-events-auto flex w-72 items-center gap-3 rounded-lg border px-4 py-3 text-sm shadow-lg', variantStyles[variant])}
+    >
+      <ToastIcon variant={variant} />
+      <span className="flex-1">{toast.message}</span>
+      <button onClick={() => onDismiss(toast.id)} className="shrink-0 cursor-pointer opacity-60 transition-opacity hover:opacity-100" aria-label="Dismiss">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+          <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+        </svg>
+      </button>
+    </motion.div>
+  )
+}
+
+export const ToastContainer: React.FC<ToastProps> = ({ toasts, onDismiss, position = 'top-right', className = '' }) => {
+  return (
+    <div className={cn('fixed z-50 flex flex-col gap-2 pointer-events-none', positionStyles[position], className)}>
+      <AnimatePresence mode="popLayout">
+        {toasts.map((toast) => (
+          <ToastItem key={toast.id} toast={toast} onDismiss={onDismiss} />
+        ))}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+export function useToast() {
+  const [toasts, setToasts] = useState<Toast[]>([])
+  const addToast = (message: string, variant?: Toast['variant'], duration?: number) => {
+    const id = Math.random().toString(36).slice(2)
+    setToasts((prev) => [...prev, { id, message, variant: variant || 'default', duration: duration || 4000 }])
+  }
+  const dismissToast = (id: string) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id))
+  }
+  return { toasts, addToast, dismissToast }
+}
+
+export default ToastContainer`,
+    usage: `import { ToastContainer, useToast } from "@/app/components/ui/toast-notification"
+
+export function Demo() {
+  const { toasts, addToast, dismissToast } = useToast()
+  return (
+    <div>
+      <button onClick={() => addToast("Hello!", "success")}>Show Toast</button>
+      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
+    </div>
+  )
+}`,
+    props: [
+      {
+        name: "toasts",
+        type: "Toast[]",
+        default: "—",
+        description: "Array of toast objects with id, message, variant, and duration.",
+      },
+      {
+        name: "onDismiss",
+        type: "(id: string) => void",
+        default: "—",
+        description: "Callback to dismiss a toast by id.",
+      },
+      {
+        name: "position",
+        type: "'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'",
+        default: "'top-right'",
+        description: "Screen position of the toast stack.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "position", label: "Position", type: "select", default: "top-right", options: ["top-right", "top-left", "bottom-right", "bottom-left"] },
+      ],
+    },
+    component: () => import("@/app/components/ui/toast-notification"),
+    demo: () => import("@/app/components/demos/toast-notification-demo"),
+  },
+
+  "accordion": {
+    slug: "accordion",
+    title: "Accordion",
+    description:
+      "Smooth expand/collapse panels with animated chevron, supports single or multiple open panels.",
+    category: "navigation",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface AccordionItem {
+  id: string
+  title: string
+  content: React.ReactNode
+}
+
+interface AccordionProps {
+  items: AccordionItem[]
+  allowMultiple?: boolean
+  defaultOpen?: string[]
+  className?: string
+}
+
+const Accordion: React.FC<AccordionProps> = ({
+  items,
+  allowMultiple = false,
+  defaultOpen = [],
+  className,
+}) => {
+  const [openIds, setOpenIds] = useState<string[]>(defaultOpen)
+
+  const toggle = (id: string) => {
+    setOpenIds((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((i) => i !== id)
+      }
+      return allowMultiple ? [...prev, id] : [id]
+    })
+  }
+
+  return (
+    <div
+      className={cn(
+        'rounded-xl border border-border bg-obsidian overflow-hidden divide-y divide-border',
+        className
+      )}
+    >
+      {items.map((item) => {
+        const isOpen = openIds.includes(item.id)
+
+        return (
+          <div key={item.id}>
+            <button
+              type="button"
+              onClick={() => toggle(item.id)}
+              className="flex w-full items-center justify-between px-5 py-4 cursor-pointer transition-colors hover:bg-ignite/5"
+            >
+              <span className="text-sm font-medium text-chalk">{item.title}</span>
+              <motion.svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16" height="16" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" strokeWidth="2"
+                strokeLinecap="round" strokeLinejoin="round"
+                className="text-blush"
+                animate={{ rotate: isOpen ? 180 : 0 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </motion.svg>
+            </button>
+            <AnimatePresence initial={false}>
+              {isOpen && (
+                <motion.div
+                  key="content"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  className="overflow-hidden"
+                >
+                  <div className="px-5 pb-4 text-sm leading-relaxed text-blush">
+                    {item.content}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+export default Accordion`,
+    usage: `import Accordion from "@/app/components/ui/accordion"
+
+export function Demo() {
+  return (
+    <Accordion
+      items={[
+        { id: "1", title: "What is Praxys UI?", content: "An open-source animated component library." },
+        { id: "2", title: "Is it free?", content: "Yes! MIT licensed." },
+      ]}
+      defaultOpen={["1"]}
+    />
+  )
+}`,
+    props: [
+      {
+        name: "items",
+        type: "AccordionItem[]",
+        default: "—",
+        description: "Array of accordion items with id, title, and content.",
+      },
+      {
+        name: "allowMultiple",
+        type: "boolean",
+        default: "false",
+        description: "Whether multiple panels can be open simultaneously.",
+      },
+      {
+        name: "defaultOpen",
+        type: "string[]",
+        default: "[]",
+        description: "Array of item ids to open by default.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "allowMultiple", label: "Allow Multiple", type: "boolean", default: false },
+      ],
+      defaults: {
+        items: [
+          { id: "1", title: "What is Praxys UI?", content: "An open-source collection of animated React components you can copy-paste into your projects." },
+          { id: "2", title: "How do I install?", content: "Use the CLI: npx praxys-ui add accordion — or copy the source code." },
+          { id: "3", title: "Is it free?", content: "Yes! Completely free and open-source under the MIT license." },
+        ],
+        defaultOpen: ["1"],
+      },
+    },
+    component: () => import("@/app/components/ui/accordion"),
+    demo: () => import("@/app/components/demos/accordion-demo"),
+  },
+
+  "animated-tabs": {
+    slug: "animated-tabs",
+    title: "Animated Tabs",
+    description:
+      "Tab navigation with a smooth sliding indicator and crossfade content transitions.",
+    category: "navigation",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface Tab {
+  id: string
+  label: string
+  content: React.ReactNode
+}
+
+interface AnimatedTabsProps {
+  tabs: Tab[]
+  defaultTab?: string
+  className?: string
+}
+
+const AnimatedTabs: React.FC<AnimatedTabsProps> = ({
+  tabs,
+  defaultTab,
+  className,
+}) => {
+  const [activeTab, setActiveTab] = useState<string>(
+    defaultTab ?? tabs[0]?.id ?? ''
+  )
+
+  const activeContent = tabs.find((tab) => tab.id === activeTab)
+
+  return (
+    <div className={cn('w-full', className)}>
+      <div className="relative flex items-center gap-1 rounded-xl border border-border bg-obsidian p-1.5">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            onClick={() => setActiveTab(tab.id)}
+            className={cn(
+              'relative z-10 rounded-lg px-4 py-2 text-sm font-medium transition-colors cursor-pointer',
+              activeTab === tab.id ? 'text-chalk' : 'text-blush hover:text-chalk'
+            )}
+          >
+            {activeTab === tab.id && (
+              <motion.div
+                layoutId="tab-indicator"
+                className="absolute inset-0 rounded-lg bg-ignite/10 border border-ignite/20"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+            <span className="relative z-10">{tab.label}</span>
+          </button>
+        ))}
+      </div>
+      <div className="mt-4">
+        <AnimatePresence mode="wait">
+          {activeContent && (
+            <motion.div
+              key={activeContent.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.25, ease: 'easeInOut' }}
+            >
+              {activeContent.content}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  )
+}
+
+export default AnimatedTabs`,
+    usage: `import AnimatedTabs from "@/app/components/ui/animated-tabs"
+
+export function Demo() {
+  return (
+    <AnimatedTabs
+      tabs={[
+        { id: "preview", label: "Preview", content: <div>Preview content</div> },
+        { id: "code", label: "Code", content: <div>Code content</div> },
+      ]}
+      defaultTab="preview"
+    />
+  )
+}`,
+    props: [
+      {
+        name: "tabs",
+        type: "Tab[]",
+        default: "—",
+        description: "Array of tab objects with id, label, and content.",
+      },
+      {
+        name: "defaultTab",
+        type: "string",
+        default: "first tab id",
+        description: "ID of the initially active tab.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+    ],
+    playground: {
+      controls: [],
+      defaults: {
+        tabs: [
+          { id: "tab-1", label: "Preview", content: "This is the preview panel content." },
+          { id: "tab-2", label: "Code", content: "This is the code panel content." },
+          { id: "tab-3", label: "Usage", content: "This is the usage panel content." },
+        ],
+      },
+    },
+    component: () => import("@/app/components/ui/animated-tabs"),
+    demo: () => import("@/app/components/demos/animated-tabs-demo"),
+  },
+
+  "magnetic-cursor": {
+    slug: "magnetic-cursor",
+    title: "Magnetic Cursor",
+    description:
+      "A wrapper that creates a magnetic pull effect, attracting elements toward the cursor with configurable strength and radius.",
+    category: "visual",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useRef, useCallback } from 'react'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface MagneticCursorProps {
+  children: React.ReactNode
+  className?: string
+  strength?: number
+  radius?: number
+  springConfig?: { stiffness?: number; damping?: number }
+}
+
+const MagneticCursor: React.FC<MagneticCursorProps> = ({
+  children,
+  className = '',
+  strength = 0.3,
+  radius = 200,
+  springConfig,
+}) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const xMotion = useMotionValue(0)
+  const yMotion = useMotionValue(0)
+
+  const springOpts = {
+    stiffness: springConfig?.stiffness ?? 150,
+    damping: springConfig?.damping ?? 15,
+  }
+
+  const x = useSpring(xMotion, springOpts)
+  const y = useSpring(yMotion, springOpts)
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!ref.current) return
+      const rect = ref.current.getBoundingClientRect()
+      const centerX = rect.left + rect.width / 2
+      const centerY = rect.top + rect.height / 2
+      const distX = e.clientX - centerX
+      const distY = e.clientY - centerY
+      const distance = Math.sqrt(distX * distX + distY * distY)
+
+      if (distance < radius) {
+        xMotion.set(distX * strength)
+        yMotion.set(distY * strength)
+      } else {
+        xMotion.set(0)
+        yMotion.set(0)
+      }
+    },
+    [radius, strength, xMotion, yMotion]
+  )
+
+  const handleMouseLeave = useCallback(() => {
+    xMotion.set(0)
+    yMotion.set(0)
+  }, [xMotion, yMotion])
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ x, y }}
+      className={cn(className)}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+export default MagneticCursor`,
+    usage: `import MagneticCursor from "@/app/components/ui/magnetic-cursor"
+
+export function Demo() {
+  return (
+    <MagneticCursor strength={0.4} radius={150}>
+      <button className="rounded-lg bg-ignite/10 border border-ignite/30 px-6 py-3 text-chalk">
+        Hover near me
+      </button>
+    </MagneticCursor>
+  )
+}`,
+    props: [
+      {
+        name: "children",
+        type: "React.ReactNode",
+        default: "—",
+        description: "The element to apply the magnetic effect to.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "strength",
+        type: "number",
+        default: "0.3",
+        description: "Magnetic pull strength (0 = none, 1 = follows cursor fully).",
+      },
+      {
+        name: "radius",
+        type: "number",
+        default: "200",
+        description: "Pixel radius of the magnetic field.",
+      },
+      {
+        name: "springConfig",
+        type: "{ stiffness?: number; damping?: number }",
+        default: "{ stiffness: 150, damping: 15 }",
+        description: "Spring physics configuration for the animation.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "strength", label: "Strength", type: "number", default: 0.3, min: 0.05, max: 1, step: 0.05 },
+        { name: "radius", label: "Radius (px)", type: "number", default: 200, min: 50, max: 500, step: 25 },
+      ],
+    },
+    component: () => import("@/app/components/ui/magnetic-cursor"),
+    demo: () => import("@/app/components/demos/magnetic-cursor-demo"),
+  },
+
+  "parallax-scroll": {
+    slug: "parallax-scroll",
+    title: "Parallax Scroll",
+    description:
+      "Scroll-driven parallax layers with configurable speed multipliers for creating depth effects.",
+    category: "visual",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface ParallaxLayer {
+  content: React.ReactNode
+  speed?: number
+}
+
+interface ParallaxScrollProps {
+  layers: ParallaxLayer[]
+  className?: string
+  height?: string
+}
+
+const ParallaxLayerItem: React.FC<{
+  layer: ParallaxLayer
+  scrollYProgress: ReturnType<typeof useScroll>['scrollYProgress']
+}> = ({ layer, scrollYProgress }) => {
+  const { content, speed = 0.5 } = layer
+  const y = useTransform(scrollYProgress, [0, 1], [speed * -100, speed * 100])
+
+  return (
+    <motion.div className="absolute inset-0 flex items-center justify-center" style={{ y }}>
+      {content}
+    </motion.div>
+  )
+}
+
+const ParallaxScroll: React.FC<ParallaxScrollProps> = ({
+  layers,
+  className = '',
+  height = '400px',
+}) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  })
+
+  return (
+    <div
+      ref={ref}
+      className={cn('relative overflow-hidden rounded-xl border border-border bg-obsidian', className)}
+      style={{ height }}
+    >
+      {layers.map((layer, index) => (
+        <ParallaxLayerItem key={index} layer={layer} scrollYProgress={scrollYProgress} />
+      ))}
+    </div>
+  )
+}
+
+export default ParallaxScroll`,
+    usage: `import ParallaxScroll from "@/app/components/ui/parallax-scroll"
+
+export function Demo() {
+  return (
+    <ParallaxScroll
+      height="300px"
+      layers={[
+        { speed: 0.2, content: <div className="text-8xl text-ignite/10">BG</div> },
+        { speed: 0.8, content: <p className="text-chalk">Scroll me</p> },
+      ]}
+    />
+  )
+}`,
+    props: [
+      {
+        name: "layers",
+        type: "ParallaxLayer[]",
+        default: "—",
+        description: "Array of layers with content and speed multiplier.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "height",
+        type: "string",
+        default: "'400px'",
+        description: "Height of the parallax container.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "height", label: "Height", type: "text", default: "300px" },
+      ],
+      defaults: {
+        layers: [
+          { speed: 0.2, content: "Background Layer" },
+          { speed: 0.5, content: "Middle Layer" },
+          { speed: 0.8, content: "Foreground Layer" },
+        ],
+      },
+    },
+    component: () => import("@/app/components/ui/parallax-scroll"),
+    demo: () => import("@/app/components/demos/parallax-scroll-demo"),
+  },
+
+  "gradient-mesh": {
+    slug: "gradient-mesh",
+    title: "Gradient Mesh",
+    description:
+      "Animated multi-color gradient mesh background with smooth transitions between color states.",
+    category: "visual",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface GradientMeshProps {
+  className?: string
+  colors?: string[]
+  speed?: number
+  blur?: number
+  children?: React.ReactNode
+}
+
+const blobKeyframes = [
+  { x: ['0%', '30%', '10%', '0%'], y: ['0%', '20%', '40%', '0%'] },
+  { x: ['60%', '30%', '50%', '60%'], y: ['10%', '50%', '20%', '10%'] },
+  { x: ['20%', '50%', '10%', '20%'], y: ['50%', '10%', '30%', '50%'] },
+  { x: ['40%', '10%', '60%', '40%'], y: ['30%', '60%', '0%', '30%'] },
+]
+
+const durationMultipliers = [1, 1.3, 0.9, 1.1]
+
+const GradientMesh: React.FC<GradientMeshProps> = ({
+  className = '',
+  colors = ['#E84E2D', '#C9958A', '#F2ECE2', '#0B0A08'],
+  speed = 8,
+  blur = 100,
+  children,
+}) => {
+  return (
+    <div className={cn('relative overflow-hidden rounded-xl border border-border', className)}>
+      <div className="absolute inset-0" style={{ filter: \\\`blur(\\\${blur}px)\\\` }}>
+        {colors.map((color, i) => {
+          const keyframe = blobKeyframes[i % blobKeyframes.length]
+          const duration = speed * durationMultipliers[i % durationMultipliers.length]
+          return (
+            <motion.div
+              key={i}
+              className="absolute h-[60%] w-[60%] rounded-full"
+              style={{ background: \\\`radial-gradient(circle, \\\${color} 0%, transparent 70%)\\\` }}
+              animate={{ x: keyframe.x, y: keyframe.y }}
+              transition={{ duration, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          )
+        })}
+      </div>
+      <div className="relative z-10">{children}</div>
+    </div>
+  )
+}
+
+export default GradientMesh`,
+    usage: `import GradientMesh from "@/app/components/ui/gradient-mesh"
+
+export function Demo() {
+  return (
+    <GradientMesh className="h-64 w-full">
+      <div className="flex h-full items-center justify-center">
+        <p className="font-pixel text-2xl text-chalk">Gradient Mesh</p>
+      </div>
+    </GradientMesh>
+  )
+}`,
+    props: [
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "colors",
+        type: "string[]",
+        default: "['#E84E2D', '#C9958A', '#F2ECE2', '#0B0A08']",
+        description: "Array of colors for the gradient blobs.",
+      },
+      {
+        name: "speed",
+        type: "number",
+        default: "8",
+        description: "Base animation speed in seconds.",
+      },
+      {
+        name: "blur",
+        type: "number",
+        default: "100",
+        description: "Blur amount in pixels.",
+      },
+      {
+        name: "children",
+        type: "React.ReactNode",
+        default: "—",
+        description: "Content to display on top of the mesh.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "speed", label: "Speed (s)", type: "number", default: 8, min: 2, max: 20, step: 1 },
+        { name: "blur", label: "Blur (px)", type: "number", default: 100, min: 20, max: 200, step: 10 },
+      ],
+    },
+    component: () => import("@/app/components/ui/gradient-mesh"),
+    demo: () => import("@/app/components/demos/gradient-mesh-demo"),
+  },
+
+  "skeleton-loader": {
+    slug: "skeleton-loader",
+    title: "Skeleton Loader",
+    description:
+      "Animated placeholder loading states with shimmer effect, supporting text, avatar, card, and button variants.",
+    category: "visual",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface SkeletonLoaderProps {
+  variant?: 'text' | 'avatar' | 'card' | 'button'
+  width?: string | number
+  height?: string | number
+  count?: number
+  animate?: boolean
+  className?: string
+}
+
+const variantStyles = {
+  text: 'rounded-md w-full h-4',
+  avatar: 'rounded-full w-12 h-12',
+  card: 'rounded-xl w-full h-[200px]',
+  button: 'rounded-lg w-[120px] h-10',
+}
+
+const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
+  variant = 'text',
+  width,
+  height,
+  count = 1,
+  animate = true,
+  className = '',
+}) => {
+  const lines = variant === 'text' ? count : 1
+
+  return (
+    <>
+      {Array.from({ length: lines }).map((_, i) => {
+        const isLastLine = variant === 'text' && lines > 1 && i === lines - 1
+        return (
+          <div
+            key={i}
+            className={cn('bg-border/20 overflow-hidden', variantStyles[variant], className)}
+            style={{ width: isLastLine ? '75%' : width, height }}
+          >
+            {animate && (
+              <motion.div
+                className="h-full w-full"
+                style={{
+                  background: 'linear-gradient(90deg, transparent, rgba(232,78,45,0.06), transparent)',
+                  backgroundSize: '200% 100%',
+                }}
+                animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+              />
+            )}
+          </div>
+        )
+      })}
+    </>
+  )
+}
+
+export default SkeletonLoader`,
+    usage: `import SkeletonLoader from "@/app/components/ui/skeleton-loader"
+
+export function Demo() {
+  return (
+    <div className="space-y-4">
+      <SkeletonLoader variant="card" height={160} />
+      <div className="flex items-center gap-3">
+        <SkeletonLoader variant="avatar" />
+        <div className="flex-1 space-y-2">
+          <SkeletonLoader variant="text" />
+          <SkeletonLoader variant="text" width="60%" />
+        </div>
+      </div>
+    </div>
+  )
+}`,
+    props: [
+      {
+        name: "variant",
+        type: "'text' | 'avatar' | 'card' | 'button'",
+        default: "'text'",
+        description: "Shape variant of the skeleton.",
+      },
+      {
+        name: "width",
+        type: "string | number",
+        default: "auto",
+        description: "Custom width override.",
+      },
+      {
+        name: "height",
+        type: "string | number",
+        default: "auto",
+        description: "Custom height override.",
+      },
+      {
+        name: "count",
+        type: "number",
+        default: "1",
+        description: "Number of skeleton lines (text variant only).",
+      },
+      {
+        name: "animate",
+        type: "boolean",
+        default: "true",
+        description: "Whether the shimmer animation plays.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "variant", label: "Variant", type: "select", default: "text", options: ["text", "avatar", "card", "button"] },
+        { name: "count", label: "Count", type: "number", default: 1, min: 1, max: 6, step: 1 },
+        { name: "animate", label: "Animate", type: "boolean", default: true },
+      ],
+    },
+    component: () => import("@/app/components/ui/skeleton-loader"),
+    demo: () => import("@/app/components/demos/skeleton-loader-demo"),
+  },
+
+  "morphing-text": {
+    slug: "morphing-text",
+    title: "Morphing Text",
+    description:
+      "Text that morphs between words using a blur crossfade effect, creating smooth character interpolation transitions.",
+    category: "text",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useState, useEffect, useCallback } from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface MorphingTextProps {
+  words: string[]
+  className?: string
+  interval?: number
+  morphDuration?: number
+}
+
+const MorphingText: React.FC<MorphingTextProps> = ({
+  words,
+  className = '',
+  interval = 3000,
+  morphDuration = 1500,
+}) => {
+  const [index, setIndex] = useState(0)
+  const [morphing, setMorphing] = useState(false)
+
+  const nextIndex = (index + 1) % words.length
+
+  const startMorph = useCallback(() => {
+    setMorphing(true)
+  }, [])
+
+  useEffect(() => {
+    const timer = setInterval(startMorph, interval)
+    return () => clearInterval(timer)
+  }, [startMorph, interval])
+
+  useEffect(() => {
+    if (!morphing) return
+    const timeout = setTimeout(() => {
+      setIndex((prev) => (prev + 1) % words.length)
+      setMorphing(false)
+    }, morphDuration)
+    return () => clearTimeout(timeout)
+  }, [morphing, morphDuration, words.length])
+
+  const durationSec = morphDuration / 1000
+
+  return (
+    <span className={cn('relative inline-flex text-center', className)}>
+      <motion.span
+        className="inline-block"
+        animate={{
+          opacity: morphing ? 0 : 1,
+          filter: morphing ? 'blur(8px)' : 'blur(0px)',
+        }}
+        transition={{ duration: durationSec, ease: 'easeInOut' }}
+      >
+        {words[index]}
+      </motion.span>
+      <motion.span
+        className="absolute inset-0 inline-block"
+        animate={{
+          opacity: morphing ? 1 : 0,
+          filter: morphing ? 'blur(0px)' : 'blur(8px)',
+        }}
+        transition={{ duration: durationSec, ease: 'easeInOut' }}
+      >
+        {words[nextIndex]}
+      </motion.span>
+    </span>
+  )
+}
+
+export default MorphingText`,
+    usage: `import MorphingText from "@/app/components/ui/morphing-text"
+
+export function Demo() {
+  return (
+    <h1 className="text-4xl font-bold text-chalk">
+      We make it{" "}
+      <MorphingText
+        words={["simple", "beautiful", "powerful", "fast"]}
+        className="text-ignite"
+      />
+    </h1>
+  )
+}`,
+    props: [
+      {
+        name: "words",
+        type: "string[]",
+        default: "—",
+        description: "Array of words to morph between.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "interval",
+        type: "number",
+        default: "3000",
+        description: "Time between morphs in milliseconds.",
+      },
+      {
+        name: "morphDuration",
+        type: "number",
+        default: "1500",
+        description: "Duration of the morph transition in milliseconds.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "interval", label: "Interval (ms)", type: "number", default: 3000, min: 1000, max: 8000, step: 250 },
+        { name: "morphDuration", label: "Morph Duration (ms)", type: "number", default: 1500, min: 300, max: 3000, step: 100 },
+      ],
+      defaults: {
+        words: ["simple", "beautiful", "powerful", "fast"],
+      },
+    },
+    component: () => import("@/app/components/ui/morphing-text"),
+    demo: () => import("@/app/components/demos/morphing-text-demo"),
+  },
+
+  "spotlight-card": {
+    slug: "spotlight-card",
+    title: "Spotlight Card",
+    description:
+      "A card with a radial spotlight that follows the cursor, creating a flashlight reveal effect.",
+    category: "cards",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useRef } from 'react'
+import { motion, useMotionTemplate, useMotionValue } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface SpotlightCardProps {
+  children: React.ReactNode
+  className?: string
+  spotlightColor?: string
+  spotlightSize?: number
+}
+
+const SpotlightCard: React.FC<SpotlightCardProps> = ({
+  children,
+  className,
+  spotlightColor = 'rgba(232, 78, 45, 0.15)',
+  spotlightSize = 300,
+}) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = ref.current?.getBoundingClientRect()
+    if (!rect) return
+    mouseX.set(e.clientX - rect.left)
+    mouseY.set(e.clientY - rect.top)
+  }
+
+  const background = useMotionTemplate\`radial-gradient(
+    \${spotlightSize}px circle at \${mouseX}px \${mouseY}px,
+    \${spotlightColor},
+    transparent 80%
+  )\`
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      className={cn('group relative rounded-xl border border-border bg-obsidian overflow-hidden', className)}
+    >
+      <motion.div
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background }}
+      />
+      <div className="relative z-10 p-6">{children}</div>
+    </div>
+  )
+}
+
+export default SpotlightCard`,
+    usage: `import SpotlightCard from "@/app/components/ui/spotlight-card"
+
+export function Demo() {
+  return (
+    <SpotlightCard>
+      <h3 className="font-pixel text-lg text-chalk">Card Title</h3>
+      <p className="mt-2 text-sm text-blush">Hover to see the spotlight effect.</p>
+    </SpotlightCard>
+  )
+}`,
+    props: [
+      {
+        name: "children",
+        type: "React.ReactNode",
+        default: "—",
+        description: "Content inside the card.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+      {
+        name: "spotlightColor",
+        type: "string",
+        default: "'rgba(232, 78, 45, 0.15)'",
+        description: "Color of the spotlight radial gradient.",
+      },
+      {
+        name: "spotlightSize",
+        type: "number",
+        default: "300",
+        description: "Diameter of the spotlight in pixels.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "spotlightColor", label: "Spotlight Color", type: "color", default: "rgba(232, 78, 45, 0.15)" },
+        { name: "spotlightSize", label: "Spotlight Size (px)", type: "number", default: 300, min: 100, max: 600, step: 50 },
+      ],
+    },
+    component: () => import("@/app/components/ui/spotlight-card"),
+    demo: () => import("@/app/components/demos/spotlight-card-demo"),
   },
 };
 

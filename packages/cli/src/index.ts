@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, writeFileSync, readFileSync } from "fs";
 import { join } from "path";
 import { execSync } from "child_process";
 
-const VERSION = "0.1.0";
+const VERSION = "0.2.0";
 
 // ─── Utility file contents ──────────────────────────────
 
@@ -26,9 +26,11 @@ const COMPONENTS_BASE_URL =
   "https://raw.githubusercontent.com/sushanttverma/Praxys-UI/main/app/components/ui";
 
 const COMPONENT_LIST = [
+  "accordion",
   "animated-button",
   "animated-hero",
   "animated-number",
+  "animated-tabs",
   "creepy-button",
   "displacement-text",
   "expandable-bento-grid",
@@ -37,19 +39,27 @@ const COMPONENT_LIST = [
   "folder-preview",
   "glass-dock",
   "glow-border-card",
+  "gradient-mesh",
   "interactive-book",
   "light-lines",
   "line-hover-link",
   "liquid-metal",
   "liquid-ocean",
   "logo-slider",
+  "magnetic-cursor",
   "masked-avatars",
+  "morphing-text",
+  "parallax-scroll",
   "perspective-grid",
   "reveal-loader",
+  "skeleton-loader",
   "social-flip-button",
+  "spotlight-card",
   "spotlight-navbar",
   "staggered-grid",
   "testimonials-card",
+  "toast-notification",
+  "typewriter-text",
 ];
 
 // ─── Helpers ─────────────────────────────────────────────

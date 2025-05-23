@@ -12,34 +12,53 @@ const componentCategories = [
   },
   {
     name: "Cards & Layout",
-    count: 5,
+    count: 6,
     items: [
       "Glow Border Card",
       "Testimonials Card",
       "Staggered Grid",
       "Expandable Bento Grid",
       "Perspective Grid",
+      "Spotlight Card",
     ],
   },
   {
     name: "Text Effects",
-    count: 4,
+    count: 6,
     items: [
       "3D Displacement Text",
       "Flip Text",
       "Flip Fade Text",
       "Animated Number",
+      "Typewriter Text",
+      "Morphing Text",
     ],
   },
   {
     name: "Navigation",
-    count: 3,
-    items: ["Spotlight Navbar", "Glass Dock", "Line Hover Link"],
+    count: 5,
+    items: [
+      "Spotlight Navbar",
+      "Glass Dock",
+      "Line Hover Link",
+      "Accordion",
+      "Animated Tabs",
+    ],
   },
   {
     name: "Visual Effects",
-    count: 4,
-    items: ["Liquid Ocean", "Liquid Metal", "Light Lines", "Reveal Loader"],
+    count: 9,
+    items: [
+      "Liquid Ocean",
+      "Liquid Metal",
+      "Light Lines",
+      "Reveal Loader",
+      "Toast Notification",
+      "Magnetic Cursor",
+      "Parallax Scroll",
+      "Gradient Mesh",
+      "Skeleton Loader",
+    ],
   },
   {
     name: "Media & Content",
@@ -75,7 +94,7 @@ export default function ComponentGrid() {
             transition={{ delay: 0.1 }}
             className="font-pixel text-3xl font-bold text-chalk md:text-5xl"
           >
-            24 Components
+            34 Components
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
