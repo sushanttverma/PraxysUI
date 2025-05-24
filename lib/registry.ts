@@ -3816,6 +3816,13 @@ export function Demo() {
       controls: [
         { name: "position", label: "Position", type: "select", default: "top-right", options: ["top-right", "top-left", "bottom-right", "bottom-left"] },
       ],
+      defaults: {
+        toasts: [
+          { id: "1", message: "File saved successfully", variant: "success" },
+          { id: "2", message: "Something went wrong", variant: "error" },
+          { id: "3", message: "New update available", variant: "default" },
+        ],
+      },
     },
     component: () => import("@/app/components/ui/toast-notification"),
     demo: () => import("@/app/components/demos/toast-notification-demo"),

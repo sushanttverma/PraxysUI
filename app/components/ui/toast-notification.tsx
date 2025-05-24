@@ -149,6 +149,8 @@ const ToastContainer: React.FC<ToastProps> = ({
   position = 'top-right',
   className = '',
 }) => {
+  const handleDismiss = onDismiss ?? (() => {})
+
   return (
     <div
       className={cn(
@@ -158,8 +160,8 @@ const ToastContainer: React.FC<ToastProps> = ({
       )}
     >
       <AnimatePresence mode="popLayout">
-        {toasts.map((toast) => (
-          <ToastItem key={toast.id} toast={toast} onDismiss={onDismiss} />
+        {(toasts ?? []).map((toast) => (
+          <ToastItem key={toast.id} toast={toast} onDismiss={handleDismiss} />
         ))}
       </AnimatePresence>
     </div>
