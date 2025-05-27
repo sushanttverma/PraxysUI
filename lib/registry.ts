@@ -3364,7 +3364,10 @@ const LogoSlider: React.FC<LogoSliderProps> = ({
         ref={scrollRef}
         className="flex w-max"
         style={{
-          animation: \\\`logo-slide \\\${duration}s linear infinite\\\`,
+          animationName: 'logo-slide',
+          animationDuration: \\\`\\\${duration}s\\\`,
+          animationTimingFunction: 'linear',
+          animationIterationCount: 'infinite',
           animationDirection: direction === 'right' ? 'reverse' : 'normal',
           animationPlayState: 'running',
           gap: \\\`\\\${gap}px\\\`,
