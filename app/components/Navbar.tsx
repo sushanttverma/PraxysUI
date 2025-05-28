@@ -38,6 +38,12 @@ export default function Navbar() {
             Templates
           </Link>
           <Link
+            href="/customize"
+            className="text-sm text-blush transition-colors hover:text-chalk"
+          >
+            Customize
+          </Link>
+          <Link
             href="/docs"
             className="text-sm text-blush transition-colors hover:text-chalk"
           >
@@ -99,6 +105,13 @@ export default function Navbar() {
                 className="rounded-lg px-3 py-2.5 text-sm text-blush transition-colors hover:bg-void hover:text-chalk"
               >
                 Templates
+              </Link>
+              <Link
+                href="/customize"
+                onClick={() => setMobileOpen(false)}
+                className="rounded-lg px-3 py-2.5 text-sm text-blush transition-colors hover:bg-void hover:text-chalk"
+              >
+                Customize
               </Link>
               <Link
                 href="/docs"

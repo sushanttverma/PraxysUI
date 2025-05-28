@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s | Praxys UI",
   },
   description:
-    "A curated collection of 24 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+    "A curated collection of 34 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
   keywords: [
     "React",
     "components",
@@ -40,13 +40,13 @@ export const metadata: Metadata = {
     siteName: "Praxys UI",
     title: "Praxys UI - Animated React Components",
     description:
-      "A curated collection of 24 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+      "A curated collection of 34 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Praxys UI - Animated React Components",
     description:
-      "A curated collection of 24 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+      "A curated collection of 34 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
   },
   robots: {
     index: true,

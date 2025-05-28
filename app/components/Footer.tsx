@@ -7,6 +7,7 @@ const footerLinks = [
     links: [
       { label: "Components", href: "/docs/components-overview" },
       { label: "Templates", href: "/templates" },
+      { label: "Customize", href: "/customize" },
       { label: "Documentation", href: "/docs" },
       { label: "Changelog", href: "/changelog" },
     ],
@@ -26,7 +27,7 @@ const footerLinks = [
       { label: "GitHub", href: "https://github.com/sushanttverma/Praxys-UI" },
       { label: "Discord", href: "#" },
       { label: "Twitter", href: "#" },
-      { label: "Contributing", href: "#" },
+      { label: "Contributing", href: "https://github.com/sushanttverma/Praxys-UI/blob/main/CONTRIBUTING.md" },
     ],
   },
 ];
