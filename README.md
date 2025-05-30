@@ -2,7 +2,7 @@
 
 # Praxys UI
 
-**A curated collection of 24 beautifully crafted, animated React components.**
+**A curated collection of 34 beautifully crafted, animated React components.**
 
 Browse. Copy. Paste. Ship.
 
@@ -13,7 +13,7 @@ Browse. Copy. Paste. Ship.
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-FF0050?style=flat-square&logo=framer)](https://www.framer.com/motion)
 [![License](https://img.shields.io/badge/License-MIT-E84E2D?style=flat-square)](LICENSE)
 
-[Live Demo](https://ui.praxys.xyz) · [Documentation](https://ui.praxys.xyz/docs) · [Components](https://ui.praxys.xyz/docs/components-overview)
+[Live Demo](https://ui.praxys.xyz) · [Documentation](https://ui.praxys.xyz/docs) · [Components](https://ui.praxys.xyz/docs/components-overview) · [Theme Customizer](https://ui.praxys.xyz/customize)
 
 </div>
 
@@ -26,23 +26,23 @@ Praxys UI is an open-source component library and documentation site for animate
 - **Copy & Paste** — No dependency on a package registry. Own the code.
 - **TypeScript First** — Full type safety with well-defined interfaces.
 - **Animated** — Powered by Framer Motion for smooth, performant animations.
-- **Themeable** — Light and dark mode with CSS custom properties.
+- **Themeable** — Light and dark mode with CSS custom properties. [Customize your theme](https://ui.praxys.xyz/customize).
 - **CLI Available** — Scaffold components directly from the terminal.
 
 ## Components
 
-24 production-ready components across 6 categories:
+34 production-ready components across 6 categories:
 
 | Category | Components |
 |----------|-----------|
 | **Buttons** | Animated Button, Creepy Button, Social Flip Button |
-| **Cards & Layout** | Glow Border Card, Testimonials Card, Staggered Grid, Expandable Bento Grid, Perspective Grid |
-| **Text Effects** | Flip Text, Animated Number, Flip Fade Text, Displacement Text |
-| **Navigation** | Line Hover Link, Spotlight Navbar, Glass Dock |
-| **Visual Effects** | Light Lines, Liquid Ocean, Liquid Metal, Reveal Loader |
+| **Cards & Layout** | Glow Border Card, Testimonials Card, Staggered Grid, Expandable Bento Grid, Perspective Grid, Spotlight Card |
+| **Text Effects** | Flip Text, Animated Number, Flip Fade Text, Displacement Text, Typewriter Text, Morphing Text |
+| **Navigation** | Line Hover Link, Spotlight Navbar, Glass Dock, Accordion, Animated Tabs |
+| **Visual Effects** | Light Lines, Liquid Ocean, Liquid Metal, Reveal Loader, Toast Notification, Magnetic Cursor, Parallax Scroll, Gradient Mesh, Skeleton Loader |
 | **Media & Content** | Animated Hero, Masked Avatars, Folder Preview, Interactive Book, Logo Slider |
 
-Every component includes a live preview, full source code, installation steps, usage example, and props table.
+Every component includes a live preview, full source code, installation steps, usage example, interactive props playground, and props table.
 
 ## Quick Start
 
@@ -91,13 +91,16 @@ Open [http://localhost:3000](http://localhost:3000) for the landing page, or [ht
 
 ## Features
 
-- **24 Animated Components** — Buttons, cards, text effects, navigation, visual effects, and media components
+- **34 Animated Components** — Buttons, cards, text effects, navigation, visual effects, and media components
+- **Interactive Props Playground** — Tweak every prop and see changes live on each component page
 - **Light / Dark Mode** — Theme toggle with CSS custom properties, persisted to localStorage, no FOUC
+- **Theme Customizer** — Pick brand colors, preview components live, export CSS / JSON / Tailwind config
 - **Command Palette** — Press `Ctrl+K` to fuzzy-search across all components and docs pages
 - **Shiki Syntax Highlighting** — Server-rendered code blocks with dual themes (vitesse-dark / vitesse-light)
 - **Dynamic Docs** — Single `[slug]` route with a component registry, no per-page files needed
 - **Templates Gallery** — Curated page templates to jumpstart full layouts
 - **CLI Tool** — `npx praxys-ui init` / `add` / `list` to scaffold components from the terminal
+- **Examples & Recipes** — Real-world patterns combining multiple components
 
 ## Project Structure
 
@@ -110,33 +113,40 @@ praxys-ui/
 │   ├── fonts/
 │   │   └── GeistPixel-Square.woff2
 │   ├── components/
-│   │   ├── ui/                  # 24 reusable animated components
+│   │   ├── ui/                  # 34 reusable animated components
 │   │   ├── demos/               # Demo wrappers for docs previews
 │   │   ├── ThemeProvider.tsx     # React context + localStorage + system preference
 │   │   ├── ThemeToggle.tsx       # Animated sun/moon toggle
 │   │   ├── CommandPalette.tsx    # Ctrl+K search modal
-│   │   ├── Navbar.tsx            # Landing navbar
+│   │   ├── Navbar.tsx            # Site navbar
 │   │   ├── Hero.tsx, Features.tsx, ComponentGrid.tsx, CTA.tsx, Footer.tsx
 │   │   └── ComponentShowcase.tsx # Landing marquee carousel
+│   ├── customize/               # Theme customizer page
 │   ├── docs/
 │   │   ├── layout.tsx           # Server layout
 │   │   ├── DocsShell.tsx        # Client shell — navbar + sidebar toggle
 │   │   ├── page.tsx             # /docs — introduction
-│   │   ├── components/          # Sidebar, CodeBlock, CopyButton, PropsTable, etc.
+│   │   ├── components/          # Sidebar, CodeBlock, CopyButton, PropsPlayground, etc.
 │   │   └── [slug]/
 │   │       ├── page.tsx         # Dynamic route for all doc + component pages
 │   │       ├── ComponentPageClient.tsx
 │   │       └── pages/           # Static doc page content (intro, installation, etc.)
-│   └── templates/
-│       └── page.tsx             # Templates gallery
+│   ├── templates/               # Templates gallery + individual template pages
+│   └── changelog/               # Changelog page
 ├── lib/
 │   ├── utils.ts                 # cn() utility
-│   └── registry.ts              # Component registry + sidebar configuration
+│   ├── registry.ts              # Component registry + sidebar configuration
+│   └── templates.ts             # Templates registry
 ├── packages/
-│   └── cli/                     # npx praxys-ui CLI tool
+│   └── cli/                     # npx praxys-ui CLI tool (v0.2.0)
 │       ├── package.json
 │       ├── tsconfig.json
 │       └── src/index.ts
+├── .github/
+│   ├── ISSUE_TEMPLATE/          # Bug report and feature request templates
+│   └── pull_request_template.md
+├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
 ├── package.json
 └── README.md
 ```
@@ -165,7 +175,7 @@ Praxys UI uses a warm palette with five intentional brand colors and full light/
 | **Blush** | `#C9958A` | `#8B6B62` | Secondary text, hover states |
 | **Chalk** | `#F2ECE2` | `#1A1714` | Primary text |
 
-All colors are available as CSS custom properties and Tailwind utilities.
+All colors are available as CSS custom properties and Tailwind utilities. Use the [Theme Customizer](https://ui.praxys.xyz/customize) to create your own palette.
 
 ## Scripts
 
@@ -178,7 +188,7 @@ All colors are available as CSS custom properties and Tailwind utilities.
 
 ## Contributing
 
-Contributions are welcome.
+Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md) and our [Code of Conduct](CODE_OF_CONDUCT.md) before getting started.
 
 1. **Add a component** — Create it in `app/components/ui/`, add a demo in `app/components/demos/`, register it in `lib/registry.ts`, and add its slug to `packages/cli/src/index.ts`.
 2. **Improve existing components** — Better animations, accessibility, or customization.

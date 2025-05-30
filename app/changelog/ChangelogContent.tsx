@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowLeft, GitCommit, Sparkles, Wrench, Zap, BookOpen, Palette, Terminal, Search, Layout, Shield, Globe } from 'lucide-react'
+import { ArrowLeft, GitCommit, Sparkles, Wrench, Zap, BookOpen, Palette, Terminal, Search, Layout, Shield, Globe, Puzzle, Paintbrush, Heart } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import ThemeToggle from '../components/ThemeToggle'
 
@@ -19,6 +19,39 @@ interface ChangelogEntry {
 }
 
 const changelog: ChangelogEntry[] = [
+  {
+    version: '0.8.0',
+    date: 'Feb 14, 2026',
+    title: 'New Components, Theme Customizer & Open Source',
+    description: '10 new components, interactive theme customizer with export, Props Playground for all components, and full open-source community setup.',
+    icon: <Puzzle className="h-4 w-4" />,
+    changes: [
+      { type: 'added', text: 'Typewriter Text — animated typing effect with cursor and configurable speed' },
+      { type: 'added', text: 'Toast Notification — stackable toast system with multiple variants' },
+      { type: 'added', text: 'Accordion — smooth expand/collapse with icon rotation' },
+      { type: 'added', text: 'Animated Tabs — tab switcher with sliding indicator and content transitions' },
+      { type: 'added', text: 'Magnetic Cursor — element that pulls toward the mouse pointer' },
+      { type: 'added', text: 'Parallax Scroll — depth-based scroll animations for layered content' },
+      { type: 'added', text: 'Gradient Mesh — animated multi-point gradient background' },
+      { type: 'added', text: 'Skeleton Loader — pulsing placeholder for loading states' },
+      { type: 'added', text: 'Morphing Text — smooth text transitions between words' },
+      { type: 'added', text: 'Spotlight Card — card with mouse-following light effect' },
+      { type: 'added', text: 'Theme Customizer page (/customize) with color pickers, 6 presets, live preview, and CSS export' },
+      { type: 'added', text: 'Interactive Props Playground with live controls for all 34 components' },
+      { type: 'added', text: 'Live interactive demos on component showcase (landing page)' },
+      { type: 'added', text: '6 interactive template pages with preview toolbar and responsive viewport switcher' },
+      { type: 'added', text: 'CONTRIBUTING.md, CODE_OF_CONDUCT.md, issue templates, and PR template for open source' },
+      { type: 'improved', text: 'CLI updated to v0.2.0 with all 34 components' },
+      { type: 'improved', text: 'Component showcase redesigned with live demos instead of placeholder cards' },
+      { type: 'improved', text: 'Dark mode text contrast improved (--color-text-faint bumped to #6b6560)' },
+      { type: 'improved', text: 'Comprehensive responsive design fixes across all components and pages' },
+      { type: 'fixed', text: 'Nested <a> tags in ComponentShowcase — replaced Link with div + useRouter' },
+      { type: 'fixed', text: 'ToastContainer crash when toasts/onDismiss are undefined in playground' },
+      { type: 'fixed', text: 'LogoSlider animation shorthand/longhand conflict in React 19' },
+      { type: 'fixed', text: 'Missing playground defaults for glass-dock and logo-slider' },
+      { type: 'fixed', text: 'CopyButton invisible on touch devices — now always visible on mobile' },
+    ],
+  },
   {
     version: '0.7.0',
     date: 'Feb 14, 2026',
