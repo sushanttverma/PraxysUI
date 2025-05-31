@@ -44,6 +44,12 @@ export default function Navbar() {
             Customize
           </Link>
           <Link
+            href="/examples"
+            className="text-sm text-blush transition-colors hover:text-chalk"
+          >
+            Examples
+          </Link>
+          <Link
             href="/docs"
             className="text-sm text-blush transition-colors hover:text-chalk"
           >
@@ -112,6 +118,13 @@ export default function Navbar() {
                 className="rounded-lg px-3 py-2.5 text-sm text-blush transition-colors hover:bg-void hover:text-chalk"
               >
                 Customize
+              </Link>
+              <Link
+                href="/examples"
+                onClick={() => setMobileOpen(false)}
+                className="rounded-lg px-3 py-2.5 text-sm text-blush transition-colors hover:bg-void hover:text-chalk"
+              >
+                Examples
               </Link>
               <Link
                 href="/docs"

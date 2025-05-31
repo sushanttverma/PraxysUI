@@ -8,6 +8,7 @@ const footerLinks = [
       { label: "Components", href: "/docs/components-overview" },
       { label: "Templates", href: "/templates" },
       { label: "Customize", href: "/customize" },
+      { label: "Examples", href: "/examples" },
       { label: "Documentation", href: "/docs" },
       { label: "Changelog", href: "/changelog" },
     ],

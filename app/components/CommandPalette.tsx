@@ -14,14 +14,22 @@ interface SearchItem {
 }
 
 // Build flat search list from sidebar groups
-const searchItems: SearchItem[] = sidebarGroups.flatMap((group) =>
-  group.items.map((item) => ({
-    slug: item.slug,
-    title: item.title,
-    group: group.title,
-    href: item.slug === 'introduction' ? '/docs' : `/docs/${item.slug}`,
-  }))
-)
+const searchItems: SearchItem[] = [
+  // Top-level pages
+  { slug: 'examples', title: 'Examples & Recipes', group: 'Pages', href: '/examples' },
+  { slug: 'customize', title: 'Theme Customizer', group: 'Pages', href: '/customize' },
+  { slug: 'templates', title: 'Templates', group: 'Pages', href: '/templates' },
+  { slug: 'changelog', title: 'Changelog', group: 'Pages', href: '/changelog' },
+  // All docs/component pages
+  ...sidebarGroups.flatMap((group) =>
+    group.items.map((item) => ({
+      slug: item.slug,
+      title: item.title,
+      group: group.title,
+      href: item.slug === 'introduction' ? '/docs' : `/docs/${item.slug}`,
+    }))
+  ),
+]
 
 function fuzzyMatch(query: string, text: string): boolean {
   const q = query.toLowerCase()
