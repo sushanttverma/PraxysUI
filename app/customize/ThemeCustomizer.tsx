@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Copy, Check, RotateCcw, Download, Palette } from 'lucide-react'
+import { Copy, Check, RotateCcw, Download, Palette, FileJson, FileCode, Figma } from 'lucide-react'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
 
@@ -200,16 +200,183 @@ function generateCSS(dark: ThemeColors, light: ThemeColors): string {
 
 // ─── Component ───────────────────────────────────────────
 
+type ExportFormat = 'css' | 'json' | 'tailwind' | 'figma'
+
+const exportFormats: { key: ExportFormat; label: string; icon: React.ReactNode; ext: string; mime: string }[] = [
+  { key: 'css', label: 'CSS', icon: <FileCode className="h-3.5 w-3.5" />, ext: 'css', mime: 'text/css' },
+  { key: 'json', label: 'JSON', icon: <FileJson className="h-3.5 w-3.5" />, ext: 'json', mime: 'application/json' },
+  { key: 'tailwind', label: 'Tailwind', icon: <FileCode className="h-3.5 w-3.5" />, ext: 'js', mime: 'application/javascript' },
+  { key: 'figma', label: 'Figma', icon: <Figma className="h-3.5 w-3.5" />, ext: 'json', mime: 'application/json' },
+]
+
+function generateJSON(dark: ThemeColors, light: ThemeColors): string {
+  const buildTokens = (c: ThemeColors, mode: string) => {
+    const border = deriveBorder(c.obsidian, c.chalk)
+    const borderLight = deriveBorderLight(c.obsidian, c.chalk)
+    const textFaint = deriveTextFaint(c.blush)
+    return {
+      [`${mode}`]: {
+        core: {
+          void: c.void,
+          obsidian: c.obsidian,
+          ignite: c.ignite,
+          blush: c.blush,
+          chalk: c.chalk,
+        },
+        derived: {
+          border,
+          'border-light': borderLight,
+          'text-faint': textFaint,
+          'ignite-dim': `${c.ignite}14`,
+          'code-bg': c.obsidian,
+        },
+        glow: {
+          'ignite-shadow': `0 0 60px -12px ${c.ignite}30, 0 0 120px -24px ${c.ignite}15`,
+          'selection-bg': `${c.ignite}40`,
+        },
+      },
+    }
+  }
+  const tokens = {
+    $schema: 'https://ui.praxys.xyz/theme-schema.json',
+    name: 'Praxys UI Custom Theme',
+    version: '1.0.0',
+    ...buildTokens(dark, 'dark'),
+    ...buildTokens(light, 'light'),
+  }
+  return JSON.stringify(tokens, null, 2)
+}
+
+function generateTailwindConfig(dark: ThemeColors, light: ThemeColors): string {
+  const dBorder = deriveBorder(dark.obsidian, dark.chalk)
+  const dBorderLight = deriveBorderLight(dark.obsidian, dark.chalk)
+  const dTextFaint = deriveTextFaint(dark.blush)
+  const lBorder = deriveBorder(light.obsidian, light.chalk)
+  const lBorderLight = deriveBorderLight(light.obsidian, light.chalk)
+  const lTextFaint = deriveTextFaint(light.blush)
+
+  return `// praxys-theme.js
+// Paste into your tailwind.config.js or import into your CSS theme
+// For Tailwind CSS v4, add these as @theme values in your globals.css
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        // Core brand palette
+        void: 'var(--color-void)',
+        obsidian: 'var(--color-obsidian)',
+        ignite: 'var(--color-ignite)',
+        blush: 'var(--color-blush)',
+        chalk: 'var(--color-chalk)',
+
+        // Derived tokens
+        border: 'var(--color-border)',
+        'border-light': 'var(--color-border-light)',
+        'text-faint': 'var(--color-text-faint)',
+        'ignite-dim': 'var(--color-ignite-dim)',
+        'code-bg': 'var(--color-code-bg)',
+      },
+    },
+  },
+}
+
+/*
+ * CSS variables to add to your globals.css:
+ *
+ * :root {
+ *   --color-void: ${dark.void};
+ *   --color-obsidian: ${dark.obsidian};
+ *   --color-ignite: ${dark.ignite};
+ *   --color-blush: ${dark.blush};
+ *   --color-chalk: ${dark.chalk};
+ *   --color-border: ${dBorder};
+ *   --color-border-light: ${dBorderLight};
+ *   --color-text-faint: ${dTextFaint};
+ *   --color-ignite-dim: ${dark.ignite}14;
+ *   --color-code-bg: ${dark.obsidian};
+ * }
+ *
+ * [data-theme="light"] {
+ *   --color-void: ${light.void};
+ *   --color-obsidian: ${light.obsidian};
+ *   --color-ignite: ${light.ignite};
+ *   --color-blush: ${light.blush};
+ *   --color-chalk: ${light.chalk};
+ *   --color-border: ${lBorder};
+ *   --color-border-light: ${lBorderLight};
+ *   --color-text-faint: ${lTextFaint};
+ *   --color-ignite-dim: ${light.ignite}12;
+ *   --color-code-bg: ${light.obsidian};
+ * }
+ */`
+}
+
+function generateFigmaVariables(dark: ThemeColors, light: ThemeColors): string {
+  const buildCollection = (c: ThemeColors, mode: string) => {
+    const border = deriveBorder(c.obsidian, c.chalk)
+    const borderLight = deriveBorderLight(c.obsidian, c.chalk)
+    const textFaint = deriveTextFaint(c.blush)
+
+    const hexToRgba = (hex: string) => {
+      const r = parseInt(hex.slice(1, 3), 16) / 255
+      const g = parseInt(hex.slice(3, 5), 16) / 255
+      const b = parseInt(hex.slice(5, 7), 16) / 255
+      return { r: +r.toFixed(4), g: +g.toFixed(4), b: +b.toFixed(4), a: 1 }
+    }
+
+    return [
+      { name: `${mode}/core/void`, value: hexToRgba(c.void) },
+      { name: `${mode}/core/obsidian`, value: hexToRgba(c.obsidian) },
+      { name: `${mode}/core/ignite`, value: hexToRgba(c.ignite) },
+      { name: `${mode}/core/blush`, value: hexToRgba(c.blush) },
+      { name: `${mode}/core/chalk`, value: hexToRgba(c.chalk) },
+      { name: `${mode}/derived/border`, value: hexToRgba(border) },
+      { name: `${mode}/derived/border-light`, value: hexToRgba(borderLight) },
+      { name: `${mode}/derived/text-faint`, value: hexToRgba(textFaint) },
+    ]
+  }
+
+  const figmaPayload = {
+    $description: 'Praxys UI theme variables for Figma. Import via Figma Variables REST API or Tokens Studio.',
+    $format: 'figma-variables',
+    collections: [
+      {
+        name: 'Praxys UI Theme',
+        modes: ['dark', 'light'],
+        variables: [
+          ...buildCollection(dark, 'dark'),
+          ...buildCollection(light, 'light'),
+        ],
+      },
+    ],
+  }
+  return JSON.stringify(figmaPayload, null, 2)
+}
+
 export default function ThemeCustomizer() {
   const [darkColors, setDarkColors] = useState<ThemeColors>({ ...defaultDark })
   const [lightColors, setLightColors] = useState<ThemeColors>({ ...defaultLight })
   const [activeMode, setActiveMode] = useState<'dark' | 'light'>('dark')
   const [copied, setCopied] = useState(false)
+  const [exportFormat, setExportFormat] = useState<ExportFormat>('css')
 
   const activeColors = activeMode === 'dark' ? darkColors : lightColors
   const setActiveColors = activeMode === 'dark' ? setDarkColors : setLightColors
 
   const css = useMemo(() => generateCSS(darkColors, lightColors), [darkColors, lightColors])
+
+  const exportOutput = useMemo(() => {
+    switch (exportFormat) {
+      case 'css': return generateCSS(darkColors, lightColors)
+      case 'json': return generateJSON(darkColors, lightColors)
+      case 'tailwind': return generateTailwindConfig(darkColors, lightColors)
+      case 'figma': return generateFigmaVariables(darkColors, lightColors)
+    }
+  }, [darkColors, lightColors, exportFormat])
+
+  const activeFormatMeta = exportFormats.find((f) => f.key === exportFormat)!
 
   const updateColor = useCallback(
     (key: string, value: string) => {
@@ -219,20 +386,20 @@ export default function ThemeCustomizer() {
   )
 
   const handleCopy = useCallback(async () => {
-    await navigator.clipboard.writeText(css)
+    await navigator.clipboard.writeText(exportOutput)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-  }, [css])
+  }, [exportOutput])
 
   const handleDownload = useCallback(() => {
-    const blob = new Blob([css], { type: 'text/css' })
+    const blob = new Blob([exportOutput], { type: activeFormatMeta.mime })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = 'praxys-theme.css'
+    a.download = `praxys-theme.${activeFormatMeta.ext}`
     a.click()
     URL.revokeObjectURL(url)
-  }, [css])
+  }, [exportOutput, activeFormatMeta])
 
   const handleReset = useCallback(() => {
     setDarkColors({ ...defaultDark })
@@ -570,31 +737,53 @@ export default function ThemeCustomizer() {
                 </div>
               </div>
 
-              {/* Generated CSS output */}
+              {/* Generated export output */}
               <div className="rounded-xl border border-border bg-obsidian overflow-hidden">
                 <div className="flex items-center justify-between border-b border-border px-4 py-3">
-                  <span className="text-xs font-semibold uppercase tracking-widest text-text-faint">
-                    Generated CSS
-                  </span>
-                  <button
-                    onClick={handleCopy}
-                    className="flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs font-medium text-blush transition-colors hover:border-border-light hover:text-chalk"
-                  >
-                    {copied ? (
-                      <>
-                        <Check className="h-3 w-3 text-green-400" />
-                        Copied
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="h-3 w-3" />
-                        Copy CSS
-                      </>
-                    )}
-                  </button>
+                  <div className="flex items-center gap-1">
+                    {exportFormats.map((fmt) => (
+                      <button
+                        key={fmt.key}
+                        onClick={() => { setExportFormat(fmt.key); setCopied(false) }}
+                        className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all ${
+                          exportFormat === fmt.key
+                            ? 'bg-ignite/10 text-ignite border border-ignite/20'
+                            : 'text-text-faint hover:text-blush border border-transparent'
+                        }`}
+                      >
+                        {fmt.icon}
+                        <span className="hidden sm:inline">{fmt.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleDownload}
+                      className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-blush transition-colors hover:border-border-light hover:text-chalk"
+                    >
+                      <Download className="h-3 w-3" />
+                      <span className="hidden sm:inline">.{activeFormatMeta.ext}</span>
+                    </button>
+                    <button
+                      onClick={handleCopy}
+                      className="flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-blush transition-colors hover:border-border-light hover:text-chalk"
+                    >
+                      {copied ? (
+                        <>
+                          <Check className="h-3 w-3 text-green-400" />
+                          Copied
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="h-3 w-3" />
+                          Copy
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <pre className="max-h-80 overflow-auto p-4 font-mono text-xs leading-relaxed text-blush">
-                  <code>{css}</code>
+                  <code>{exportOutput}</code>
                 </pre>
               </div>
             </motion.div>
