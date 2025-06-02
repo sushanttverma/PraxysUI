@@ -94,7 +94,7 @@ export default function ComponentGrid() {
             transition={{ delay: 0.1 }}
             className="font-pixel text-3xl font-bold text-chalk md:text-5xl"
           >
-            34 Components
+            44 Components
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

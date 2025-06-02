@@ -99,6 +99,16 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "skeleton-loader", title: "Skeleton Loader" },
       { slug: "morphing-text", title: "Morphing Text" },
       { slug: "spotlight-card", title: "Spotlight Card" },
+      { slug: "modal-dialog", title: "Modal Dialog" },
+      { slug: "tooltip", title: "Tooltip" },
+      { slug: "dropdown-menu", title: "Dropdown Menu" },
+      { slug: "progress-bar", title: "Progress Bar" },
+      { slug: "stepper", title: "Stepper" },
+      { slug: "image-comparison", title: "Image Comparison" },
+      { slug: "animated-counter", title: "Animated Counter" },
+      { slug: "infinite-scroll", title: "Infinite Scroll" },
+      { slug: "command-menu", title: "Command Menu" },
+      { slug: "animated-toggle", title: "Animated Toggle" },
     ],
   },
 ];
@@ -4835,6 +4845,2039 @@ export function Demo() {
     },
     component: () => import("@/app/components/ui/spotlight-card"),
     demo: () => import("@/app/components/demos/spotlight-card-demo"),
+  },
+
+  "modal-dialog": {
+    slug: "modal-dialog",
+    title: "Modal Dialog",
+    description:
+      "An animated modal dialog with backdrop blur, spring scale transition, Escape key handling, scroll lock, and ARIA attributes.",
+    category: "navigation",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useEffect, useCallback } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface ModalDialogProps {
+  open: boolean
+  onClose: () => void
+  title?: string
+  description?: string
+  children: React.ReactNode
+  className?: string
+}
+
+const ModalDialog: React.FC<ModalDialogProps> = ({
+  open,
+  onClose,
+  title,
+  description,
+  children,
+  className,
+}) => {
+  const handleEscape = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    },
+    [onClose]
+  )
+
+  useEffect(() => {
+    if (open) {
+      document.addEventListener('keydown', handleEscape)
+      document.body.style.overflow = 'hidden'
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      document.body.style.overflow = ''
+    }
+  }, [open, handleEscape])
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="absolute inset-0 bg-void/80 backdrop-blur-sm"
+            onClick={onClose}
+          />
+
+          {/* Dialog */}
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={title ? 'modal-title' : undefined}
+            aria-describedby={description ? 'modal-description' : undefined}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+            className={cn(
+              'relative z-10 w-full max-w-lg rounded-xl border border-border bg-obsidian p-6 shadow-xl',
+              className
+            )}
+          >
+            {/* Close button */}
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close dialog"
+              className="absolute right-4 top-4 cursor-pointer rounded-md p-1 text-blush transition-colors hover:bg-ignite/10 hover:text-chalk"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+
+            {/* Header */}
+            {(title || description) && (
+              <div className="mb-4 pr-6">
+                {title && (
+                  <h2
+                    id="modal-title"
+                    className="text-lg font-medium text-chalk"
+                  >
+                    {title}
+                  </h2>
+                )}
+                {description && (
+                  <p
+                    id="modal-description"
+                    className="mt-1 text-sm text-blush"
+                  >
+                    {description}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Content */}
+            <div className="text-sm text-chalk">{children}</div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  )
+}
+
+export default ModalDialog`,
+    usage: `import ModalDialog from "@/app/components/ui/modal-dialog"
+
+export function Demo() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)}>Open Modal</button>
+      <ModalDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Welcome"
+        description="This is a modal dialog."
+      >
+        <p>Your modal content goes here.</p>
+      </ModalDialog>
+    </>
+  )
+}`,
+    props: [
+      {
+        name: "open",
+        type: "boolean",
+        default: "—",
+        description: "Whether the modal is visible.",
+      },
+      {
+        name: "onClose",
+        type: "() => void",
+        default: "—",
+        description: "Callback fired when the modal should close.",
+      },
+      {
+        name: "title",
+        type: "string",
+        default: "undefined",
+        description: "Optional heading for the dialog.",
+      },
+      {
+        name: "description",
+        type: "string",
+        default: "undefined",
+        description: "Optional description text below the title.",
+      },
+      {
+        name: "children",
+        type: "React.ReactNode",
+        default: "—",
+        description: "Content rendered inside the modal body.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes for the dialog panel.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "title", label: "Title", type: "text", default: "Welcome to Praxys" },
+        { name: "description", label: "Description", type: "text", default: "This is an animated modal dialog." },
+      ],
+    },
+    component: () => import("@/app/components/ui/modal-dialog"),
+    demo: () => import("@/app/components/demos/modal-dialog-demo"),
+  },
+
+  "tooltip": {
+    slug: "tooltip",
+    title: "Tooltip",
+    description:
+      "A tooltip with 4 positions, configurable delay, direction-aware motion animation, and arrow pointer.",
+    category: "navigation",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useState, useRef, useCallback } from 'react'
+import { AnimatePresence, motion, type TargetAndTransition } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+type TooltipPosition = 'top' | 'bottom' | 'left' | 'right'
+
+interface TooltipProps {
+  content: string
+  children: React.ReactNode
+  position?: TooltipPosition
+  delay?: number
+  className?: string
+}
+
+const positionStyles: Record<TooltipPosition, string> = {
+  top: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
+  bottom: 'top-full left-1/2 -translate-x-1/2 mt-2',
+  left: 'right-full top-1/2 -translate-y-1/2 mr-2',
+  right: 'left-full top-1/2 -translate-y-1/2 ml-2',
+}
+
+const arrowStyles: Record<TooltipPosition, string> = {
+  top: 'top-full left-1/2 -translate-x-1/2 border-t-obsidian border-x-transparent border-b-transparent',
+  bottom: 'bottom-full left-1/2 -translate-x-1/2 border-b-obsidian border-x-transparent border-t-transparent',
+  left: 'left-full top-1/2 -translate-y-1/2 border-l-obsidian border-y-transparent border-r-transparent',
+  right: 'right-full top-1/2 -translate-y-1/2 border-r-obsidian border-y-transparent border-l-transparent',
+}
+
+const motionVariants: Record<TooltipPosition, { initial: TargetAndTransition; animate: TargetAndTransition; exit: TargetAndTransition }> = {
+  top: {
+    initial: { opacity: 0, y: 4 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: 4 },
+  },
+  bottom: {
+    initial: { opacity: 0, y: -4 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -4 },
+  },
+  left: {
+    initial: { opacity: 0, x: 4 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: 4 },
+  },
+  right: {
+    initial: { opacity: 0, x: -4 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -4 },
+  },
+}
+
+const Tooltip: React.FC<TooltipProps> = ({
+  content,
+  children,
+  position = 'top',
+  delay = 300,
+  className,
+}) => {
+  const [visible, setVisible] = useState(false)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const show = useCallback(() => {
+    timerRef.current = setTimeout(() => setVisible(true), delay)
+  }, [delay])
+
+  const hide = useCallback(() => {
+    if (timerRef.current) clearTimeout(timerRef.current)
+    setVisible(false)
+  }, [])
+
+  const variants = motionVariants[position]
+
+  return (
+    <div className="relative inline-flex" onMouseEnter={show} onMouseLeave={hide}>
+      {children}
+
+      <AnimatePresence>
+        {visible && (
+          <motion.div
+            role="tooltip"
+            initial={variants.initial}
+            animate={variants.animate}
+            exit={variants.exit}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
+            className={cn(
+              'absolute z-50 max-w-xs whitespace-nowrap rounded-md border border-border bg-obsidian px-3 py-1.5 text-xs text-chalk shadow-lg pointer-events-none',
+              positionStyles[position],
+              className
+            )}
+          >
+            {content}
+            {/* Arrow */}
+            <span
+              className={cn(
+                'absolute block h-0 w-0 border-[4px]',
+                arrowStyles[position]
+              )}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+export default Tooltip`,
+    usage: `import Tooltip from "@/app/components/ui/tooltip"
+
+export function Demo() {
+  return (
+    <Tooltip content="Hello from tooltip!" position="top">
+      <button className="rounded-lg bg-ignite px-4 py-2 text-sm text-chalk">
+        Hover me
+      </button>
+    </Tooltip>
+  )
+}`,
+    props: [
+      {
+        name: "content",
+        type: "string",
+        default: "—",
+        description: "Text to display in the tooltip.",
+      },
+      {
+        name: "children",
+        type: "React.ReactNode",
+        default: "—",
+        description: "The trigger element the tooltip is attached to.",
+      },
+      {
+        name: "position",
+        type: "'top' | 'bottom' | 'left' | 'right'",
+        default: "'top'",
+        description: "Where the tooltip appears relative to the trigger.",
+      },
+      {
+        name: "delay",
+        type: "number",
+        default: "300",
+        description: "Delay in milliseconds before the tooltip appears.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes for the tooltip.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "content", label: "Content", type: "text", default: "Hello from tooltip!" },
+        { name: "position", label: "Position", type: "select", default: "top", options: ["top", "bottom", "left", "right"] },
+        { name: "delay", label: "Delay (ms)", type: "number", default: 300, min: 0, max: 2000, step: 100 },
+      ],
+    },
+    component: () => import("@/app/components/ui/tooltip"),
+    demo: () => import("@/app/components/demos/tooltip-demo"),
+  },
+
+  "dropdown-menu": {
+    slug: "dropdown-menu",
+    title: "Dropdown Menu",
+    description:
+      "An animated dropdown menu with full keyboard navigation, click-outside close, divider and disabled item support.",
+    category: "navigation",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useState, useRef, useEffect, useCallback } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface DropdownItem {
+  label: string
+  onClick?: () => void
+  icon?: React.ReactNode
+  disabled?: boolean
+  divider?: boolean
+}
+
+interface DropdownMenuProps {
+  trigger: React.ReactNode
+  items: DropdownItem[]
+  align?: 'left' | 'right'
+  className?: string
+}
+
+const DropdownMenu: React.FC<DropdownMenuProps> = ({
+  trigger,
+  items,
+  align = 'left',
+  className,
+}) => {
+  const [open, setOpen] = useState(false)
+  const [focusIndex, setFocusIndex] = useState(-1)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  // Close on click outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    if (open) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [open])
+
+  // Get actionable (non-divider, non-disabled) item indices
+  const actionableIndices = items
+    .map((item, i) => (!item.divider && !item.disabled ? i : -1))
+    .filter((i) => i !== -1)
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (!open) {
+        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          setOpen(true)
+          setFocusIndex(actionableIndices[0] ?? -1)
+        }
+        return
+      }
+
+      switch (e.key) {
+        case 'Escape':
+          e.preventDefault()
+          setOpen(false)
+          setFocusIndex(-1)
+          break
+        case 'ArrowDown': {
+          e.preventDefault()
+          const currentPos = actionableIndices.indexOf(focusIndex)
+          const next = actionableIndices[(currentPos + 1) % actionableIndices.length]
+          setFocusIndex(next)
+          break
+        }
+        case 'ArrowUp': {
+          e.preventDefault()
+          const currentPos = actionableIndices.indexOf(focusIndex)
+          const prev =
+            actionableIndices[
+              (currentPos - 1 + actionableIndices.length) % actionableIndices.length
+            ]
+          setFocusIndex(prev)
+          break
+        }
+        case 'Enter':
+        case ' ': {
+          e.preventDefault()
+          const item = items[focusIndex]
+          if (item && !item.disabled && !item.divider && item.onClick) {
+            item.onClick()
+          }
+          setOpen(false)
+          setFocusIndex(-1)
+          break
+        }
+      }
+    },
+    [open, focusIndex, items, actionableIndices]
+  )
+
+  const toggleOpen = () => {
+    setOpen((prev) => {
+      if (!prev) setFocusIndex(-1)
+      return !prev
+    })
+  }
+
+  return (
+    <div ref={containerRef} className="relative inline-block" onKeyDown={handleKeyDown}>
+      {/* Trigger */}
+      <div
+        role="button"
+        tabIndex={0}
+        aria-haspopup="true"
+        aria-expanded={open}
+        onClick={toggleOpen}
+        className="cursor-pointer"
+      >
+        {trigger}
+      </div>
+
+      {/* Menu */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            ref={menuRef}
+            role="menu"
+            initial={{ opacity: 0, scale: 0.95, y: -4 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -4 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
+            style={{ transformOrigin: 'top' }}
+            className={cn(
+              'absolute z-50 mt-1 min-w-[180px] overflow-hidden rounded-lg border border-border bg-obsidian py-1 shadow-xl',
+              align === 'right' ? 'right-0' : 'left-0',
+              className
+            )}
+          >
+            {items.map((item, i) => {
+              if (item.divider) {
+                return (
+                  <div
+                    key={\`divider-\${i}\`}
+                    className="my-1 h-px bg-border"
+                    role="separator"
+                  />
+                )
+              }
+
+              const isFocused = focusIndex === i
+
+              return (
+                <button
+                  key={\`\${item.label}-\${i}\`}
+                  role="menuitem"
+                  type="button"
+                  disabled={item.disabled}
+                  tabIndex={-1}
+                  onClick={() => {
+                    if (!item.disabled && item.onClick) item.onClick()
+                    setOpen(false)
+                  }}
+                  className={cn(
+                    'flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm transition-colors cursor-pointer',
+                    item.disabled
+                      ? 'text-text-faint cursor-not-allowed'
+                      : 'text-chalk hover:bg-ignite/10',
+                    isFocused && !item.disabled && 'bg-ignite/10'
+                  )}
+                >
+                  {item.icon && (
+                    <span className="flex h-4 w-4 shrink-0 items-center justify-center text-blush">
+                      {item.icon}
+                    </span>
+                  )}
+                  <span>{item.label}</span>
+                </button>
+              )
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+export default DropdownMenu`,
+    usage: `import DropdownMenu from "@/app/components/ui/dropdown-menu"
+
+export function Demo() {
+  return (
+    <DropdownMenu
+      trigger={<button className="rounded-lg bg-ignite px-4 py-2 text-sm text-chalk">Menu</button>}
+      items={[
+        { label: "Profile", onClick: () => console.log("Profile") },
+        { label: "Settings", onClick: () => console.log("Settings") },
+        { divider: true, label: "" },
+        { label: "Log Out", onClick: () => console.log("Logout") },
+      ]}
+    />
+  )
+}`,
+    props: [
+      {
+        name: "trigger",
+        type: "React.ReactNode",
+        default: "—",
+        description: "The element that triggers the dropdown.",
+      },
+      {
+        name: "items",
+        type: "DropdownItem[]",
+        default: "—",
+        description: "Array of menu items ({ label, onClick?, icon?, disabled?, divider? }).",
+      },
+      {
+        name: "align",
+        type: "'left' | 'right'",
+        default: "'left'",
+        description: "Horizontal alignment of the dropdown.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes for the dropdown panel.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "align", label: "Align", type: "select", default: "left", options: ["left", "right"] },
+      ],
+      defaults: {
+        items: [
+          { label: "Profile" },
+          { label: "Settings" },
+          { divider: true, label: "" },
+          { label: "Log Out" },
+        ],
+      },
+    },
+    component: () => import("@/app/components/ui/dropdown-menu"),
+    demo: () => import("@/app/components/demos/dropdown-menu-demo"),
+  },
+
+  "progress-bar": {
+    slug: "progress-bar",
+    title: "Progress Bar",
+    description:
+      "An animated progress bar with multiple sizes, optional label and value display, custom colors, and candy-stripe animation.",
+    category: "visual",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+type ProgressSize = 'sm' | 'md' | 'lg'
+
+interface ProgressBarProps {
+  value: number
+  max?: number
+  label?: string
+  showValue?: boolean
+  color?: string
+  size?: ProgressSize
+  animated?: boolean
+  className?: string
+}
+
+const sizeStyles: Record<ProgressSize, string> = {
+  sm: 'h-1.5',
+  md: 'h-2.5',
+  lg: 'h-4',
+}
+
+const ProgressBar: React.FC<ProgressBarProps> = ({
+  value,
+  max = 100,
+  label,
+  showValue = false,
+  color,
+  size = 'md',
+  animated = true,
+  className,
+}) => {
+  const clamped = Math.min(Math.max(value, 0), max)
+  const percent = Math.round((clamped / max) * 100)
+
+  return (
+    <div className={cn('w-full', className)}>
+      {/* Label row */}
+      {(label || showValue) && (
+        <div className="mb-1.5 flex items-center justify-between text-xs">
+          {label && <span className="font-medium text-chalk">{label}</span>}
+          {showValue && <span className="text-blush">{percent}%</span>}
+        </div>
+      )}
+
+      {/* Track */}
+      <div
+        className={cn(
+          'w-full overflow-hidden rounded-full border border-border bg-void',
+          sizeStyles[size]
+        )}
+      >
+        {/* Fill */}
+        <motion.div
+          className={cn(
+            'relative h-full rounded-full',
+            !color && 'bg-ignite'
+          )}
+          style={color ? { backgroundColor: color } : undefined}
+          initial={{ width: 0 }}
+          animate={{ width: \`\${percent}%\` }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          {/* Animated stripes */}
+          {animated && (
+            <motion.div
+              className="absolute inset-0 rounded-full"
+              style={{
+                backgroundImage:
+                  'linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent)',
+                backgroundSize: '16px 16px',
+              }}
+              animate={{ backgroundPosition: ['0px 0px', '16px 0px'] }}
+              transition={{
+                duration: 0.6,
+                repeat: Infinity,
+                ease: 'linear',
+              }}
+            />
+          )}
+        </motion.div>
+      </div>
+    </div>
+  )
+}
+
+export default ProgressBar`,
+    usage: `import ProgressBar from "@/app/components/ui/progress-bar"
+
+export function Demo() {
+  return (
+    <ProgressBar
+      value={65}
+      label="Upload Progress"
+      showValue
+      size="md"
+    />
+  )
+}`,
+    props: [
+      {
+        name: "value",
+        type: "number",
+        default: "—",
+        description: "Current progress value.",
+      },
+      {
+        name: "max",
+        type: "number",
+        default: "100",
+        description: "Maximum value for the progress bar.",
+      },
+      {
+        name: "label",
+        type: "string",
+        default: "undefined",
+        description: "Text label displayed above the bar.",
+      },
+      {
+        name: "showValue",
+        type: "boolean",
+        default: "false",
+        description: "Show the percentage value next to the label.",
+      },
+      {
+        name: "color",
+        type: "string",
+        default: "undefined",
+        description: "Custom background color for the fill. Defaults to ignite.",
+      },
+      {
+        name: "size",
+        type: "'sm' | 'md' | 'lg'",
+        default: "'md'",
+        description: "Height of the progress bar.",
+      },
+      {
+        name: "animated",
+        type: "boolean",
+        default: "true",
+        description: "Show animated candy-stripe overlay.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "value", label: "Value", type: "number", default: 65, min: 0, max: 100, step: 1 },
+        { name: "max", label: "Max", type: "number", default: 100, min: 1, max: 200, step: 1 },
+        { name: "label", label: "Label", type: "text", default: "Upload Progress" },
+        { name: "showValue", label: "Show Value", type: "boolean", default: true },
+        { name: "size", label: "Size", type: "select", default: "md", options: ["sm", "md", "lg"] },
+        { name: "animated", label: "Animated Stripes", type: "boolean", default: true },
+      ],
+    },
+    component: () => import("@/app/components/ui/progress-bar"),
+    demo: () => import("@/app/components/demos/progress-bar-demo"),
+  },
+
+  "stepper": {
+    slug: "stepper",
+    title: "Stepper",
+    description:
+      "A multi-step indicator with animated check icons, spring-scaled active step, and animated connector lines. Supports horizontal and vertical orientation.",
+    category: "navigation",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface Step {
+  label: string
+  description?: string
+}
+
+interface StepperProps {
+  steps: Step[]
+  currentStep: number
+  orientation?: 'horizontal' | 'vertical'
+  className?: string
+}
+
+function CheckIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  )
+}
+
+const StepCircle: React.FC<{
+  index: number
+  status: 'completed' | 'active' | 'upcoming'
+}> = ({ index, status }) => {
+  return (
+    <motion.div
+      layout
+      className={cn(
+        'relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-medium transition-colors',
+        status === 'completed' && 'border-ignite bg-ignite text-chalk',
+        status === 'active' && 'border-ignite bg-ignite/10 text-ignite',
+        status === 'upcoming' && 'border-border bg-obsidian text-text-faint'
+      )}
+      animate={{
+        scale: status === 'active' ? 1.1 : 1,
+      }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+    >
+      {status === 'completed' ? <CheckIcon /> : index + 1}
+    </motion.div>
+  )
+}
+
+const Stepper: React.FC<StepperProps> = ({
+  steps,
+  currentStep,
+  orientation = 'horizontal',
+  className,
+}) => {
+  const isHorizontal = orientation === 'horizontal'
+
+  return (
+    <div
+      className={cn(
+        'flex',
+        isHorizontal ? 'flex-row items-start' : 'flex-col',
+        className
+      )}
+    >
+      {steps.map((step, i) => {
+        const status: 'completed' | 'active' | 'upcoming' =
+          i < currentStep ? 'completed' : i === currentStep ? 'active' : 'upcoming'
+        const isLast = i === steps.length - 1
+
+        return (
+          <div
+            key={i}
+            className={cn(
+              'flex',
+              isHorizontal ? 'flex-1 flex-col items-center' : 'flex-row items-start',
+              isHorizontal && isLast && 'flex-none'
+            )}
+          >
+            <div
+              className={cn(
+                'flex items-center',
+                isHorizontal ? 'w-full' : 'flex-col'
+              )}
+            >
+              <StepCircle index={i} status={status} />
+
+              {/* Connector line */}
+              {!isLast && (
+                <div
+                  className={cn(
+                    'relative overflow-hidden',
+                    isHorizontal ? 'mx-2 h-0.5 flex-1' : 'my-2 ml-[15px] w-0.5 min-h-[24px]'
+                  )}
+                >
+                  {/* Background track */}
+                  <div className="absolute inset-0 bg-border" />
+                  {/* Filled portion */}
+                  <motion.div
+                    className="absolute inset-0 bg-ignite"
+                    initial={false}
+                    animate={{
+                      [isHorizontal ? 'scaleX' : 'scaleY']:
+                        i < currentStep ? 1 : 0,
+                    }}
+                    style={{
+                      transformOrigin: isHorizontal ? 'left' : 'top',
+                    }}
+                    transition={{ duration: 0.4, ease: 'easeInOut' }}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Labels */}
+            <div
+              className={cn(
+                isHorizontal ? 'mt-2 text-center' : 'ml-3 pb-6',
+                isHorizontal && !isLast && 'w-full'
+              )}
+            >
+              <motion.p
+                className={cn(
+                  'text-sm font-medium',
+                  status === 'completed' && 'text-chalk',
+                  status === 'active' && 'text-ignite',
+                  status === 'upcoming' && 'text-text-faint'
+                )}
+                animate={{
+                  color:
+                    status === 'active'
+                      ? 'var(--color-ignite)'
+                      : status === 'completed'
+                        ? 'var(--color-chalk)'
+                        : 'var(--color-text-faint)',
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                {step.label}
+              </motion.p>
+              {step.description && (
+                <p className="mt-0.5 text-xs text-blush">{step.description}</p>
+              )}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+export default Stepper`,
+    usage: `import Stepper from "@/app/components/ui/stepper"
+
+export function Demo() {
+  return (
+    <Stepper
+      steps={[
+        { label: "Account", description: "Create your account" },
+        { label: "Profile", description: "Set up your profile" },
+        { label: "Complete", description: "All done!" },
+      ]}
+      currentStep={1}
+    />
+  )
+}`,
+    props: [
+      {
+        name: "steps",
+        type: "Step[]",
+        default: "—",
+        description: "Array of step objects ({ label, description? }).",
+      },
+      {
+        name: "currentStep",
+        type: "number",
+        default: "—",
+        description: "Zero-based index of the currently active step.",
+      },
+      {
+        name: "orientation",
+        type: "'horizontal' | 'vertical'",
+        default: "'horizontal'",
+        description: "Layout direction of the stepper.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "currentStep", label: "Current Step", type: "number", default: 1, min: 0, max: 3, step: 1 },
+        { name: "orientation", label: "Orientation", type: "select", default: "horizontal", options: ["horizontal", "vertical"] },
+      ],
+      defaults: {
+        steps: [
+          { label: "Account", description: "Create your account" },
+          { label: "Profile", description: "Set up your profile" },
+          { label: "Billing", description: "Add payment method" },
+          { label: "Complete", description: "All done!" },
+        ],
+      },
+    },
+    component: () => import("@/app/components/ui/stepper"),
+    demo: () => import("@/app/components/demos/stepper-demo"),
+  },
+
+  "image-comparison": {
+    slug: "image-comparison",
+    title: "Image Comparison",
+    description:
+      "A before/after image comparison slider with pointer-capture dragging, clip-based reveal, and an animated drag handle.",
+    category: "media",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useCallback, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface ImageComparisonProps {
+  beforeSrc: string
+  afterSrc: string
+  beforeAlt?: string
+  afterAlt?: string
+  initialPosition?: number
+  className?: string
+}
+
+const ImageComparison: React.FC<ImageComparisonProps> = ({
+  beforeSrc,
+  afterSrc,
+  beforeAlt = 'Before',
+  afterAlt = 'After',
+  initialPosition = 50,
+  className,
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [position, setPosition] = useState(initialPosition)
+  const [isDragging, setIsDragging] = useState(false)
+
+  const updatePosition = useCallback((clientX: number) => {
+    const rect = containerRef.current?.getBoundingClientRect()
+    if (!rect) return
+    const x = clientX - rect.left
+    const pct = Math.min(100, Math.max(0, (x / rect.width) * 100))
+    setPosition(pct)
+  }, [])
+
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      e.preventDefault()
+      setIsDragging(true)
+      ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
+      updatePosition(e.clientX)
+    },
+    [updatePosition]
+  )
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent) => {
+      if (!isDragging) return
+      updatePosition(e.clientX)
+    },
+    [isDragging, updatePosition]
+  )
+
+  const handlePointerUp = useCallback(() => {
+    setIsDragging(false)
+  }, [])
+
+  return (
+    <div
+      ref={containerRef}
+      className={cn(
+        'relative w-full select-none overflow-hidden rounded-xl border border-border bg-void',
+        className
+      )}
+      style={{ aspectRatio: '16 / 10' }}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+    >
+      {/* After image (full background) */}
+      <img
+        src={afterSrc}
+        alt={afterAlt}
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        draggable={false}
+      />
+
+      {/* Before image (clipped) */}
+      <div
+        className="absolute inset-0 overflow-hidden"
+        style={{ width: \`\${position}%\` }}
+      >
+        <img
+          src={beforeSrc}
+          alt={beforeAlt}
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+          style={{ minWidth: containerRef.current?.offsetWidth ?? '100%' }}
+          draggable={false}
+        />
+      </div>
+
+      {/* Labels */}
+      <motion.span
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="absolute left-3 top-3 rounded-md bg-obsidian/80 px-2 py-0.5 text-xs font-medium text-chalk backdrop-blur-sm"
+      >
+        Before
+      </motion.span>
+      <motion.span
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="absolute right-3 top-3 rounded-md bg-obsidian/80 px-2 py-0.5 text-xs font-medium text-chalk backdrop-blur-sm"
+      >
+        After
+      </motion.span>
+
+      {/* Divider line */}
+      <div
+        className="absolute top-0 bottom-0 z-10 w-0.5 bg-chalk/70"
+        style={{ left: \`\${position}%\`, transform: 'translateX(-50%)' }}
+      />
+
+      {/* Handle grip */}
+      <motion.div
+        className={cn(
+          'absolute top-1/2 z-20 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 cursor-grab items-center justify-center rounded-full border-2 border-chalk bg-obsidian shadow-lg',
+          isDragging && 'cursor-grabbing scale-110'
+        )}
+        style={{ left: \`\${position}%\` }}
+        whileHover={{ scale: 1.1 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          className="text-chalk"
+        >
+          <path
+            d="M4 3L1 8L4 13"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M12 3L15 8L12 13"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </motion.div>
+    </div>
+  )
+}
+
+export default ImageComparison`,
+    usage: `import ImageComparison from "@/app/components/ui/image-comparison"
+
+export function Demo() {
+  return (
+    <ImageComparison
+      beforeSrc="/images/before.jpg"
+      afterSrc="/images/after.jpg"
+      beforeAlt="Original"
+      afterAlt="Enhanced"
+      initialPosition={50}
+    />
+  )
+}`,
+    props: [
+      {
+        name: "beforeSrc",
+        type: "string",
+        default: "—",
+        description: "URL of the 'before' image.",
+      },
+      {
+        name: "afterSrc",
+        type: "string",
+        default: "—",
+        description: "URL of the 'after' image.",
+      },
+      {
+        name: "beforeAlt",
+        type: "string",
+        default: "'Before'",
+        description: "Alt text for the before image.",
+      },
+      {
+        name: "afterAlt",
+        type: "string",
+        default: "'After'",
+        description: "Alt text for the after image.",
+      },
+      {
+        name: "initialPosition",
+        type: "number",
+        default: "50",
+        description: "Initial slider position as a percentage (0–100).",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "initialPosition", label: "Initial Position (%)", type: "number", default: 50, min: 0, max: 100, step: 5 },
+      ],
+    },
+    component: () => import("@/app/components/ui/image-comparison"),
+    demo: () => import("@/app/components/demos/image-comparison-demo"),
+  },
+
+  "animated-counter": {
+    slug: "animated-counter",
+    title: "Animated Counter",
+    description:
+      "A number counter that animates from one value to another using spring physics, triggered when scrolled into view. Supports prefix, suffix, and decimal formatting.",
+    category: "text",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useEffect, useRef } from 'react'
+import { useInView, useMotionValue, useSpring } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface AnimatedCounterProps {
+  from?: number
+  to: number
+  duration?: number
+  prefix?: string
+  suffix?: string
+  decimals?: number
+  className?: string
+}
+
+const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
+  from = 0,
+  to,
+  duration = 2,
+  prefix = '',
+  suffix = '',
+  decimals = 0,
+  className,
+}) => {
+  const ref = useRef<HTMLSpanElement>(null)
+  const motionValue = useMotionValue(from)
+  const springValue = useSpring(motionValue, {
+    damping: 40,
+    stiffness: 80,
+    duration: duration * 1000,
+  })
+  const isInView = useInView(ref, { once: true, margin: '0px' })
+
+  useEffect(() => {
+    if (isInView) {
+      motionValue.set(to)
+    }
+  }, [isInView, to, motionValue])
+
+  useEffect(() => {
+    const unsubscribe = springValue.on('change', (latest) => {
+      if (ref.current) {
+        const formatted = latest.toLocaleString(undefined, {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals,
+        })
+        ref.current.textContent = \`\${prefix}\${formatted}\${suffix}\`
+      }
+    })
+    return unsubscribe
+  }, [springValue, prefix, suffix, decimals])
+
+  const initial = from.toLocaleString(undefined, {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  })
+
+  return (
+    <span
+      ref={ref}
+      className={cn(
+        'text-4xl font-bold tabular-nums text-chalk',
+        className
+      )}
+    >
+      {prefix}{initial}{suffix}
+    </span>
+  )
+}
+
+export default AnimatedCounter`,
+    usage: `import AnimatedCounter from "@/app/components/ui/animated-counter"
+
+export function Demo() {
+  return (
+    <div className="flex gap-8">
+      <AnimatedCounter to={1234} />
+      <AnimatedCounter to={99.9} decimals={1} suffix="%" />
+      <AnimatedCounter to={50000} prefix="$" />
+    </div>
+  )
+}`,
+    props: [
+      {
+        name: "from",
+        type: "number",
+        default: "0",
+        description: "Starting value for the counter.",
+      },
+      {
+        name: "to",
+        type: "number",
+        default: "—",
+        description: "Target value to animate to.",
+      },
+      {
+        name: "duration",
+        type: "number",
+        default: "2",
+        description: "Animation duration in seconds.",
+      },
+      {
+        name: "prefix",
+        type: "string",
+        default: "''",
+        description: "Text to prepend to the number (e.g. '$').",
+      },
+      {
+        name: "suffix",
+        type: "string",
+        default: "''",
+        description: "Text to append to the number (e.g. '%').",
+      },
+      {
+        name: "decimals",
+        type: "number",
+        default: "0",
+        description: "Number of decimal places to display.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "to", label: "Target Value", type: "number", default: 1234, min: 0, max: 100000, step: 1 },
+        { name: "from", label: "From", type: "number", default: 0, min: 0, max: 100000, step: 1 },
+        { name: "duration", label: "Duration (s)", type: "number", default: 2, min: 0.5, max: 10, step: 0.5 },
+        { name: "prefix", label: "Prefix", type: "text", default: "" },
+        { name: "suffix", label: "Suffix", type: "text", default: "" },
+        { name: "decimals", label: "Decimals", type: "number", default: 0, min: 0, max: 4, step: 1 },
+      ],
+    },
+    component: () => import("@/app/components/ui/animated-counter"),
+    demo: () => import("@/app/components/demos/animated-counter-demo"),
+  },
+
+  "infinite-scroll": {
+    slug: "infinite-scroll",
+    title: "Infinite Scroll",
+    description:
+      "An Intersection Observer-based infinite scroll container with loading state, configurable threshold, and animated default loader.",
+    category: "navigation",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface InfiniteScrollProps {
+  loadMore: () => void | Promise<void>
+  hasMore: boolean
+  loader?: React.ReactNode
+  threshold?: number
+  children: React.ReactNode
+  className?: string
+}
+
+const DefaultLoader: React.FC = () => (
+  <div className="flex items-center justify-center gap-2 py-6">
+    {[0, 1, 2].map((i) => (
+      <motion.div
+        key={i}
+        className="h-2 w-2 rounded-full bg-ignite"
+        animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.1, 0.8] }}
+        transition={{
+          duration: 1,
+          repeat: Infinity,
+          ease: 'easeInOut',
+          delay: i * 0.15,
+        }}
+      />
+    ))}
+  </div>
+)
+
+const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
+  loadMore,
+  hasMore,
+  loader,
+  threshold = 200,
+  children,
+  className,
+}) => {
+  const sentinelRef = useRef<HTMLDivElement>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const loadMoreRef = useRef(loadMore)
+  loadMoreRef.current = loadMore
+
+  const triggerLoad = useCallback(async () => {
+    if (isLoading) return
+    setIsLoading(true)
+    try {
+      await loadMoreRef.current()
+    } finally {
+      setIsLoading(false)
+    }
+  }, [isLoading])
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current
+    if (!sentinel || !hasMore) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          triggerLoad()
+        }
+      },
+      { rootMargin: \`0px 0px \${threshold}px 0px\` }
+    )
+
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [hasMore, threshold, triggerLoad])
+
+  return (
+    <div className={cn('w-full', className)}>
+      {children}
+
+      {hasMore && (
+        <div ref={sentinelRef}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isLoading ? 1 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {loader ?? <DefaultLoader />}
+          </motion.div>
+        </div>
+      )}
+
+      {!hasMore && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="py-4 text-center text-sm text-text-faint"
+        >
+          No more items
+        </motion.p>
+      )}
+    </div>
+  )
+}
+
+export default InfiniteScroll`,
+    usage: `import InfiniteScroll from "@/app/components/ui/infinite-scroll"
+
+export function Demo() {
+  const [items, setItems] = useState(Array.from({ length: 10 }, (_, i) => i))
+  const [hasMore, setHasMore] = useState(true)
+
+  const loadMore = async () => {
+    await new Promise((r) => setTimeout(r, 1000))
+    setItems((prev) => {
+      const next = [...prev, ...Array.from({ length: 5 }, (_, i) => prev.length + i)]
+      if (next.length >= 40) setHasMore(false)
+      return next
+    })
+  }
+
+  return (
+    <InfiniteScroll loadMore={loadMore} hasMore={hasMore}>
+      {items.map((i) => (
+        <div key={i} className="border-b border-border p-3">Item {i + 1}</div>
+      ))}
+    </InfiniteScroll>
+  )
+}`,
+    props: [
+      {
+        name: "loadMore",
+        type: "() => void | Promise<void>",
+        default: "—",
+        description: "Callback to load more items when the sentinel enters view.",
+      },
+      {
+        name: "hasMore",
+        type: "boolean",
+        default: "—",
+        description: "Whether more items are available to load.",
+      },
+      {
+        name: "loader",
+        type: "React.ReactNode",
+        default: "DefaultLoader",
+        description: "Custom loading indicator.",
+      },
+      {
+        name: "threshold",
+        type: "number",
+        default: "200",
+        description: "Root margin (in px) for triggering the load before reaching the sentinel.",
+      },
+      {
+        name: "children",
+        type: "React.ReactNode",
+        default: "—",
+        description: "The scrollable content.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "threshold", label: "Threshold (px)", type: "number", default: 200, min: 0, max: 600, step: 50 },
+        { name: "hasMore", label: "Has More", type: "boolean", default: true },
+      ],
+    },
+    component: () => import("@/app/components/ui/infinite-scroll"),
+    demo: () => import("@/app/components/demos/infinite-scroll-demo"),
+  },
+
+  "command-menu": {
+    slug: "command-menu",
+    title: "Command Menu",
+    description:
+      "A command palette with search filtering, grouped items, keyboard navigation, match highlighting, and shortcut badges.",
+    category: "navigation",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useCallback, useMemo, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface CommandItem {
+  id: string
+  label: string
+  icon?: React.ReactNode
+  shortcut?: string
+  onSelect: () => void
+  group?: string
+}
+
+interface CommandMenuProps {
+  items: CommandItem[]
+  placeholder?: string
+  emptyMessage?: string
+  className?: string
+}
+
+function highlightMatch(text: string, query: string) {
+  if (!query) return <>{text}</>
+  const escaped = query.replace(/[.*+?^\${}()|[\\]\\\\]/g, '\\\\$&')
+  const regex = new RegExp('(' + escaped + ')', 'gi')
+  const parts = text.split(regex)
+  return (
+    <>
+      {parts.map((part, i) =>
+        regex.test(part) ? (
+          <span key={i} className="text-ignite font-semibold">
+            {part}
+          </span>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  )
+}
+
+const CommandMenu: React.FC<CommandMenuProps> = ({
+  items,
+  placeholder = 'Type a command or search...',
+  emptyMessage = 'No results found.',
+  className,
+}) => {
+  const [query, setQuery] = useState('')
+  const [activeIndex, setActiveIndex] = useState(0)
+  const listRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const filtered = useMemo(() => {
+    if (!query.trim()) return items
+    const lower = query.toLowerCase()
+    return items.filter(
+      (item) =>
+        item.label.toLowerCase().includes(lower) ||
+        (item.group && item.group.toLowerCase().includes(lower))
+    )
+  }, [items, query])
+
+  const grouped = useMemo(() => {
+    const map = new Map<string, CommandItem[]>()
+    for (const item of filtered) {
+      const group = item.group ?? ''
+      if (!map.has(group)) map.set(group, [])
+      map.get(group)!.push(item)
+    }
+    return map
+  }, [filtered])
+
+  const flatList = useMemo(() => filtered, [filtered])
+
+  const scrollActiveIntoView = useCallback(
+    (index: number) => {
+      const el = listRef.current?.querySelector(\`[data-cmd-index="\${index}"]\`)
+      el?.scrollIntoView({ block: 'nearest' })
+    },
+    []
+  )
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        const next = Math.min(activeIndex + 1, flatList.length - 1)
+        setActiveIndex(next)
+        scrollActiveIntoView(next)
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        const prev = Math.max(activeIndex - 1, 0)
+        setActiveIndex(prev)
+        scrollActiveIntoView(prev)
+      } else if (e.key === 'Enter') {
+        e.preventDefault()
+        flatList[activeIndex]?.onSelect()
+      }
+    },
+    [activeIndex, flatList, scrollActiveIntoView]
+  )
+
+  const handleQueryChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value)
+    setActiveIndex(0)
+  }, [])
+
+  let runningIndex = 0
+
+  return (
+    <div
+      className={cn(
+        'w-full max-w-md overflow-hidden rounded-xl border border-border bg-obsidian shadow-2xl',
+        className
+      )}
+      onKeyDown={handleKeyDown}
+    >
+      {/* Search input */}
+      <div className="flex items-center gap-2 border-b border-border px-4 py-3">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          className="h-4 w-4 shrink-0 text-text-faint"
+        >
+          <path
+            fillRule="evenodd"
+            d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+            clipRule="evenodd"
+          />
+        </svg>
+        <input
+          ref={inputRef}
+          type="text"
+          value={query}
+          onChange={handleQueryChange}
+          placeholder={placeholder}
+          className="flex-1 bg-transparent text-sm text-chalk placeholder:text-text-faint outline-none"
+          autoFocus
+        />
+      </div>
+
+      {/* Items list */}
+      <div ref={listRef} className="max-h-72 overflow-y-auto py-2">
+        <AnimatePresence mode="popLayout">
+          {flatList.length === 0 ? (
+            <motion.p
+              key="empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="px-4 py-6 text-center text-sm text-text-faint"
+            >
+              {emptyMessage}
+            </motion.p>
+          ) : (
+            Array.from(grouped.entries()).map(([group, groupItems]) => {
+              const startIndex = runningIndex
+              runningIndex += groupItems.length
+
+              return (
+                <div key={group || '__default'}>
+                  {group && (
+                    <p className="px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-text-faint">
+                      {group}
+                    </p>
+                  )}
+                  {groupItems.map((item, i) => {
+                    const itemIndex = startIndex + i
+                    const isActive = itemIndex === activeIndex
+
+                    return (
+                      <motion.button
+                        key={item.id}
+                        data-cmd-index={itemIndex}
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        transition={{ duration: 0.15, delay: i * 0.02 }}
+                        type="button"
+                        onClick={() => item.onSelect()}
+                        onMouseEnter={() => setActiveIndex(itemIndex)}
+                        className={cn(
+                          'flex w-full cursor-pointer items-center gap-3 px-4 py-2 text-left text-sm transition-colors',
+                          isActive
+                            ? 'bg-ignite/10 text-chalk'
+                            : 'text-blush hover:text-chalk'
+                        )}
+                      >
+                        {item.icon && (
+                          <span className="flex h-5 w-5 shrink-0 items-center justify-center text-text-faint">
+                            {item.icon}
+                          </span>
+                        )}
+                        <span className="flex-1 truncate">
+                          {highlightMatch(item.label, query)}
+                        </span>
+                        {item.shortcut && (
+                          <kbd className="ml-auto shrink-0 rounded border border-border bg-void px-1.5 py-0.5 text-[10px] font-mono text-text-faint">
+                            {item.shortcut}
+                          </kbd>
+                        )}
+                      </motion.button>
+                    )
+                  })}
+                </div>
+              )
+            })
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  )
+}
+
+export default CommandMenu`,
+    usage: `import CommandMenu from "@/app/components/ui/command-menu"
+
+export function Demo() {
+  return (
+    <CommandMenu
+      items={[
+        { id: "1", label: "Home", group: "Navigation", onSelect: () => {} },
+        { id: "2", label: "Docs", group: "Navigation", onSelect: () => {}, shortcut: "Ctrl+D" },
+        { id: "3", label: "Settings", group: "Actions", onSelect: () => {} },
+      ]}
+    />
+  )
+}`,
+    props: [
+      {
+        name: "items",
+        type: "CommandItem[]",
+        default: "—",
+        description: "Array of command items ({ id, label, icon?, shortcut?, onSelect, group? }).",
+      },
+      {
+        name: "placeholder",
+        type: "string",
+        default: "'Type a command or search...'",
+        description: "Placeholder text for the search input.",
+      },
+      {
+        name: "emptyMessage",
+        type: "string",
+        default: "'No results found.'",
+        description: "Message shown when no items match the query.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "placeholder", label: "Placeholder", type: "text", default: "Type a command or search..." },
+        { name: "emptyMessage", label: "Empty Message", type: "text", default: "No results found." },
+      ],
+      defaults: {
+        items: [
+          { id: "1", label: "Home", group: "Navigation" },
+          { id: "2", label: "Documentation", group: "Navigation", shortcut: "Ctrl+D" },
+          { id: "3", label: "Settings", group: "Actions" },
+          { id: "4", label: "Create Project", group: "Actions", shortcut: "Ctrl+N" },
+          { id: "5", label: "Search", group: "Actions", shortcut: "Ctrl+K" },
+        ],
+      },
+    },
+    component: () => import("@/app/components/ui/command-menu"),
+    demo: () => import("@/app/components/demos/command-menu-demo"),
+  },
+
+  "animated-toggle": {
+    slug: "animated-toggle",
+    title: "Animated Toggle",
+    description:
+      "A switch toggle with spring-animated knob, multiple sizes, ARIA role='switch', keyboard support, and disabled state.",
+    category: "buttons",
+    dependencies: ["framer-motion", "clsx", "tailwind-merge"],
+    code: `'use client'
+
+import React, { useCallback, useId } from 'react'
+import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+interface AnimatedToggleProps {
+  checked?: boolean
+  onChange?: (checked: boolean) => void
+  label?: string
+  size?: 'sm' | 'md' | 'lg'
+  disabled?: boolean
+  className?: string
+}
+
+const sizeConfig = {
+  sm: { track: 'h-5 w-9', knob: 'h-3.5 w-3.5', translate: 16, padding: 3 },
+  md: { track: 'h-6 w-11', knob: 'h-4.5 w-4.5', translate: 20, padding: 3 },
+  lg: { track: 'h-8 w-14', knob: 'h-6 w-6', translate: 24, padding: 4 },
+}
+
+const AnimatedToggle: React.FC<AnimatedToggleProps> = ({
+  checked = false,
+  onChange,
+  label,
+  size = 'md',
+  disabled = false,
+  className,
+}) => {
+  const id = useId()
+  const config = sizeConfig[size]
+
+  const handleToggle = useCallback(() => {
+    if (!disabled) {
+      onChange?.(!checked)
+    }
+  }, [checked, onChange, disabled])
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault()
+        handleToggle()
+      }
+    },
+    [handleToggle]
+  )
+
+  return (
+    <div
+      className={cn(
+        'inline-flex items-center gap-3',
+        disabled && 'opacity-40 pointer-events-none',
+        className
+      )}
+    >
+      <button
+        id={id}
+        role="switch"
+        type="button"
+        aria-checked={checked}
+        aria-label={label ?? 'Toggle'}
+        disabled={disabled}
+        onClick={handleToggle}
+        onKeyDown={handleKeyDown}
+        className={cn(
+          'relative inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 transition-colors duration-200',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ignite focus-visible:ring-offset-2 focus-visible:ring-offset-void',
+          checked
+            ? 'border-ignite bg-ignite'
+            : 'border-border bg-obsidian',
+          config.track
+        )}
+      >
+        <motion.span
+          className={cn(
+            'block rounded-full shadow-sm',
+            checked ? 'bg-chalk' : 'bg-blush',
+            config.knob
+          )}
+          initial={false}
+          animate={{
+            x: checked ? config.translate : 0,
+          }}
+          transition={{
+            type: 'spring',
+            stiffness: 500,
+            damping: 30,
+          }}
+          style={{
+            marginLeft: config.padding,
+          }}
+        />
+      </button>
+
+      {label && (
+        <label
+          htmlFor={id}
+          className={cn(
+            'cursor-pointer select-none text-sm font-medium',
+            checked ? 'text-chalk' : 'text-blush'
+          )}
+        >
+          {label}
+        </label>
+      )}
+    </div>
+  )
+}
+
+export default AnimatedToggle`,
+    usage: `import AnimatedToggle from "@/app/components/ui/animated-toggle"
+
+export function Demo() {
+  const [enabled, setEnabled] = useState(false)
+
+  return (
+    <AnimatedToggle
+      checked={enabled}
+      onChange={setEnabled}
+      label="Dark Mode"
+    />
+  )
+}`,
+    props: [
+      {
+        name: "checked",
+        type: "boolean",
+        default: "false",
+        description: "Whether the toggle is on.",
+      },
+      {
+        name: "onChange",
+        type: "(checked: boolean) => void",
+        default: "undefined",
+        description: "Callback fired when the toggle state changes.",
+      },
+      {
+        name: "label",
+        type: "string",
+        default: "undefined",
+        description: "Optional text label displayed next to the toggle.",
+      },
+      {
+        name: "size",
+        type: "'sm' | 'md' | 'lg'",
+        default: "'md'",
+        description: "Toggle size variant.",
+      },
+      {
+        name: "disabled",
+        type: "boolean",
+        default: "false",
+        description: "Disable interaction.",
+      },
+      {
+        name: "className",
+        type: "string",
+        default: "''",
+        description: "Additional CSS classes.",
+      },
+    ],
+    playground: {
+      controls: [
+        { name: "checked", label: "Checked", type: "boolean", default: false },
+        { name: "label", label: "Label", type: "text", default: "Dark Mode" },
+        { name: "size", label: "Size", type: "select", default: "md", options: ["sm", "md", "lg"] },
+        { name: "disabled", label: "Disabled", type: "boolean", default: false },
+      ],
+    },
+    component: () => import("@/app/components/ui/animated-toggle"),
+    demo: () => import("@/app/components/demos/animated-toggle-demo"),
   },
 };
 
