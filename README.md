@@ -2,7 +2,7 @@
 
 # Praxys UI
 
-**A curated collection of 34 beautifully crafted, animated React components.**
+**A curated collection of 44 beautifully crafted, animated React components.**
 
 Browse. Copy. Paste. Ship.
 
@@ -31,16 +31,16 @@ Praxys UI is an open-source component library and documentation site for animate
 
 ## Components
 
-34 production-ready components across 6 categories:
+44 production-ready components across 6 categories:
 
 | Category | Components |
 |----------|-----------|
-| **Buttons** | Animated Button, Creepy Button, Social Flip Button |
+| **Buttons** | Animated Button, Creepy Button, Social Flip Button, Animated Toggle |
 | **Cards & Layout** | Glow Border Card, Testimonials Card, Staggered Grid, Expandable Bento Grid, Perspective Grid, Spotlight Card |
-| **Text Effects** | Flip Text, Animated Number, Flip Fade Text, Displacement Text, Typewriter Text, Morphing Text |
-| **Navigation** | Line Hover Link, Spotlight Navbar, Glass Dock, Accordion, Animated Tabs |
-| **Visual Effects** | Light Lines, Liquid Ocean, Liquid Metal, Reveal Loader, Toast Notification, Magnetic Cursor, Parallax Scroll, Gradient Mesh, Skeleton Loader |
-| **Media & Content** | Animated Hero, Masked Avatars, Folder Preview, Interactive Book, Logo Slider |
+| **Text Effects** | Flip Text, Animated Number, Flip Fade Text, Displacement Text, Typewriter Text, Morphing Text, Animated Counter |
+| **Navigation** | Line Hover Link, Spotlight Navbar, Glass Dock, Accordion, Animated Tabs, Modal Dialog, Tooltip, Dropdown Menu, Stepper, Infinite Scroll, Command Menu |
+| **Visual Effects** | Light Lines, Liquid Ocean, Liquid Metal, Reveal Loader, Toast Notification, Magnetic Cursor, Parallax Scroll, Gradient Mesh, Skeleton Loader, Progress Bar |
+| **Media & Content** | Animated Hero, Masked Avatars, Folder Preview, Interactive Book, Logo Slider, Image Comparison |
 
 Every component includes a live preview, full source code, installation steps, usage example, interactive props playground, and props table.
 
@@ -91,7 +91,7 @@ Open [http://localhost:3000](http://localhost:3000) for the landing page, or [ht
 
 ## Features
 
-- **34 Animated Components** — Buttons, cards, text effects, navigation, visual effects, and media components
+- **44 Animated Components** — Buttons, cards, text effects, navigation, visual effects, and media components
 - **Interactive Props Playground** — Tweak every prop and see changes live on each component page
 - **Light / Dark Mode** — Theme toggle with CSS custom properties, persisted to localStorage, no FOUC
 - **Theme Customizer** — Pick brand colors, preview components live, export CSS / JSON / Tailwind config
@@ -113,7 +113,7 @@ praxys-ui/
 │   ├── fonts/
 │   │   └── GeistPixel-Square.woff2
 │   ├── components/
-│   │   ├── ui/                  # 34 reusable animated components
+│   │   ├── ui/                  # 44 reusable animated components
 │   │   ├── demos/               # Demo wrappers for docs previews
 │   │   ├── ThemeProvider.tsx     # React context + localStorage + system preference
 │   │   ├── ThemeToggle.tsx       # Animated sun/moon toggle

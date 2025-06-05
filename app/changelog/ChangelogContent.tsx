@@ -20,6 +20,27 @@ interface ChangelogEntry {
 
 const changelog: ChangelogEntry[] = [
   {
+    version: '0.9.0',
+    date: 'Feb 14, 2026',
+    title: '10 New Components & CLI v0.3.0',
+    description: '10 new interactive components spanning modals, tooltips, dropdowns, progress indicators, and more — bringing the total to 44. CLI updated to v0.3.0.',
+    icon: <Sparkles className="h-4 w-4" />,
+    changes: [
+      { type: 'added', text: 'Modal Dialog — animated modal with backdrop blur, spring scale, Escape key, scroll lock, and ARIA attributes' },
+      { type: 'added', text: 'Tooltip — 4-position tooltip with configurable delay, direction-aware animation, and arrow pointer' },
+      { type: 'added', text: 'Dropdown Menu — full keyboard navigation, click-outside close, divider and disabled item support' },
+      { type: 'added', text: 'Progress Bar — animated bar with sm/md/lg sizes, candy-stripe overlay, custom colors, and label/value display' },
+      { type: 'added', text: 'Stepper — horizontal/vertical multi-step indicator with animated check icons and connector fill' },
+      { type: 'added', text: 'Image Comparison — before/after slider with pointer-capture drag, clip-based reveal, and animated handle' },
+      { type: 'added', text: 'Animated Counter — spring-physics number counter triggered on scroll into view with prefix/suffix/decimals' },
+      { type: 'added', text: 'Infinite Scroll — Intersection Observer-based with configurable threshold and animated loader' },
+      { type: 'added', text: 'Command Menu — search-filtered palette with grouped items, keyboard nav, match highlighting, and shortcut badges' },
+      { type: 'added', text: 'Animated Toggle — switch with spring-animated knob, 3 sizes, ARIA role="switch", and disabled state' },
+      { type: 'improved', text: 'CLI updated to v0.3.0 with all 44 components published to npm' },
+      { type: 'improved', text: 'Component count updated from 34 to 44 across landing page and registry' },
+    ],
+  },
+  {
     version: '0.8.0',
     date: 'Feb 14, 2026',
     title: 'New Components, Theme Customizer & Open Source',
