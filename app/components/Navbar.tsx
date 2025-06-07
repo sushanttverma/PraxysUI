@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Github, Menu, X } from "lucide-react";
+import { Github, Star, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "./ThemeToggle";
 import CommandPalette from "./CommandPalette";
@@ -65,10 +65,12 @@ export default function Navbar() {
             href="https://github.com/sushanttverma/Praxys-UI"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Praxys UI on GitHub"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-blush transition-colors hover:border-border-light hover:text-chalk"
+            aria-label="Star Praxys UI on GitHub"
+            className="flex h-9 items-center gap-1.5 rounded-lg border border-border px-3 text-blush transition-colors hover:border-border-light hover:text-chalk"
           >
             <Github className="h-4 w-4" />
+            <Star className="h-3 w-3 fill-current text-amber-400" />
+            <span className="text-xs font-medium">Star</span>
           </a>
         </div>
 

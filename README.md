@@ -12,6 +12,10 @@ Browse. Copy. Paste. Ship.
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-FF0050?style=flat-square&logo=framer)](https://www.framer.com/motion)
 [![License](https://img.shields.io/badge/License-MIT-E84E2D?style=flat-square)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/praxys-ui?style=flat-square&color=E84E2D&logo=npm)](https://www.npmjs.com/package/praxys-ui)
+[![npm downloads](https://img.shields.io/npm/dm/praxys-ui?style=flat-square&color=C9958A)](https://www.npmjs.com/package/praxys-ui)
+[![GitHub stars](https://img.shields.io/github/stars/sushanttverma/Praxys-UI?style=flat-square&color=F2ECE2&logo=github)](https://github.com/sushanttverma/Praxys-UI)
+[![CI](https://img.shields.io/github/actions/workflow/status/sushanttverma/Praxys-UI/ci.yml?style=flat-square&label=CI&logo=githubactions)](https://github.com/sushanttverma/Praxys-UI/actions)
 
 [Live Demo](https://ui.praxys.xyz) · [Documentation](https://ui.praxys.xyz/docs) · [Components](https://ui.praxys.xyz/docs/components-overview) · [Theme Customizer](https://ui.praxys.xyz/customize)
 
@@ -138,7 +142,7 @@ praxys-ui/
 │   ├── registry.ts              # Component registry + sidebar configuration
 │   └── templates.ts             # Templates registry
 ├── packages/
-│   └── cli/                     # npx praxys-ui CLI tool (v0.2.0)
+│   └── cli/                     # npx praxys-ui CLI tool (v0.3.0)
 │       ├── package.json
 │       ├── tsconfig.json
 │       └── src/index.ts

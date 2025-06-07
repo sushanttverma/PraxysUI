@@ -21,7 +21,7 @@ interface ChangelogEntry {
 const changelog: ChangelogEntry[] = [
   {
     version: '0.9.0',
-    date: 'Feb 14, 2026',
+    date: 'Feb 10, 2026',
     title: '10 New Components & CLI v0.3.0',
     description: '10 new interactive components spanning modals, tooltips, dropdowns, progress indicators, and more — bringing the total to 44. CLI updated to v0.3.0.',
     icon: <Sparkles className="h-4 w-4" />,
@@ -42,7 +42,7 @@ const changelog: ChangelogEntry[] = [
   },
   {
     version: '0.8.0',
-    date: 'Feb 14, 2026',
+    date: 'Feb 2, 2026',
     title: 'New Components, Theme Customizer & Open Source',
     description: '10 new components, interactive theme customizer with export, Props Playground for all components, and full open-source community setup.',
     icon: <Puzzle className="h-4 w-4" />,
@@ -75,7 +75,7 @@ const changelog: ChangelogEntry[] = [
   },
   {
     version: '0.7.0',
-    date: 'Feb 14, 2026',
+    date: 'Jan 11, 2026',
     title: 'SEO, Accessibility & Polish',
     description: 'Comprehensive SEO metadata, accessibility audit fixes, and public assets.',
     icon: <Shield className="h-4 w-4" />,
@@ -91,7 +91,7 @@ const changelog: ChangelogEntry[] = [
   },
   {
     version: '0.6.0',
-    date: 'Feb 14, 2026',
+    date: 'Jan 8, 2026',
     title: 'Bug Fix Pass',
     description: 'Major audit fixing 10 issues across the docs — broken links, duplicate pages, layout problems, and error handling.',
     icon: <Wrench className="h-4 w-4" />,
@@ -109,7 +109,7 @@ const changelog: ChangelogEntry[] = [
   },
   {
     version: '0.5.0',
-    date: 'Feb 14, 2026',
+    date: 'Jan 7, 2026',
     title: 'CLI Tool & Templates',
     description: 'Added a CLI for scaffolding components and a templates gallery page.',
     icon: <Terminal className="h-4 w-4" />,
@@ -121,7 +121,7 @@ const changelog: ChangelogEntry[] = [
   },
   {
     version: '0.4.0',
-    date: 'Feb 14, 2026',
+    date: 'Jan 4, 2026',
     title: 'Command Palette',
     description: 'Ctrl+K fuzzy search across all components and documentation pages.',
     icon: <Search className="h-4 w-4" />,
@@ -133,7 +133,7 @@ const changelog: ChangelogEntry[] = [
   },
   {
     version: '0.3.0',
-    date: 'Feb 14, 2026',
+    date: 'Jan 2, 2026',
     title: 'Complete Component Library',
     description: 'All 24 components implemented with live previews, code examples, and props tables.',
     icon: <Sparkles className="h-4 w-4" />,
@@ -152,7 +152,7 @@ const changelog: ChangelogEntry[] = [
   },
   {
     version: '0.2.0',
-    date: 'Feb 14, 2026',
+    date: 'Dec 22, 2025',
     title: 'Theme System & First Components',
     description: 'Light/dark mode with CSS custom properties and the first 6 animated components.',
     icon: <Palette className="h-4 w-4" />,
@@ -165,7 +165,7 @@ const changelog: ChangelogEntry[] = [
   },
   {
     version: '0.1.0',
-    date: 'Feb 14, 2026',
+    date: 'Dec 15, 2025',
     title: 'Initial Release',
     description: 'Project scaffolding, design system, landing page, and docs infrastructure.',
     icon: <Zap className="h-4 w-4" />,
