@@ -14,7 +14,7 @@ interface PerspectiveGridProps {
 const PerspectiveGrid: React.FC<PerspectiveGridProps> = ({
   children,
   className = '',
-  columns = 3,
+  columns: _columns = 3,
   tiltAmount = 8,
 }) => {
   return (

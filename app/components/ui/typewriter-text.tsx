@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
@@ -27,42 +27,36 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
 
   const currentString = strings[stringIndex]
 
-  const handleTyping = useCallback(() => {
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>
+
     if (phase === 'typing') {
       if (text.length < currentString.length) {
-        const timeout = setTimeout(() => {
+        timeout = setTimeout(() => {
           setText(currentString.slice(0, text.length + 1))
         }, typingSpeed)
-        return () => clearTimeout(timeout)
       } else {
-        setPhase('pausing')
+        timeout = setTimeout(() => setPhase('pausing'), 0)
       }
-    }
-
-    if (phase === 'pausing') {
-      const timeout = setTimeout(() => {
+    } else if (phase === 'pausing') {
+      timeout = setTimeout(() => {
         setPhase('deleting')
       }, pauseDuration)
-      return () => clearTimeout(timeout)
-    }
-
-    if (phase === 'deleting') {
+    } else if (phase === 'deleting') {
       if (text.length > 0) {
-        const timeout = setTimeout(() => {
+        timeout = setTimeout(() => {
           setText(text.slice(0, -1))
         }, deletingSpeed)
-        return () => clearTimeout(timeout)
       } else {
-        setStringIndex((prev) => (prev + 1) % strings.length)
-        setPhase('typing')
+        timeout = setTimeout(() => {
+          setStringIndex((prev) => (prev + 1) % strings.length)
+          setPhase('typing')
+        }, 0)
       }
     }
-  }, [phase, text, currentString, typingSpeed, deletingSpeed, pauseDuration, strings.length])
 
-  useEffect(() => {
-    const cleanup = handleTyping()
-    return cleanup
-  }, [handleTyping])
+    return () => clearTimeout(timeout)
+  }, [phase, text, currentString, typingSpeed, deletingSpeed, pauseDuration, strings.length])
 
   return (
     <span className={cn('inline', className)}>

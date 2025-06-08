@@ -2,7 +2,7 @@
 
 import { lazy, Suspense, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, ExternalLink, Monitor, Smartphone, Tablet, Maximize2, Code } from 'lucide-react'
+import { ArrowLeft, Monitor, Smartphone, Tablet, Maximize2, Code } from 'lucide-react'
 import { motion } from 'framer-motion'
 import type { TemplateDefinition } from '@/lib/templates'
 import ThemeToggle from '@/app/components/ThemeToggle'

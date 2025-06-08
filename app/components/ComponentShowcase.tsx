@@ -240,7 +240,7 @@ export default function ComponentShowcase() {
         <div className="animate-marquee flex gap-4">
           {[...showcaseItems.slice(0, 6), ...showcaseItems.slice(0, 6)].map(
             (item, i) => (
-              <ShowcaseCard key={`row1-${i}`} item={item} index={i} />
+              <ShowcaseCard key={`row1-${i}`} item={item} />
             )
           )}
         </div>
@@ -254,7 +254,7 @@ export default function ComponentShowcase() {
         >
           {[...showcaseItems.slice(6), ...showcaseItems.slice(6)].map(
             (item, i) => (
-              <ShowcaseCard key={`row2-${i}`} item={item} index={i} />
+              <ShowcaseCard key={`row2-${i}`} item={item} />
             )
           )}
         </div>
@@ -269,10 +269,8 @@ export default function ComponentShowcase() {
 
 function ShowcaseCard({
   item,
-  index,
 }: {
   item: ShowcaseItem;
-  index: number;
 }) {
   const router = useRouter();
 

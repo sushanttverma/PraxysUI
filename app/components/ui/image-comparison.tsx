@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
@@ -24,6 +24,20 @@ const ImageComparison: React.FC<ImageComparisonProps> = ({
   const containerRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState(initialPosition)
   const [isDragging, setIsDragging] = useState(false)
+  const [containerWidth, setContainerWidth] = useState<number | null>(null)
+
+  // Track container width via ResizeObserver
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setContainerWidth(entry.contentRect.width)
+      }
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   const updatePosition = useCallback((clientX: number) => {
     const rect = containerRef.current?.getBoundingClientRect()
@@ -85,7 +99,7 @@ const ImageComparison: React.FC<ImageComparisonProps> = ({
           src={beforeSrc}
           alt={beforeAlt}
           className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-          style={{ minWidth: containerRef.current?.offsetWidth ?? '100%' }}
+          style={{ minWidth: containerWidth ?? '100%' }}
           draggable={false}
         />
       </div>

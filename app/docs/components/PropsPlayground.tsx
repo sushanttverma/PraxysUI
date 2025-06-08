@@ -74,17 +74,18 @@ export default function PropsPlayground({
   const [key, setKey] = useState(0); // force remount on reset
 
   // Load actual component
+  const entry = componentRegistry[slug];
+  const registryError = !entry ? `Component "${slug}" not found.` : null;
+
   useEffect(() => {
-    const entry = componentRegistry[slug];
-    if (!entry) {
-      setError(`Component "${slug}" not found.`);
-      return;
-    }
+    if (!entry) return;
     entry
       .component()
       .then((mod) => setComponent(() => mod.default))
       .catch(() => setError(`Failed to load component "${slug}".`));
-  }, [slug]);
+  }, [slug, entry]);
+
+  const displayError = registryError || error;
 
   const handleChange = useCallback(
     (name: string, value: unknown) => {
@@ -174,8 +175,8 @@ export default function PropsPlayground({
         {/* Live preview */}
         <div className="flex-1 border-b lg:border-b-0 lg:border-r border-border bg-void/50 p-4 sm:p-6 overflow-hidden">
           <div className="flex min-h-[200px] items-center justify-center">
-            {error ? (
-              <p className="text-sm text-ignite/70">{error}</p>
+            {displayError ? (
+              <p className="text-sm text-ignite/70">{displayError}</p>
             ) : !Component ? (
               <div className="flex items-center gap-2 text-text-faint">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-ignite/30 border-t-ignite" />
@@ -248,7 +249,7 @@ function PlaygroundPreview({
 
 function getSpecialChildren(
   slug: string,
-  childrenValue?: ReactNode
+  _childrenValue?: ReactNode
 ): ReactNode | undefined {
   if (slug === "glow-border-card") {
     return (

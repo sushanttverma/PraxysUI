@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowLeft, GitCommit, Sparkles, Wrench, Zap, BookOpen, Palette, Terminal, Search, Layout, Shield, Globe, Puzzle, Paintbrush, Heart } from 'lucide-react'
+import { ArrowLeft, GitCommit, Sparkles, Wrench, Zap, BookOpen, Palette, Terminal, Search, Shield, Puzzle } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import ThemeToggle from '../components/ThemeToggle'
 

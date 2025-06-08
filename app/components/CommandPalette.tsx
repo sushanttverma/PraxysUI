@@ -119,10 +119,11 @@ export default function CommandPalette() {
     }
   }, [open])
 
-  // Reset selection when results change
-  useEffect(() => {
+  // Reset selection when query changes
+  const handleQueryChange = useCallback((newQuery: string) => {
+    setQuery(newQuery)
     setSelectedIndex(0)
-  }, [query])
+  }, [])
 
   // Scroll selected item into view
   useEffect(() => {
@@ -199,7 +200,7 @@ export default function CommandPalette() {
                   type="text"
                   placeholder="Search components, pages..."
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => handleQueryChange(e.target.value)}
                   onKeyDown={handleKeyDown}
                   role="combobox"
                   aria-expanded={results.length > 0}

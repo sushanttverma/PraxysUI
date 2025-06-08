@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShoppingCart, Star, Heart, Share2, Check, ChevronDown, Shield, Truck, RotateCcw, Github, Twitter, Instagram } from 'lucide-react'
+import { ShoppingCart, Star, Heart, Check, ChevronDown, Shield, Truck, RotateCcw, Github, Twitter, Instagram } from 'lucide-react'
 import MaskedAvatars from '@/app/components/ui/masked-avatars'
 import SocialFlipButton from '@/app/components/ui/social-flip-button'
 import RevealLoader from '@/app/components/ui/reveal-loader'

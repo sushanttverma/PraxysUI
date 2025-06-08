@@ -4,7 +4,7 @@ import { Command } from "commander";
 import chalk from "chalk";
 import ora from "ora";
 import prompts from "prompts";
-import { existsSync, mkdirSync, writeFileSync, readFileSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { execSync } from "child_process";
 

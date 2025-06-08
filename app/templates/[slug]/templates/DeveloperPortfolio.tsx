@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Github, Twitter, Linkedin, Mail, ExternalLink, Code2, Palette, Terminal, Cpu } from 'lucide-react'
+import { Github, Twitter, Linkedin, Mail, ExternalLink, Code2, Terminal } from 'lucide-react'
 import DisplacementText from '@/app/components/ui/displacement-text'
 import PerspectiveGrid from '@/app/components/ui/perspective-grid'
 import GlassDock from '@/app/components/ui/glass-dock'

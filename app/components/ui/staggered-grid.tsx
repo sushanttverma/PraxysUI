@@ -14,7 +14,7 @@ interface StaggeredGridProps {
 const StaggeredGrid: React.FC<StaggeredGridProps> = ({
   children,
   className = '',
-  columns = 3,
+  columns: _columns = 3,
   staggerDelay = 0.08,
 }) => {
   return (

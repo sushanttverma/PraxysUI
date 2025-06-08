@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Search, Book, FileText, Terminal, Zap, ChevronRight, Hash, ExternalLink } from 'lucide-react'
+import { Search, Book, Terminal, Zap, ChevronRight, Hash } from 'lucide-react'
 import InteractiveBook from '@/app/components/ui/interactive-book'
 import FolderPreview from '@/app/components/ui/folder-preview'
 import LineHoverLink from '@/app/components/ui/line-hover-link'

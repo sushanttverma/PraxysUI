@@ -365,8 +365,6 @@ export default function ThemeCustomizer() {
   const activeColors = activeMode === 'dark' ? darkColors : lightColors
   const setActiveColors = activeMode === 'dark' ? setDarkColors : setLightColors
 
-  const css = useMemo(() => generateCSS(darkColors, lightColors), [darkColors, lightColors])
-
   const exportOutput = useMemo(() => {
     switch (exportFormat) {
       case 'css': return generateCSS(darkColors, lightColors)

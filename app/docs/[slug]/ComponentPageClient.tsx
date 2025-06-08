@@ -12,14 +12,13 @@ export default function ComponentPageClient({ slug }: ComponentPageClientProps) 
   const [DemoComponent, setDemoComponent] = useState<ComponentType<any> | null>(
     null
   );
-  const [error, setError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  const entry = componentRegistry[slug];
+  const registryError = !entry ? `Component "${slug}" not found in registry.` : null;
 
   useEffect(() => {
-    const entry = componentRegistry[slug];
-    if (!entry) {
-      setError(`Component "${slug}" not found in registry.`);
-      return;
-    }
+    if (!entry) return;
 
     entry
       .demo()
@@ -28,9 +27,11 @@ export default function ComponentPageClient({ slug }: ComponentPageClientProps) 
       })
       .catch((err) => {
         console.error(`Failed to load demo for "${slug}":`, err);
-        setError(`Failed to load preview for "${slug}".`);
+        setLoadError(`Failed to load preview for "${slug}".`);
       });
-  }, [slug]);
+  }, [slug, entry]);
+
+  const error = registryError || loadError;
 
   if (error) {
     return (
