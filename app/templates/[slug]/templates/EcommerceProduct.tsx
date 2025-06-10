@@ -64,14 +64,16 @@ const EcommerceProduct: React.FC = () => {
       {/* Navigation */}
       <nav className="border-b border-border/60 bg-void/85 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
-          <span className="font-pixel text-lg font-bold text-chalk">PRAXYS STORE</span>
+          <span className="font-pixel text-sm font-bold text-chalk sm:text-lg">PRAXYS STORE</span>
           <div className="hidden items-center gap-6 md:flex">
             <a href="#" className="text-sm text-blush transition-colors hover:text-chalk">Shop</a>
             <a href="#" className="text-sm text-blush transition-colors hover:text-chalk">New</a>
             <a href="#" className="text-sm text-blush transition-colors hover:text-chalk">About</a>
           </div>
-          <div className="flex items-center gap-3">
-            <SocialFlipButton frontLabel="Share" links={socialLinks} />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="hidden sm:block">
+              <SocialFlipButton frontLabel="Share" links={socialLinks} />
+            </div>
             <button className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-border text-blush transition-colors hover:text-chalk cursor-pointer">
               <ShoppingCart className="h-4 w-4" />
               <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-ignite font-pixel text-[9px] font-bold text-void">
@@ -82,7 +84,7 @@ const EcommerceProduct: React.FC = () => {
         </div>
       </nav>
 
-      <main className="mx-auto max-w-6xl px-6 py-10">
+      <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
         <div className="grid gap-10 lg:grid-cols-2">
           {/* Product images */}
           <div>
@@ -231,7 +233,7 @@ const EcommerceProduct: React.FC = () => {
             </div>
 
             {/* Trust badges */}
-            <div className="mt-8 grid grid-cols-3 gap-3">
+            <div className="mt-8 grid grid-cols-1 gap-3 min-[400px]:grid-cols-3">
               {[
                 { icon: <Shield className="h-4 w-4" />, label: '2 Year Warranty' },
                 { icon: <Truck className="h-4 w-4" />, label: 'Free Shipping' },

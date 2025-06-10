@@ -77,14 +77,14 @@ const AgencyShowcase: React.FC = () => {
       {/* Navigation */}
       <nav className="border-b border-border/60 bg-void/85 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <span className="font-pixel text-xl font-bold text-chalk tracking-tight">OBSIDIAN</span>
+          <span className="font-pixel text-base font-bold text-chalk tracking-tight sm:text-xl">OBSIDIAN</span>
           <div className="hidden items-center gap-8 md:flex">
             <a href="#work" className="text-sm text-blush transition-colors hover:text-chalk">Work</a>
             <a href="#services" className="text-sm text-blush transition-colors hover:text-chalk">Services</a>
             <a href="#about" className="text-sm text-blush transition-colors hover:text-chalk">About</a>
             <a href="#contact" className="text-sm text-blush transition-colors hover:text-chalk">Contact</a>
           </div>
-          <CreepyButton className="text-sm px-5 py-2">Let&apos;s Talk</CreepyButton>
+          <CreepyButton className="text-xs px-3 py-1.5 sm:text-sm sm:px-5 sm:py-2">Let&apos;s Talk</CreepyButton>
         </div>
       </nav>
 

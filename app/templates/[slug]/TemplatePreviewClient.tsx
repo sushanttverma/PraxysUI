@@ -160,14 +160,14 @@ export default function TemplatePreviewClient({
 
       {/* Bottom bar: component tags */}
       <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-void/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-10 max-w-[1600px] items-center gap-3 px-4 sm:px-6">
-          <span className="text-[11px] text-text-faint">Components used:</span>
-          <div className="flex flex-wrap gap-1.5">
+        <div className="mx-auto flex min-h-10 max-w-[1600px] items-center gap-2 px-4 py-2 sm:gap-3 sm:px-6">
+          <span className="hidden text-[11px] text-text-faint sm:inline shrink-0">Components used:</span>
+          <div className="flex flex-wrap gap-1.5 overflow-hidden">
             {template.components.map((comp) => (
               <Link
                 key={comp}
                 href={`/docs/${comp}`}
-                className="rounded-md border border-border bg-obsidian px-2 py-0.5 text-[10px] text-blush transition-colors hover:border-ignite/30 hover:text-ignite"
+                className="rounded-md border border-border bg-obsidian px-2 py-0.5 text-[10px] text-blush transition-colors hover:border-ignite/30 hover:text-ignite whitespace-nowrap"
               >
                 {comp}
               </Link>

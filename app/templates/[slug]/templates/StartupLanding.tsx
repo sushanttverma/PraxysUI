@@ -116,8 +116,8 @@ const StartupLanding: React.FC = () => {
             <a href="#pricing" className="text-sm text-blush transition-colors hover:text-chalk">Pricing</a>
           </div>
           <div className="flex items-center gap-3">
-            <a href="#" className="text-sm text-blush transition-colors hover:text-chalk">Log in</a>
-            <AnimatedButton className="text-sm">Get Started</AnimatedButton>
+            <a href="#" className="hidden text-sm text-blush transition-colors hover:text-chalk sm:inline">Log in</a>
+            <AnimatedButton className="text-xs sm:text-sm">Get Started</AnimatedButton>
           </div>
         </div>
       </nav>

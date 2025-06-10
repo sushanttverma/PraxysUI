@@ -75,7 +75,7 @@ const SaaSDashboard: React.FC = () => {
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-ignite">
               <span className="font-pixel text-xs font-bold text-void">D</span>
             </div>
-            <span className="font-pixel text-base font-semibold text-chalk">Dashboard</span>
+            <span className="hidden font-pixel text-base font-semibold text-chalk sm:inline">Dashboard</span>
           </div>
 
           <div className="hidden md:flex items-center gap-2 rounded-lg border border-border bg-void px-3 py-1.5">
@@ -84,12 +84,12 @@ const SaaSDashboard: React.FC = () => {
             <kbd className="ml-4 rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-text-faint">⌘K</kbd>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button className="relative flex h-8 w-8 items-center justify-center rounded-lg border border-border text-blush transition-colors hover:text-chalk cursor-pointer">
               <Bell className="h-4 w-4" />
               <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-ignite" />
             </button>
-            <button className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-blush transition-colors hover:text-chalk cursor-pointer">
+            <button className="hidden h-8 w-8 items-center justify-center rounded-lg border border-border text-blush transition-colors hover:text-chalk cursor-pointer sm:flex">
               <Settings className="h-4 w-4" />
             </button>
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-ignite/10 font-pixel text-xs font-bold text-ignite">
@@ -99,7 +99,7 @@ const SaaSDashboard: React.FC = () => {
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl px-6 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
         {/* Spotlight navbar */}
         <div className="mb-8">
           <SpotlightNavbar items={navItems} />

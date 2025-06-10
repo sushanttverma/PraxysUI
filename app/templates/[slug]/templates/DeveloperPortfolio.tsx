@@ -90,7 +90,7 @@ const DeveloperPortfolio: React.FC = () => {
           <span className="text-xs font-medium tracking-wide text-ignite">Available for hire</span>
         </motion.div>
 
-        <DisplacementText text="Alex Mercer" fontSize={80} className="mb-4" />
+        <DisplacementText text="Alex Mercer" fontSize={40} className="mb-4 sm:scale-125 md:scale-[1.75] origin-center" />
 
         <div className="mt-2 flex items-center gap-2 text-lg text-blush sm:text-xl">
           <span>I build</span>
@@ -114,7 +114,7 @@ const DeveloperPortfolio: React.FC = () => {
           transition={{ delay: 0.7 }}
           className="mt-12"
         >
-          <GlassDock items={dockItems} />
+          <GlassDock items={dockItems} iconSize={20} />
         </motion.div>
       </section>
 
@@ -225,7 +225,7 @@ const DeveloperPortfolio: React.FC = () => {
 
       {/* Footer */}
       <footer className="border-t border-border py-8 px-6">
-        <div className="mx-auto flex max-w-6xl items-center justify-between">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 sm:flex-row">
           <span className="font-pixel text-sm text-chalk">Alex Mercer</span>
           <p className="text-xs text-text-faint">&copy; 2026. Built with Praxys UI.</p>
         </div>

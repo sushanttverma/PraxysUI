@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, Book, Terminal, Zap, ChevronRight, Hash } from 'lucide-react'
+import { Search, Book, Terminal, Zap, ChevronRight, Hash, Menu, X } from 'lucide-react'
 import InteractiveBook from '@/app/components/ui/interactive-book'
 import FolderPreview from '@/app/components/ui/folder-preview'
 import LineHoverLink from '@/app/components/ui/line-hover-link'
@@ -78,18 +78,25 @@ const relatedLinks = [
 
 const DocumentationSite: React.FC = () => {
   const [activeSection, setActiveSection] = useState('Introduction')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-void">
       {/* Top navigation */}
       <header className="border-b border-border bg-obsidian/50 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-6">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-blush transition-colors hover:text-chalk cursor-pointer lg:hidden"
+            >
+              {sidebarOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            </button>
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-ignite">
               <Book className="h-3.5 w-3.5 text-void" />
             </div>
             <span className="font-pixel text-base font-semibold text-chalk">Acme Docs</span>
-            <span className="ml-2 rounded-md border border-border px-1.5 py-0.5 font-pixel text-[10px] text-text-faint">v3.2</span>
+            <span className="ml-2 hidden rounded-md border border-border px-1.5 py-0.5 font-pixel text-[10px] text-text-faint sm:inline">v3.2</span>
           </div>
 
           <div className="hidden md:flex items-center gap-2 rounded-lg border border-border bg-void px-3 py-1.5 w-64">
@@ -98,7 +105,7 @@ const DocumentationSite: React.FC = () => {
             <kbd className="ml-auto rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-text-faint">⌘K</kbd>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="hidden items-center gap-4 sm:flex">
             <a href="#" className="text-xs text-blush transition-colors hover:text-chalk">Guides</a>
             <a href="#" className="text-xs text-blush transition-colors hover:text-chalk">API</a>
             <a href="#" className="text-xs text-blush transition-colors hover:text-chalk">Blog</a>
@@ -106,9 +113,22 @@ const DocumentationSite: React.FC = () => {
         </div>
       </header>
 
-      <div className="mx-auto flex max-w-7xl">
+      <div className="mx-auto flex max-w-7xl relative">
+        {/* Mobile sidebar overlay */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 z-30 bg-void/60 backdrop-blur-sm lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
         {/* Sidebar */}
-        <aside className="hidden lg:block w-64 shrink-0 border-r border-border">
+        <aside className={`
+          fixed top-14 left-0 z-40 h-[calc(100vh-56px)] w-64 shrink-0 border-r border-border bg-void
+          transition-transform duration-200 ease-in-out
+          lg:sticky lg:top-0 lg:translate-x-0 lg:bg-transparent
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        `}>
           <div className="sticky top-0 h-[calc(100vh-56px)] overflow-y-auto py-6 px-4">
             {sidebarSections.map((section) => (
               <div key={section.title} className="mb-6">
@@ -119,7 +139,7 @@ const DocumentationSite: React.FC = () => {
                   {section.items.map((item) => (
                     <li key={item}>
                       <button
-                        onClick={() => setActiveSection(item)}
+                        onClick={() => { setActiveSection(item); setSidebarOpen(false) }}
                         className={`flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-sm transition-colors cursor-pointer ${
                           activeSection === item
                             ? 'bg-ignite/10 text-ignite border border-ignite/20'
@@ -138,7 +158,7 @@ const DocumentationSite: React.FC = () => {
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 py-10 px-6 lg:px-12">
+        <main className="flex-1 min-w-0 py-6 px-4 sm:py-10 sm:px-6 lg:px-12">
           {/* Breadcrumb */}
           <div className="mb-6 flex items-center gap-2 text-xs text-text-faint">
             <span>Docs</span>
@@ -219,8 +239,8 @@ const DocumentationSite: React.FC = () => {
                 </p>
 
                 {/* Interactive Book */}
-                <div className="py-4">
-                  <InteractiveBook pages={bookPages} width={400} height={320} />
+                <div className="py-4 overflow-x-auto">
+                  <InteractiveBook pages={bookPages} width={320} height={260} />
                 </div>
               </div>
             </div>

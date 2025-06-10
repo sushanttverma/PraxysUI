@@ -147,7 +147,7 @@ export default function TemplatesContent() {
                 <h3 className="font-pixel text-base font-bold text-chalk">
                   {template.title}
                 </h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-blush/80">
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-blush/80 line-clamp-3">
                   {template.description}
                 </p>
 
