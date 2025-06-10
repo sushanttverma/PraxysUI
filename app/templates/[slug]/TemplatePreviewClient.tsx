@@ -26,6 +26,7 @@ export default function TemplatePreviewClient({
   template: TemplateDefinition
 }) {
   const [viewport, setViewport] = useState<Viewport>('desktop')
+  const [iframeLoaded, setIframeLoaded] = useState(false)
   const TemplateComponent = templateComponents[slug]
 
   const viewportWidths: Record<Viewport, string> = {
@@ -54,6 +55,14 @@ export default function TemplatePreviewClient({
         </Suspense>
       </div>
     )
+  }
+
+  // Reset iframe loaded state when viewport changes
+  const handleViewportChange = (key: Viewport) => {
+    if (key !== viewport) {
+      setIframeLoaded(false)
+    }
+    setViewport(key)
   }
 
   return (
@@ -87,7 +96,7 @@ export default function TemplatePreviewClient({
             ]).map(({ key, icon: Icon, label }) => (
               <button
                 key={key}
-                onClick={() => setViewport(key)}
+                onClick={() => handleViewportChange(key)}
                 className={`flex h-7 items-center gap-1.5 rounded-md px-2.5 text-xs transition-colors cursor-pointer ${
                   viewport === key
                     ? 'bg-ignite/10 text-ignite border border-ignite/20'
@@ -123,7 +132,7 @@ export default function TemplatePreviewClient({
             maxWidth: viewportWidths[viewport],
           }}
         >
-          {/* Device frame for mobile/tablet */}
+          {/* Device frame for mobile/tablet — uses iframe for correct responsive breakpoints */}
           {(viewport === 'mobile' || viewport === 'tablet') && (
             <div className="py-4 px-4">
               <div className="overflow-hidden rounded-2xl border border-border shadow-2xl">
@@ -140,16 +149,25 @@ export default function TemplatePreviewClient({
                     </div>
                   </div>
                 </div>
-                <div className="overflow-y-auto bg-void" style={{ maxHeight: 'calc(100vh - 140px)' }}>
-                  <Suspense fallback={<TemplateSkeleton />}>
-                    {TemplateComponent && <TemplateComponent />}
-                  </Suspense>
+                {/* iframe renders template with real viewport breakpoints */}
+                <div className="relative bg-void" style={{ height: 'calc(100vh - 140px)' }}>
+                  {!iframeLoaded && (
+                    <div className="absolute inset-0 z-10">
+                      <TemplateSkeleton />
+                    </div>
+                  )}
+                  <iframe
+                    src={`/templates/${slug}/embed`}
+                    className="h-full w-full border-0 bg-void"
+                    title={`${template.title} preview`}
+                    onLoad={() => setIframeLoaded(true)}
+                  />
                 </div>
               </div>
             </div>
           )}
 
-          {/* Desktop: no frame */}
+          {/* Desktop: render directly (viewport matches, breakpoints work) */}
           {viewport === 'desktop' && (
             <Suspense fallback={<TemplateSkeleton />}>
               {TemplateComponent && <TemplateComponent />}
