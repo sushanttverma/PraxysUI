@@ -57,7 +57,7 @@ const SpotlightNavbar: React.FC<SpotlightNavbarProps> = ({
 
       {items.map((item, i) => (
         <a
-          key={item.href}
+          key={item.label}
           href={item.href}
           onMouseEnter={(e) => handleHover(e, i)}
           onMouseLeave={() => setHoveredIndex(null)}
