@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import {
   componentRegistry,
   isComponentSlug,
@@ -109,13 +109,26 @@ export default async function DocsSlugPage({
       <div className="space-y-10">
         {/* Header */}
         <div>
-          <p className="mb-2 font-pixel text-xs uppercase tracking-wider text-ignite">
-            Components
-          </p>
-          <h1 className="font-pixel text-2xl sm:text-3xl font-bold text-chalk">
-            {entry.title}
-          </h1>
-          <p className="mt-3 text-lg text-blush">{entry.description}</p>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="mb-2 font-pixel text-xs uppercase tracking-wider text-ignite">
+                Components
+              </p>
+              <h1 className="font-pixel text-2xl sm:text-3xl font-bold text-chalk">
+                {entry.title}
+              </h1>
+              <p className="mt-3 text-lg text-blush">{entry.description}</p>
+            </div>
+            <a
+              href={`https://github.com/sushanttverma/Praxys-UI/blob/main/app/components/ui/${slug}.tsx`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-text-faint transition-colors hover:border-border-light hover:text-blush"
+            >
+              Edit on GitHub
+              <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
         </div>
 
         {/* Preview + Code */}
