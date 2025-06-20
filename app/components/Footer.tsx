@@ -26,8 +26,8 @@ const footerLinks = [
     title: "Community",
     links: [
       { label: "GitHub", href: "https://github.com/sushanttverma/Praxys-UI" },
-      { label: "Discord", href: "#" },
-      { label: "Twitter", href: "#" },
+      { label: "Issues", href: "https://github.com/sushanttverma/Praxys-UI/issues" },
+      { label: "Discussions", href: "https://github.com/sushanttverma/Praxys-UI/discussions" },
       { label: "Contributing", href: "https://github.com/sushanttverma/Praxys-UI/blob/main/CONTRIBUTING.md" },
     ],
   },
