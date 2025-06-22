@@ -14,6 +14,8 @@ const templateFiles: Record<string, string> = {
   'agency-showcase': 'AgencyShowcase.tsx',
   'documentation-site': 'DocumentationSite.tsx',
   'ecommerce-product': 'EcommerceProduct.tsx',
+  'blog-magazine': 'BlogMagazine.tsx',
+  'saas-pricing': 'SaaSPricing.tsx',
 }
 
 interface Props {

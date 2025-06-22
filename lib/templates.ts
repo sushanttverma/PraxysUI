@@ -55,6 +55,22 @@ export const templateRegistry: Record<string, TemplateDefinition> = {
     components: ['masked-avatars', 'social-flip-button', 'reveal-loader', 'animated-button'],
     category: 'E-commerce',
   },
+  'blog-magazine': {
+    slug: 'blog-magazine',
+    title: 'Blog & Magazine',
+    description:
+      'A content-driven blog layout with animated headings, category tabs, parallax hero, and article cards. Uses Typewriter Text, Morphing Text, Animated Tabs, and Parallax Scroll.',
+    components: ['typewriter-text', 'morphing-text', 'animated-tabs', 'parallax-scroll'],
+    category: 'Content',
+  },
+  'saas-pricing': {
+    slug: 'saas-pricing',
+    title: 'SaaS Pricing',
+    description:
+      'A conversion-focused pricing page with animated counters, spotlight cards, billing toggle, and usage meters. Uses Animated Counter, Spotlight Card, Animated Toggle, and Progress Bar.',
+    components: ['animated-counter', 'spotlight-card', 'animated-toggle', 'progress-bar'],
+    category: 'SaaS',
+  },
 }
 
 export const allTemplateSlugs = Object.keys(templateRegistry)

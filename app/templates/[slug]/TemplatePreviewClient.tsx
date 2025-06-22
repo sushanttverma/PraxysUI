@@ -14,6 +14,8 @@ const templateComponents: Record<string, React.LazyExoticComponent<React.FC>> = 
   'agency-showcase': lazy(() => import('./templates/AgencyShowcase')),
   'documentation-site': lazy(() => import('./templates/DocumentationSite')),
   'ecommerce-product': lazy(() => import('./templates/EcommerceProduct')),
+  'blog-magazine': lazy(() => import('./templates/BlogMagazine')),
+  'saas-pricing': lazy(() => import('./templates/SaaSPricing')),
 }
 
 type Viewport = 'desktop' | 'tablet' | 'mobile' | 'fullscreen'
