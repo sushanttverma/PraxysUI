@@ -16,6 +16,9 @@ import {
   CreditCard,
   Users,
   Zap,
+  BarChart3,
+  ClipboardList,
+  HelpCircle,
 } from 'lucide-react'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
@@ -335,6 +338,270 @@ export default function AppLayout() {
   )
 }`,
   },
+  {
+    id: 'dashboard-stats',
+    title: 'Dashboard Stats Panel',
+    description:
+      'An analytics dashboard section combining AnimatedCounter for live KPIs, ProgressBar for usage meters, AnimatedToggle for settings, and SpotlightCard for interactive panels.',
+    icon: <BarChart3 className="h-4 w-4" />,
+    components: ['animated-counter', 'progress-bar', 'animated-toggle', 'spotlight-card'],
+    preview: <DashboardStatsPreview />,
+    code: `import { useState } from 'react'
+import AnimatedCounter from '@/components/ui/animated-counter'
+import ProgressBar from '@/components/ui/progress-bar'
+import AnimatedToggle from '@/components/ui/animated-toggle'
+import SpotlightCard from '@/components/ui/spotlight-card'
+
+const metrics = [
+  { label: 'Revenue', to: 48250, prefix: '$', suffix: '' },
+  { label: 'Users', to: 3842, prefix: '', suffix: '+' },
+  { label: 'Uptime', to: 99.9, prefix: '', suffix: '%', decimals: 1 },
+]
+
+export default function DashboardStats() {
+  const [liveMode, setLiveMode] = useState(true)
+
+  return (
+    <section className="py-12 px-6">
+      <div className="max-w-4xl mx-auto">
+        {/* Header with toggle */}
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="font-pixel text-2xl font-bold text-chalk">
+            Analytics
+          </h2>
+          <div className="flex items-center gap-2">
+            <AnimatedToggle
+              checked={liveMode}
+              onChange={setLiveMode}
+              label="Live"
+              size="sm"
+            />
+          </div>
+        </div>
+
+        {/* KPI cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          {metrics.map((m) => (
+            <SpotlightCard key={m.label} className="text-center py-6">
+              <AnimatedCounter
+                to={m.to}
+                prefix={m.prefix}
+                suffix={m.suffix}
+                decimals={m.decimals ?? 0}
+                duration={2}
+                className="text-3xl font-bold text-chalk"
+              />
+              <p className="mt-1 text-sm text-blush">{m.label}</p>
+            </SpotlightCard>
+          ))}
+        </div>
+
+        {/* Usage meters */}
+        <div className="rounded-xl border border-border bg-obsidian p-6 space-y-5">
+          <h3 className="font-pixel text-sm font-bold text-chalk">
+            Resource Usage
+          </h3>
+          <ProgressBar value={73} label="CPU" showValue size="md" />
+          <ProgressBar value={58} label="Memory" showValue size="md" />
+          <ProgressBar
+            value={91}
+            label="Storage"
+            showValue
+            size="md"
+            color="#E84E2D"
+          />
+        </div>
+      </div>
+    </section>
+  )
+}`,
+  },
+  {
+    id: 'onboarding-form',
+    title: 'Multi-step Onboarding Form',
+    description:
+      'A guided onboarding wizard using Stepper for progress tracking, AnimatedButton for navigation, ModalDialog for confirmations, and toast notifications for feedback.',
+    icon: <ClipboardList className="h-4 w-4" />,
+    components: ['stepper', 'animated-button', 'modal-dialog', 'toast-notification'],
+    preview: <OnboardingFormPreview />,
+    code: `import { useState } from 'react'
+import Stepper from '@/components/ui/stepper'
+import AnimatedButton from '@/components/ui/animated-button'
+import ModalDialog from '@/components/ui/modal-dialog'
+import { useToast } from '@/components/ui/toast-notification'
+import ToastContainer from '@/components/ui/toast-notification'
+
+const steps = [
+  { label: 'Account', description: 'Create your account' },
+  { label: 'Profile', description: 'Add personal info' },
+  { label: 'Workspace', description: 'Set up your workspace' },
+  { label: 'Done', description: 'All set!' },
+]
+
+export default function OnboardingForm() {
+  const [currentStep, setCurrentStep] = useState(0)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const { toasts, addToast, dismissToast } = useToast()
+
+  const handleNext = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep((s) => s + 1)
+      addToast({
+        message: \`Step \${currentStep + 2}: \${steps[currentStep + 1].label}\`,
+        variant: 'success',
+      })
+    } else {
+      setShowConfirm(true)
+    }
+  }
+
+  return (
+    <div className="max-w-2xl mx-auto py-12 px-6">
+      {/* Stepper */}
+      <Stepper steps={steps} currentStep={currentStep} />
+
+      {/* Form content */}
+      <div className="mt-8 rounded-xl border border-border bg-obsidian p-6">
+        <h3 className="font-pixel text-lg text-chalk mb-2">
+          {steps[currentStep].label}
+        </h3>
+        <p className="text-sm text-blush mb-6">
+          {steps[currentStep].description}
+        </p>
+
+        {/* Navigation */}
+        <div className="flex gap-3">
+          {currentStep > 0 && (
+            <AnimatedButton
+              className="bg-transparent border-border text-blush"
+              onClick={() => setCurrentStep((s) => s - 1)}
+            >
+              Back
+            </AnimatedButton>
+          )}
+          <AnimatedButton onClick={handleNext}>
+            {currentStep < steps.length - 1 ? 'Continue' : 'Finish'}
+          </AnimatedButton>
+        </div>
+      </div>
+
+      {/* Confirmation modal */}
+      <ModalDialog
+        open={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        title="All done!"
+        description="Your workspace is ready to go."
+      >
+        <AnimatedButton onClick={() => setShowConfirm(false)}>
+          Get Started
+        </AnimatedButton>
+      </ModalDialog>
+
+      {/* Toast notifications */}
+      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
+    </div>
+  )
+}`,
+  },
+  {
+    id: 'faq-help-center',
+    title: 'FAQ & Help Center',
+    description:
+      'A support page pattern using Accordion for expandable FAQs, AnimatedTabs for category switching, Tooltip for contextual help, and DropdownMenu for quick actions.',
+    icon: <HelpCircle className="h-4 w-4" />,
+    components: ['accordion', 'animated-tabs', 'tooltip', 'dropdown-menu'],
+    preview: <FaqHelpPreview />,
+    code: `import Accordion from '@/components/ui/accordion'
+import AnimatedTabs from '@/components/ui/animated-tabs'
+import Tooltip from '@/components/ui/tooltip'
+import DropdownMenu from '@/components/ui/dropdown-menu'
+import { HelpCircle, MessageSquare, Book, Mail } from 'lucide-react'
+
+const generalFaqs = [
+  {
+    id: 'g1',
+    title: 'How do I install components?',
+    content: 'Use the CLI: npx praxys-ui add <component-name>. Each component is copied directly into your project.',
+  },
+  {
+    id: 'g2',
+    title: 'Do I need to install any dependencies?',
+    content: 'Most components only require framer-motion and tailwindcss, which are listed as peer dependencies.',
+  },
+  {
+    id: 'g3',
+    title: 'Can I customize the styling?',
+    content: 'Absolutely. Every component uses Tailwind classes and CSS custom properties, so you can override anything.',
+  },
+]
+
+const billingFaqs = [
+  {
+    id: 'b1',
+    title: 'Is Praxys UI free?',
+    content: 'Yes! Praxys UI is completely open source under the MIT license.',
+  },
+  {
+    id: 'b2',
+    title: 'Do you offer paid support?',
+    content: 'We offer priority support and custom component development. Contact us for details.',
+  },
+]
+
+const tabs = [
+  {
+    id: 'general',
+    label: 'General',
+    content: <Accordion items={generalFaqs} />,
+  },
+  {
+    id: 'billing',
+    label: 'Billing',
+    content: <Accordion items={billingFaqs} />,
+  },
+]
+
+const contactActions = [
+  { label: 'Email Support', icon: <Mail className="h-4 w-4" /> },
+  { label: 'Live Chat', icon: <MessageSquare className="h-4 w-4" /> },
+  { label: 'Documentation', icon: <Book className="h-4 w-4" /> },
+]
+
+export default function FaqHelpCenter() {
+  return (
+    <section className="py-16 px-6">
+      <div className="max-w-2xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="font-pixel text-2xl font-bold text-chalk">
+              Help Center
+            </h2>
+            <p className="mt-1 text-sm text-blush">
+              Find answers or{' '}
+              <Tooltip content="We typically respond within 2 hours">
+                <span className="text-ignite underline decoration-dotted cursor-help">
+                  contact us
+                </span>
+              </Tooltip>
+            </p>
+          </div>
+          <DropdownMenu
+            trigger={
+              <button className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm text-blush hover:text-chalk">
+                <HelpCircle className="h-4 w-4" />
+                Contact
+              </button>
+            }
+            items={contactActions}
+          />
+        </div>
+
+        <AnimatedTabs tabs={tabs} defaultTab="general" />
+      </div>
+    </section>
+  )
+}`,
+  },
 ]
 
 // ─── Preview components (simplified visual previews) ─────
@@ -506,6 +773,125 @@ function NavLayoutPreview() {
   )
 }
 
+function DashboardStatsPreview() {
+  return (
+    <div className="p-4 space-y-3">
+      {/* Toggle row */}
+      <div className="flex items-center justify-between">
+        <div className="h-2 w-16 rounded bg-chalk/40" />
+        <div className="flex items-center gap-1.5">
+          <div className="h-1.5 w-6 rounded bg-border" />
+          <div className="h-3.5 w-7 rounded-full bg-ignite relative">
+            <div className="absolute right-0.5 top-0.5 h-2.5 w-2.5 rounded-full bg-chalk" />
+          </div>
+        </div>
+      </div>
+      {/* KPI cards */}
+      <div className="grid grid-cols-3 gap-2">
+        {[{ v: '$48K', l: 'Revenue' }, { v: '3.8K', l: 'Users' }, { v: '99.9%', l: 'Uptime' }].map((m) => (
+          <div key={m.l} className="rounded-lg border border-border bg-obsidian p-2 text-center">
+            <div className="text-sm font-bold text-ignite">{m.v}</div>
+            <div className="text-[9px] text-blush">{m.l}</div>
+          </div>
+        ))}
+      </div>
+      {/* Progress bars */}
+      <div className="rounded-lg border border-border bg-obsidian p-3 space-y-2">
+        {[73, 58, 91].map((v) => (
+          <div key={v} className="space-y-1">
+            <div className="flex justify-between">
+              <div className="h-1.5 w-8 rounded bg-border" />
+              <span className="text-[8px] text-text-faint">{v}%</span>
+            </div>
+            <div className="h-1.5 w-full rounded-full bg-void overflow-hidden">
+              <div
+                className={`h-full rounded-full ${v > 85 ? 'bg-ignite' : 'bg-ignite/70'}`}
+                style={{ width: `${v}%` }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function OnboardingFormPreview() {
+  return (
+    <div className="p-4 space-y-3">
+      {/* Stepper */}
+      <div className="flex items-center justify-between px-2">
+        {['Account', 'Profile', 'Workspace', 'Done'].map((step, i) => (
+          <div key={step} className="flex items-center gap-1">
+            <div className={`flex h-5 w-5 items-center justify-center rounded-full text-[8px] font-bold ${
+              i < 2 ? 'bg-ignite text-void' : i === 2 ? 'border border-ignite text-ignite' : 'border border-border text-text-faint'
+            }`}>
+              {i < 2 ? '\u2713' : i + 1}
+            </div>
+            <span className={`text-[8px] hidden sm:inline ${i <= 2 ? 'text-chalk' : 'text-text-faint'}`}>{step}</span>
+            {i < 3 && <div className={`mx-1 h-px w-4 ${i < 2 ? 'bg-ignite' : 'bg-border'}`} />}
+          </div>
+        ))}
+      </div>
+      {/* Form card */}
+      <div className="rounded-lg border border-border bg-obsidian p-3">
+        <div className="h-2 w-20 rounded bg-chalk/40 mb-1.5" />
+        <div className="h-1.5 w-32 rounded bg-border mb-3" />
+        <div className="space-y-2 mb-3">
+          <div className="h-6 w-full rounded border border-border bg-void" />
+          <div className="h-6 w-full rounded border border-border bg-void" />
+        </div>
+        <div className="flex gap-2">
+          <div className="h-5 w-12 rounded bg-obsidian border border-border" />
+          <div className="h-5 w-14 rounded bg-ignite" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function FaqHelpPreview() {
+  return (
+    <div className="p-4 space-y-3">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="h-2.5 w-20 rounded bg-chalk/40 mb-1" />
+          <div className="h-1.5 w-28 rounded bg-border" />
+        </div>
+        <div className="h-6 w-16 rounded border border-border flex items-center justify-center">
+          <span className="text-[8px] text-blush">Contact</span>
+        </div>
+      </div>
+      {/* Tabs */}
+      <div className="flex gap-1">
+        {['General', 'Billing'].map((t, i) => (
+          <span key={t} className={`rounded px-2.5 py-0.5 text-[9px] ${i === 0 ? 'bg-ignite/10 text-ignite' : 'text-text-faint'}`}>
+            {t}
+          </span>
+        ))}
+      </div>
+      {/* Accordion items */}
+      <div className="space-y-1.5">
+        {['How do I install?', 'Any dependencies?', 'Customize styling?'].map((q, i) => (
+          <div key={q} className="rounded border border-border bg-obsidian overflow-hidden">
+            <div className="flex items-center justify-between px-2.5 py-1.5">
+              <span className="text-[9px] text-chalk">{q}</span>
+              <ChevronDown className={`h-2.5 w-2.5 text-text-faint transition-transform ${i === 0 ? 'rotate-180' : ''}`} />
+            </div>
+            {i === 0 && (
+              <div className="border-t border-border px-2.5 py-1.5">
+                <div className="h-1 w-full rounded bg-border mb-1" />
+                <div className="h-1 w-3/4 rounded bg-border" />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ─── Code copy button ────────────────────────────────────
 
 function CopyButton({ text }: { text: string }) {
@@ -658,6 +1044,8 @@ export default function ExamplesContent() {
           <p className="mt-3 max-w-2xl text-base text-blush leading-relaxed">
             Complete code recipes combining multiple Praxys UI components into
             production-ready sections. Copy the full pattern, then customize.
+            Currently featuring <span className="text-ignite font-medium">9 recipes</span> across
+            common UI patterns.
           </p>
         </div>
 
