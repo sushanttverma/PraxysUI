@@ -78,7 +78,7 @@ export default function DocsShell({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Layout body */}
-      <div className="flex pt-16">
+      <div className="flex min-h-screen pt-16">
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
         <main className="min-w-0 flex-1 px-6 py-10 lg:px-12 lg:py-12">

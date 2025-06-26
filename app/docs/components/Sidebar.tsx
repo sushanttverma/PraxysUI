@@ -35,7 +35,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         className={cn(
           "fixed top-16 bottom-0 z-50 w-72 border-r border-border bg-void/95 backdrop-blur-xl overflow-y-auto",
           "transition-transform duration-300 ease-in-out",
-          "lg:sticky lg:top-16 lg:z-0 lg:translate-x-0 lg:bg-transparent lg:backdrop-blur-none",
+          "lg:sticky lg:top-16 lg:z-0 lg:h-[calc(100vh-4rem)] lg:translate-x-0 lg:bg-transparent lg:backdrop-blur-none",
           open ? "translate-x-0" : "-translate-x-full"
         )}
       >
