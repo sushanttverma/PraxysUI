@@ -14,7 +14,7 @@ export default function DocsShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-void">
       {/* Docs Navbar */}
       <header className="fixed top-0 left-0 right-0 z-40 border-b border-border/60 bg-void/85 backdrop-blur-xl">
-        <div className="flex h-16 items-center justify-between px-6">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
           <div className="flex items-center gap-4">
             {/* Mobile sidebar toggle */}
             <button
