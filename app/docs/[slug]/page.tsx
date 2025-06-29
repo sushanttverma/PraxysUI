@@ -16,6 +16,7 @@ import ComponentPreview from "../components/ComponentPreview";
 import ComponentPageClient from "./ComponentPageClient";
 import PropsPlayground from "../components/PropsPlayground";
 
+
 // ─── Doc pages (non-component pages) ────────────────────
 
 import InstallationPage from "./pages/InstallationPage";
