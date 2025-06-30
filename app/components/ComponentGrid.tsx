@@ -7,12 +7,12 @@ import Link from "next/link";
 const componentCategories = [
   {
     name: "Buttons & Inputs",
-    count: 4,
-    items: ["Animated Button", "Creepy Button", "Social Flip Button", "Animated Toggle"],
+    count: 6,
+    items: ["Animated Button", "Creepy Button", "Social Flip Button", "Animated Toggle", "Badge", "Tag Input"],
   },
   {
     name: "Cards & Layout",
-    count: 7,
+    count: 8,
     items: [
       "Glow Border Card",
       "Spotlight Card",
@@ -21,11 +21,12 @@ const componentCategories = [
       "Expandable Bento Grid",
       "Perspective Grid",
       "Modal Dialog",
+      "Data Table",
     ],
   },
   {
     name: "Text Effects",
-    count: 7,
+    count: 8,
     items: [
       "3D Displacement Text",
       "Flip Text",
@@ -34,11 +35,12 @@ const componentCategories = [
       "Animated Counter",
       "Typewriter Text",
       "Morphing Text",
+      "Kbd",
     ],
   },
   {
     name: "Navigation & Menus",
-    count: 8,
+    count: 9,
     items: [
       "Spotlight Navbar",
       "Glass Dock",
@@ -48,11 +50,12 @@ const componentCategories = [
       "Dropdown Menu",
       "Tooltip",
       "Command Menu",
+      "Breadcrumbs",
     ],
   },
   {
     name: "Visual Effects",
-    count: 11,
+    count: 12,
     items: [
       "Liquid Ocean",
       "Liquid Metal",
@@ -65,6 +68,7 @@ const componentCategories = [
       "Skeleton Loader",
       "Progress Bar",
       "Stepper",
+      "Avatar Group",
     ],
   },
   {
@@ -103,7 +107,7 @@ export default function ComponentGrid() {
             transition={{ delay: 0.1 }}
             className="font-pixel text-3xl font-bold text-chalk md:text-5xl"
           >
-            44 Components
+            50 Components
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

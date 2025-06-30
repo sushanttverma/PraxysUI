@@ -54,6 +54,12 @@ import animatedCounter from "./animated-counter";
 import infiniteScroll from "./infinite-scroll";
 import commandMenu from "./command-menu";
 import animatedToggle from "./animated-toggle";
+import badge from "./badge";
+import avatarGroup from "./avatar-group";
+import breadcrumbs from "./breadcrumbs";
+import tagInput from "./tag-input";
+import kbd from "./kbd";
+import dataTable from "./data-table";
 
 // ─── Sidebar structure ───────────────────────────────────
 
@@ -116,6 +122,12 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "infinite-scroll", title: "Infinite Scroll" },
       { slug: "command-menu", title: "Command Menu" },
       { slug: "animated-toggle", title: "Animated Toggle" },
+      { slug: "badge", title: "Badge" },
+      { slug: "tag-input", title: "Tag Input" },
+      { slug: "avatar-group", title: "Avatar Group" },
+      { slug: "breadcrumbs", title: "Breadcrumbs" },
+      { slug: "kbd", title: "Kbd" },
+      { slug: "data-table", title: "Data Table" },
     ],
   },
 ];
@@ -189,6 +201,12 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "infinite-scroll": infiniteScroll,
   "command-menu": commandMenu,
   "animated-toggle": animatedToggle,
+  "badge": badge,
+  "avatar-group": avatarGroup,
+  "breadcrumbs": breadcrumbs,
+  "tag-input": tagInput,
+  "kbd": kbd,
+  "data-table": dataTable,
 };
 
 // Helper: check if a slug is a component page
