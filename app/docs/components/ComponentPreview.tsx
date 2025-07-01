@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useCallback, Suspense } from "react";
+import { useState, useCallback, useMemo, Suspense } from "react";
 import { MotionConfig } from "framer-motion";
 import { RotateCcw, Gauge } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { buildThemeVars, type ThemeColors } from "@/lib/theme-presets";
+import ThemePreviewSelector from "./ThemePreviewSelector";
 
 const SPEED_OPTIONS = [
   { label: "0.25x", value: 0.25 },
@@ -25,14 +27,25 @@ export default function ComponentPreview({
   const [speed, setSpeed] = useState(1);
   const [replayKey, setReplayKey] = useState(0);
   const [showSpeed, setShowSpeed] = useState(false);
+  const [themeColors, setThemeColors] = useState<ThemeColors | null>(null);
 
   const handleReplay = useCallback(() => {
     setReplayKey((k) => k + 1);
   }, []);
 
+  const handleThemeChange = useCallback((colors: ThemeColors | null) => {
+    setThemeColors(colors);
+  }, []);
+
   // Scale factor: speed 2x means animations should take half the time
   // So duration multiplier = 1 / speed
   const durationScale = 1 / speed;
+
+  // Build CSS variable overrides for the selected theme
+  const themeStyle = useMemo(() => {
+    if (!themeColors) return undefined;
+    return buildThemeVars(themeColors) as React.CSSProperties;
+  }, [themeColors]);
 
   return (
     <div className="rounded-xl border border-border overflow-hidden">
@@ -63,9 +76,12 @@ export default function ComponentPreview({
           </button>
         </div>
 
-        {/* Animation controls — only show on preview tab */}
+        {/* Animation + Theme controls — only show on preview tab */}
         {activeTab === "preview" && (
           <div className="flex items-center gap-1 pr-3">
+            {/* Theme selector */}
+            <ThemePreviewSelector onThemeChange={handleThemeChange} />
+
             {/* Speed selector */}
             <div className="relative">
               <button
@@ -126,7 +142,10 @@ export default function ComponentPreview({
 
       {/* Content */}
       {activeTab === "preview" ? (
-        <div className="bg-void/50 p-4 sm:p-6 overflow-hidden">
+        <div
+          className="bg-void/50 p-4 sm:p-6 overflow-hidden transition-colors duration-200"
+          style={themeStyle}
+        >
           <MotionConfig
             transition={{
               duration: 0.5 * durationScale,

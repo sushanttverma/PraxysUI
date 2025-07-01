@@ -5,6 +5,16 @@ import { motion } from 'framer-motion'
 import { Copy, Check, RotateCcw, Download, Palette, FileJson, FileCode, Figma } from 'lucide-react'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
+import {
+  type ThemeColors,
+  type ThemePreset,
+  defaultDark,
+  defaultLight,
+  themePresets,
+  deriveBorder,
+  deriveBorderLight,
+  deriveTextFaint,
+} from '@/lib/theme-presets'
 
 // ─── Types ───────────────────────────────────────────────
 
@@ -12,32 +22,6 @@ interface ColorToken {
   key: string
   label: string
   description: string
-}
-
-interface ThemeColors {
-  void: string
-  obsidian: string
-  ignite: string
-  blush: string
-  chalk: string
-}
-
-// ─── Default brand palettes ──────────────────────────────
-
-const defaultDark: ThemeColors = {
-  void: '#050505',
-  obsidian: '#0B0A08',
-  ignite: '#E84E2D',
-  blush: '#C9958A',
-  chalk: '#F2ECE2',
-}
-
-const defaultLight: ThemeColors = {
-  void: '#FAFAF8',
-  obsidian: '#F0EDE8',
-  ignite: '#D4432A',
-  blush: '#8B6B62',
-  chalk: '#1A1714',
 }
 
 const colorTokens: ColorToken[] = [
@@ -48,98 +32,7 @@ const colorTokens: ColorToken[] = [
   { key: 'chalk', label: 'Chalk', description: 'Primary text color' },
 ]
 
-// ─── Preset themes ───────────────────────────────────────
-
-const presets: { name: string; dark: ThemeColors; light: ThemeColors }[] = [
-  { name: 'Praxys (Default)', dark: defaultDark, light: defaultLight },
-  {
-    name: 'Ocean',
-    dark: { void: '#020617', obsidian: '#0f172a', ignite: '#3b82f6', blush: '#94a3b8', chalk: '#f1f5f9' },
-    light: { void: '#f8fafc', obsidian: '#e2e8f0', ignite: '#2563eb', blush: '#64748b', chalk: '#0f172a' },
-  },
-  {
-    name: 'Forest',
-    dark: { void: '#022c22', obsidian: '#064e3b', ignite: '#10b981', blush: '#6ee7b7', chalk: '#ecfdf5' },
-    light: { void: '#f0fdf4', obsidian: '#dcfce7', ignite: '#059669', blush: '#4ade80', chalk: '#052e16' },
-  },
-  {
-    name: 'Purple Haze',
-    dark: { void: '#09090b', obsidian: '#18181b', ignite: '#a855f7', blush: '#c4b5fd', chalk: '#faf5ff' },
-    light: { void: '#faf5ff', obsidian: '#f3e8ff', ignite: '#9333ea', blush: '#7c3aed', chalk: '#1e1b4b' },
-  },
-  {
-    name: 'Rose Gold',
-    dark: { void: '#0c0a09', obsidian: '#1c1917', ignite: '#f43f5e', blush: '#fda4af', chalk: '#fff1f2' },
-    light: { void: '#fff1f2', obsidian: '#ffe4e6', ignite: '#e11d48', blush: '#be123c', chalk: '#1c1917' },
-  },
-  {
-    name: 'Amber',
-    dark: { void: '#0a0a00', obsidian: '#1a1a0a', ignite: '#f59e0b', blush: '#fbbf24', chalk: '#fffbeb' },
-    light: { void: '#fffbeb', obsidian: '#fef3c7', ignite: '#d97706', blush: '#b45309', chalk: '#1c1917' },
-  },
-]
-
 // ─── Helpers ─────────────────────────────────────────────
-
-function hexToHsl(hex: string): [number, number, number] {
-  const r = parseInt(hex.slice(1, 3), 16) / 255
-  const g = parseInt(hex.slice(3, 5), 16) / 255
-  const b = parseInt(hex.slice(5, 7), 16) / 255
-  const max = Math.max(r, g, b)
-  const min = Math.min(r, g, b)
-  const l = (max + min) / 2
-  let h = 0
-  let s = 0
-  if (max !== min) {
-    const d = max - min
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
-    switch (max) {
-      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break
-      case g: h = ((b - r) / d + 2) / 6; break
-      case b: h = ((r - g) / d + 4) / 6; break
-    }
-  }
-  return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)]
-}
-
-function deriveBorder(obsidian: string, chalk: string): string {
-  const [, , obsL] = hexToHsl(obsidian)
-  const [, , chkL] = hexToHsl(chalk)
-  const isDark = obsL < chkL
-  if (isDark) {
-    const r = parseInt(obsidian.slice(1, 3), 16)
-    const g = parseInt(obsidian.slice(3, 5), 16)
-    const b = parseInt(obsidian.slice(5, 7), 16)
-    return `#${Math.min(255, r + 20).toString(16).padStart(2, '0')}${Math.min(255, g + 18).toString(16).padStart(2, '0')}${Math.min(255, b + 16).toString(16).padStart(2, '0')}`
-  }
-  const r = parseInt(obsidian.slice(1, 3), 16)
-  const g = parseInt(obsidian.slice(3, 5), 16)
-  const b = parseInt(obsidian.slice(5, 7), 16)
-  return `#${Math.max(0, r - 30).toString(16).padStart(2, '0')}${Math.max(0, g - 28).toString(16).padStart(2, '0')}${Math.max(0, b - 25).toString(16).padStart(2, '0')}`
-}
-
-function deriveBorderLight(obsidian: string, chalk: string): string {
-  const [, , obsL] = hexToHsl(obsidian)
-  const [, , chkL] = hexToHsl(chalk)
-  const isDark = obsL < chkL
-  if (isDark) {
-    const r = parseInt(obsidian.slice(1, 3), 16)
-    const g = parseInt(obsidian.slice(3, 5), 16)
-    const b = parseInt(obsidian.slice(5, 7), 16)
-    return `#${Math.min(255, r + 35).toString(16).padStart(2, '0')}${Math.min(255, g + 32).toString(16).padStart(2, '0')}${Math.min(255, b + 28).toString(16).padStart(2, '0')}`
-  }
-  const r = parseInt(obsidian.slice(1, 3), 16)
-  const g = parseInt(obsidian.slice(3, 5), 16)
-  const b = parseInt(obsidian.slice(5, 7), 16)
-  return `#${Math.max(0, r - 45).toString(16).padStart(2, '0')}${Math.max(0, g - 42).toString(16).padStart(2, '0')}${Math.max(0, b - 38).toString(16).padStart(2, '0')}`
-}
-
-function deriveTextFaint(blush: string): string {
-  const r = parseInt(blush.slice(1, 3), 16)
-  const g = parseInt(blush.slice(3, 5), 16)
-  const b = parseInt(blush.slice(5, 7), 16)
-  return `#${Math.round(r * 0.7).toString(16).padStart(2, '0')}${Math.round(g * 0.7).toString(16).padStart(2, '0')}${Math.round(b * 0.7).toString(16).padStart(2, '0')}`
-}
 
 function generateCSS(dark: ThemeColors, light: ThemeColors): string {
   const dBorder = deriveBorder(dark.obsidian, dark.chalk)
@@ -404,7 +297,7 @@ export default function ThemeCustomizer() {
     setLightColors({ ...defaultLight })
   }, [])
 
-  const applyPreset = useCallback((preset: typeof presets[0]) => {
+  const applyPreset = useCallback((preset: ThemePreset) => {
     setDarkColors({ ...preset.dark })
     setLightColors({ ...preset.light })
   }, [])
@@ -525,7 +418,7 @@ export default function ThemeCustomizer() {
                   Presets
                 </label>
                 <div className="grid grid-cols-2 gap-2">
-                  {presets.map((preset) => (
+                  {themePresets.map((preset) => (
                     <button
                       key={preset.name}
                       onClick={() => applyPreset(preset)}
