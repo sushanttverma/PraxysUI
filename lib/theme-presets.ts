@@ -125,4 +125,9 @@ export const themePresets: ThemePreset[] = [
     dark: { void: "#0a0a00", obsidian: "#1a1a0a", ignite: "#f59e0b", blush: "#fbbf24", chalk: "#fffbeb" },
     light: { void: "#fffbeb", obsidian: "#fef3c7", ignite: "#d97706", blush: "#b45309", chalk: "#1c1917" },
   },
+  {
+    name: "Neutral",
+    dark: { void: "#0a0a0a", obsidian: "#171717", ignite: "#a3a3a3", blush: "#737373", chalk: "#ededed" },
+    light: { void: "#fafafa", obsidian: "#f0f0f0", ignite: "#404040", blush: "#737373", chalk: "#171717" },
+  },
 ];

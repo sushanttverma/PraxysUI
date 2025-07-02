@@ -71,6 +71,54 @@ export const templateRegistry: Record<string, TemplateDefinition> = {
     components: ['animated-counter', 'spotlight-card', 'animated-toggle', 'progress-bar'],
     category: 'SaaS',
   },
+  'ocean-theme': {
+    slug: 'ocean-theme',
+    title: 'Ocean Theme',
+    description:
+      'A cloud SaaS landing page themed with the Ocean preset — deep navy and cyan tones. Features Typewriter Text, Spotlight Cards, Animated Counters, and Animated Buttons.',
+    components: ['typewriter-text', 'spotlight-card', 'animated-counter', 'animated-button'],
+    category: 'Theme',
+  },
+  'forest-theme': {
+    slug: 'forest-theme',
+    title: 'Forest Theme',
+    description:
+      'A sustainability-focused landing page themed with the Forest preset — rich greens and earth tones. Features Morphing Text, Glow Border Cards, Progress Bars, and Animated Buttons.',
+    components: ['morphing-text', 'glow-border-card', 'progress-bar', 'animated-button'],
+    category: 'Theme',
+  },
+  'purple-haze-theme': {
+    slug: 'purple-haze-theme',
+    title: 'Purple Haze Theme',
+    description:
+      'A creative agency page themed with the Purple Haze preset — vibrant purples and magentas. Features Animated Tabs, Spotlight Cards, Animated Counters, and Animated Buttons.',
+    components: ['animated-tabs', 'spotlight-card', 'animated-counter', 'animated-button'],
+    category: 'Theme',
+  },
+  'rose-gold-theme': {
+    slug: 'rose-gold-theme',
+    title: 'Rose Gold Theme',
+    description:
+      'A luxury brand landing page themed with the Rose Gold preset — warm pinks and gold accents. Features Typewriter Text, Spotlight Cards, Animated Counters, and Animated Buttons.',
+    components: ['typewriter-text', 'spotlight-card', 'animated-counter', 'animated-button'],
+    category: 'Theme',
+  },
+  'amber-theme': {
+    slug: 'amber-theme',
+    title: 'Amber Theme',
+    description:
+      'A restaurant landing page themed with the Amber preset — warm oranges and golden tones. Features Spotlight Cards, Animated Counters, Animated Buttons, and Tooltips.',
+    components: ['spotlight-card', 'animated-counter', 'animated-button', 'tooltip'],
+    category: 'Theme',
+  },
+  'neutral-theme': {
+    slug: 'neutral-theme',
+    title: 'Neutral Theme',
+    description:
+      'A minimal portfolio page themed with the Neutral preset — monochromatic grays. Features Accordion, Kbd, Badge, and Animated Buttons.',
+    components: ['accordion', 'kbd', 'badge', 'animated-button'],
+    category: 'Theme',
+  },
 }
 
 export const allTemplateSlugs = Object.keys(templateRegistry)

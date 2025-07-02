@@ -16,6 +16,12 @@ const templateFiles: Record<string, string> = {
   'ecommerce-product': 'EcommerceProduct.tsx',
   'blog-magazine': 'BlogMagazine.tsx',
   'saas-pricing': 'SaaSPricing.tsx',
+  'ocean-theme': 'OceanTheme.tsx',
+  'forest-theme': 'ForestTheme.tsx',
+  'purple-haze-theme': 'PurpleHazeTheme.tsx',
+  'rose-gold-theme': 'RoseGoldTheme.tsx',
+  'amber-theme': 'AmberTheme.tsx',
+  'neutral-theme': 'NeutralTheme.tsx',
 }
 
 interface Props {

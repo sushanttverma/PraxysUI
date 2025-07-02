@@ -16,6 +16,12 @@ const templateComponents: Record<string, React.LazyExoticComponent<React.FC>> = 
   'ecommerce-product': lazy(() => import('./templates/EcommerceProduct')),
   'blog-magazine': lazy(() => import('./templates/BlogMagazine')),
   'saas-pricing': lazy(() => import('./templates/SaaSPricing')),
+  'ocean-theme': lazy(() => import('./templates/OceanTheme')),
+  'forest-theme': lazy(() => import('./templates/ForestTheme')),
+  'purple-haze-theme': lazy(() => import('./templates/PurpleHazeTheme')),
+  'rose-gold-theme': lazy(() => import('./templates/RoseGoldTheme')),
+  'amber-theme': lazy(() => import('./templates/AmberTheme')),
+  'neutral-theme': lazy(() => import('./templates/NeutralTheme')),
 }
 
 type Viewport = 'desktop' | 'tablet' | 'mobile' | 'fullscreen'

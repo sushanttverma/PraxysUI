@@ -72,6 +72,54 @@ const templates = [
     components: ['animated-counter', 'spotlight-card', 'animated-toggle', 'progress-bar'],
     category: 'SaaS',
   },
+  {
+    title: 'Ocean Theme',
+    slug: 'ocean-theme',
+    description:
+      'A cloud SaaS landing page themed with the Ocean preset — deep navy and cyan tones. Features Typewriter Text, Spotlight Cards, Animated Counters, and Animated Buttons.',
+    components: ['typewriter-text', 'spotlight-card', 'animated-counter', 'animated-button'],
+    category: 'Theme',
+  },
+  {
+    title: 'Forest Theme',
+    slug: 'forest-theme',
+    description:
+      'A sustainability-focused landing page themed with the Forest preset — rich greens and earth tones. Features Morphing Text, Glow Border Cards, Progress Bars, and Animated Buttons.',
+    components: ['morphing-text', 'glow-border-card', 'progress-bar', 'animated-button'],
+    category: 'Theme',
+  },
+  {
+    title: 'Purple Haze Theme',
+    slug: 'purple-haze-theme',
+    description:
+      'A creative agency page themed with the Purple Haze preset — vibrant purples and magentas. Features Animated Tabs, Spotlight Cards, Animated Counters, and Animated Buttons.',
+    components: ['animated-tabs', 'spotlight-card', 'animated-counter', 'animated-button'],
+    category: 'Theme',
+  },
+  {
+    title: 'Rose Gold Theme',
+    slug: 'rose-gold-theme',
+    description:
+      'A luxury brand landing page themed with the Rose Gold preset — warm pinks and gold accents. Features Typewriter Text, Spotlight Cards, Animated Counters, and Animated Buttons.',
+    components: ['typewriter-text', 'spotlight-card', 'animated-counter', 'animated-button'],
+    category: 'Theme',
+  },
+  {
+    title: 'Amber Theme',
+    slug: 'amber-theme',
+    description:
+      'A restaurant landing page themed with the Amber preset — warm oranges and golden tones. Features Spotlight Cards, Animated Counters, Animated Buttons, and Tooltips.',
+    components: ['spotlight-card', 'animated-counter', 'animated-button', 'tooltip'],
+    category: 'Theme',
+  },
+  {
+    title: 'Neutral Theme',
+    slug: 'neutral-theme',
+    description:
+      'A minimal portfolio page themed with the Neutral preset — monochromatic grays. Features Accordion, Kbd, Badge, and Animated Buttons.',
+    components: ['accordion', 'kbd', 'badge', 'animated-button'],
+    category: 'Theme',
+  },
 ]
 
 const categories = ['All', ...Array.from(new Set(templates.map((t) => t.category)))]
