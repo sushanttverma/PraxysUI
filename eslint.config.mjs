@@ -13,6 +13,14 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  // UI components use plain <img> intentionally — they are framework-agnostic
+  // copy-paste components that must work outside Next.js (Vite, Remix, etc.).
+  {
+    files: ["app/components/ui/**"],
+    rules: {
+      "@next/next/no-img-element": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

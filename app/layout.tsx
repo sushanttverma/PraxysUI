@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "./components/ThemeProvider";
 import "./globals.css";
 
@@ -7,6 +8,13 @@ const geistPixel = localFont({
   src: "./fonts/GeistPixel-Square.woff2",
   variable: "--font-geist-pixel",
   weight: "500",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-jetbrains-mono",
   display: "swap",
 });
 
@@ -19,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s | Praxys UI",
   },
   description:
-    "A curated collection of 44 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+    "A curated collection of 50+ beautifully crafted, animated React components. Browse, copy, paste, and ship.",
   keywords: [
     "React",
     "components",
@@ -40,7 +48,7 @@ export const metadata: Metadata = {
     siteName: "Praxys UI",
     title: "Praxys UI - Animated React Components",
     description:
-      "A curated collection of 44 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+      "A curated collection of 50+ beautifully crafted, animated React components. Browse, copy, paste, and ship.",
     images: [
       {
         url: `${SITE_URL}/opengraph-image`,
@@ -54,7 +62,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Praxys UI - Animated React Components",
     description:
-      "A curated collection of 44 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+      "A curated collection of 50+ beautifully crafted, animated React components. Browse, copy, paste, and ship.",
     images: [`${SITE_URL}/opengraph-image`],
   },
   robots: {
@@ -69,7 +77,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geistPixel.variable} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${geistPixel.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         {/* Inline script to prevent FOUC — reads theme before first paint */}
         <script
@@ -77,23 +89,13 @@ export default function RootLayout({
             __html: `(function(){try{var t=localStorage.getItem('praxys-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t)}else if(window.matchMedia('(prefers-color-scheme:light)').matches){document.documentElement.setAttribute('data-theme','light')}}catch(e){}})()`,
           }}
         />
-        {/* Satoshi — body font */}
+        {/* Satoshi — body font (Fontshare CDN) */}
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link
           href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap"
           rel="stylesheet"
         />
-        {/* JetBrains Mono — technical/code font */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
-          rel="stylesheet"
-        />
+        {/* JetBrains Mono is loaded via next/font/google — no external <link> needed */}
       </head>
       <body className="noise-overlay antialiased" suppressHydrationWarning>
         <ThemeProvider>{children}</ThemeProvider>

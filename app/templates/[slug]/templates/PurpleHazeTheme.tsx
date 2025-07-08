@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Palette, Sparkles, Layers, Wand2, ArrowRight, Star } from 'lucide-react'
+import { Palette, Sparkles, ArrowRight, Star } from 'lucide-react'
 import { buildThemeVars, themePresets } from '@/lib/theme-presets'
 import AnimatedTabs from '@/app/components/ui/animated-tabs'
 import SpotlightCard from '@/app/components/ui/spotlight-card'

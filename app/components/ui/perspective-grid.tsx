@@ -14,14 +14,14 @@ interface PerspectiveGridProps {
 const PerspectiveGrid: React.FC<PerspectiveGridProps> = ({
   children,
   className = '',
-  columns: _columns = 3,
+  columns = 3,
   tiltAmount = 8,
 }) => {
   return (
     <div
       className={cn('grid gap-4', className)}
       style={{
-        gridTemplateColumns: `repeat(auto-fit, minmax(min(200px, 100%), 1fr))`,
+        gridTemplateColumns: `repeat(${columns}, 1fr)`,
         perspective: '1000px',
       }}
     >

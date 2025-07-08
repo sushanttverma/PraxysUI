@@ -14,14 +14,14 @@ interface StaggeredGridProps {
 const StaggeredGrid: React.FC<StaggeredGridProps> = ({
   children,
   className = '',
-  columns: _columns = 3,
+  columns = 3,
   staggerDelay = 0.08,
 }) => {
   return (
     <div
       className={cn('grid gap-4', className)}
       style={{
-        gridTemplateColumns: `repeat(auto-fit, minmax(min(200px, 100%), 1fr))`,
+        gridTemplateColumns: `repeat(${columns}, 1fr)`,
       }}
     >
       {React.Children.map(children, (child, i) => (

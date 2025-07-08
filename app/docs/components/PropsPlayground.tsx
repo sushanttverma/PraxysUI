@@ -232,7 +232,7 @@ function PlaygroundPreview({
   slug: string;
 }) {
   // Special wrapper content for certain components
-  const specialChildren = getSpecialChildren(slug, childrenValue);
+  const specialChildren = getSpecialChildren(slug);
 
   if (specialChildren !== undefined) {
     return <Component {...props}>{specialChildren}</Component>;
@@ -248,8 +248,7 @@ function PlaygroundPreview({
 // ─── Special children for components that need it ───────
 
 function getSpecialChildren(
-  slug: string,
-  _childrenValue?: ReactNode
+  slug: string
 ): ReactNode | undefined {
   if (slug === "glow-border-card") {
     return (

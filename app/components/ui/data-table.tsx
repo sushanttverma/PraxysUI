@@ -13,7 +13,6 @@ interface Column<T> {
 }
 
 interface DataTableProps<T> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columns: Column<T>[]
   data: T[]
   striped?: boolean

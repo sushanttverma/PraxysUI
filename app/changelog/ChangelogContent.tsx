@@ -23,7 +23,7 @@ const changelog: ChangelogEntry[] = [
     version: '0.9.0',
     date: 'Feb 10, 2026',
     title: '10 New Components & CLI v0.3.0',
-    description: '10 new interactive components spanning modals, tooltips, dropdowns, progress indicators, and more — bringing the total to 44. CLI updated to v0.3.0.',
+    description: '10 new interactive components spanning modals, tooltips, dropdowns, progress indicators, and more — bringing the total to 50. CLI updated to v0.3.0.',
     icon: <Sparkles className="h-4 w-4" />,
     changes: [
       { type: 'added', text: 'Modal Dialog — animated modal with backdrop blur, spring scale, Escape key, scroll lock, and ARIA attributes' },
@@ -36,8 +36,8 @@ const changelog: ChangelogEntry[] = [
       { type: 'added', text: 'Infinite Scroll — Intersection Observer-based with configurable threshold and animated loader' },
       { type: 'added', text: 'Command Menu — search-filtered palette with grouped items, keyboard nav, match highlighting, and shortcut badges' },
       { type: 'added', text: 'Animated Toggle — switch with spring-animated knob, 3 sizes, ARIA role="switch", and disabled state' },
-      { type: 'improved', text: 'CLI updated to v0.3.0 with all 44 components published to npm' },
-      { type: 'improved', text: 'Component count updated from 34 to 44 across landing page and registry' },
+      { type: 'improved', text: 'CLI updated to v0.3.0 with all 50 components published to npm' },
+      { type: 'improved', text: 'Component count updated from 34 to 50 across landing page and registry' },
     ],
   },
   {

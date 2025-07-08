@@ -87,7 +87,7 @@
    * Body:          Satoshi            — paragraphs, UI text
    */
   --font-body: "Satoshi", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
 }
 
 /* Geist Pixel — can't go through @theme inline because it references
