@@ -1,6 +1,6 @@
 {
   "name": "praxys-ui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "description": "CLI for scaffolding Praxys UI components into your project",
   "bin": {
