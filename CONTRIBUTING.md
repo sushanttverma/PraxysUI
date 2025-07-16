@@ -6,8 +6,8 @@ Thank you for your interest in contributing to Praxys UI! This guide will help y
 
 ### Prerequisites
 
-- Node.js 18+
-- npm, pnpm, yarn, or bun
+- Node.js 20 (see `.nvmrc` — run `nvm use` to switch)
+- npm
 
 ### Local Development
 
@@ -82,6 +82,15 @@ packages/
    npm run build
    ```
 
+## Scripts
+
+| Command | What it does |
+|---------|--------------|
+| `npm run dev` | Start dev server (Turbopack) |
+| `npm run build` | Production build |
+| `npm run lint` | Run ESLint |
+| `npm run release <version>` | Bump CLI version, commit, and tag (maintainers only) |
+
 ## Code Style
 
 - TypeScript strict mode
@@ -89,6 +98,7 @@ packages/
 - Framer Motion for animations (avoid `ease` string in `Variants` — use tuples)
 - Components should be self-contained and copy-pasteable
 - Use CSS custom properties (`var(--color-*)`) for theme-aware colors
+- UI components use plain `<img>` (not `next/image`) so they work outside Next.js
 
 ## Commit Messages
 
@@ -104,9 +114,21 @@ We follow conventional commits:
 
 1. Create a branch from `main` with a descriptive name (e.g., `feat/accordion-component`)
 2. Make your changes following the guidelines above
-3. Run `npm run build` to verify no errors
+3. Run `npm run lint` and `npm run build` to verify no errors
 4. Submit a pull request with a clear description
-5. Wait for review — we aim to review PRs within a few days
+5. CI will run lint, type check, and build automatically
+6. Wait for review — we aim to review PRs within a few days
+
+## Releasing (Maintainers)
+
+Releases are handled via the release script:
+
+```bash
+npm run release 1.0.4
+git push origin main && git push origin v1.0.4
+```
+
+This bumps the CLI version in both `packages/cli/package.json` and `packages/cli/src/index.ts`, commits, and creates a git tag. Pushing the tag triggers GitHub Actions to create a GitHub Release and publish the CLI to npm.
 
 ## Bug Reports
 
