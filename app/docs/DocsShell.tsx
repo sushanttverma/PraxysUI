@@ -2,10 +2,71 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Github, Menu } from "lucide-react";
+import { Github } from "lucide-react";
+import { motion } from "framer-motion";
 import Sidebar from "./components/Sidebar";
 import ThemeToggle from "../components/ThemeToggle";
 import CommandPalette from "../components/CommandPalette";
+
+// ─── Animated hamburger (matching main Navbar) ──────────
+
+function HamburgerButton({
+  open,
+  onClick,
+}: {
+  open: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <motion.button
+      onClick={onClick}
+      aria-label={open ? "Close sidebar" : "Open sidebar"}
+      aria-expanded={open}
+      className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-obsidian text-blush transition-colors hover:text-chalk cursor-pointer"
+      whileTap={{ scale: 0.9 }}
+      animate={{
+        borderColor: open ? "var(--color-ignite)" : "var(--color-border)",
+        backgroundColor: open ? "var(--color-ignite)" : "var(--color-obsidian)",
+      }}
+      transition={{ duration: 0.3 }}
+    >
+      <div className="relative flex h-4 w-4 flex-col items-center justify-center">
+        <motion.span
+          animate={
+            open
+              ? { rotate: 45, y: 0, width: 16 }
+              : { rotate: 0, y: -3.5, width: 16 }
+          }
+          transition={{ duration: 0.4, ease: [0.76, 0, 0.24, 1] }}
+          className="absolute h-[1.5px] rounded-full"
+          style={{ backgroundColor: open ? "var(--color-void)" : "currentColor" }}
+        />
+        <motion.span
+          animate={
+            open
+              ? { opacity: 0, scaleX: 0 }
+              : { opacity: 1, scaleX: 1 }
+          }
+          transition={{ duration: 0.2 }}
+          className="absolute h-[1.5px] w-3 rounded-full"
+          style={{ backgroundColor: open ? "var(--color-void)" : "currentColor" }}
+        />
+        <motion.span
+          animate={
+            open
+              ? { rotate: -45, y: 0, width: 16 }
+              : { rotate: 0, y: 3.5, width: 10 }
+          }
+          transition={{ duration: 0.4, ease: [0.76, 0, 0.24, 1] }}
+          className="absolute h-[1.5px] rounded-full self-end"
+          style={{ backgroundColor: open ? "var(--color-void)" : "currentColor" }}
+        />
+      </div>
+    </motion.button>
+  );
+}
+
+// ─── DocsShell ───────────────────────────────────────────
 
 export default function DocsShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -17,12 +78,12 @@ export default function DocsShell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
           <div className="flex items-center gap-4">
             {/* Mobile sidebar toggle */}
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-blush hover:text-chalk lg:hidden cursor-pointer"
-            >
-              <Menu className="h-4 w-4" />
-            </button>
+            <div className="lg:hidden">
+              <HamburgerButton
+                open={sidebarOpen}
+                onClick={() => setSidebarOpen((prev) => !prev)}
+              />
+            </div>
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5">
