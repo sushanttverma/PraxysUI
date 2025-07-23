@@ -1,209 +1,170 @@
 'use client'
 
-import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { ArrowLeft, GitCommit, Sparkles, Wrench, Zap, BookOpen, Palette, Terminal, Search, Shield, Puzzle } from 'lucide-react'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  GitCommit, Sparkles, Wrench, Zap, BookOpen, Palette,
+  Terminal, Search, Shield, Puzzle, ChevronDown, Plus,
+  CheckCircle, ArrowUp,
+  type LucideIcon,
+} from 'lucide-react'
 import Navbar from '../components/Navbar'
-import ThemeToggle from '../components/ThemeToggle'
+import Footer from '../components/Footer'
+import { changelog, type ChangelogEntry } from '@/data/changelog'
 
-interface ChangelogEntry {
-  version: string
-  date: string
-  title: string
-  description: string
-  icon: React.ReactNode
-  changes: {
-    type: 'added' | 'fixed' | 'improved'
-    text: string
-  }[]
+// ─── Icon resolver ───────────────────────────────────────
+
+const iconMap: Record<string, LucideIcon> = {
+  sparkles: Sparkles,
+  puzzle: Puzzle,
+  shield: Shield,
+  wrench: Wrench,
+  terminal: Terminal,
+  search: Search,
+  palette: Palette,
+  zap: Zap,
 }
 
-const changelog: ChangelogEntry[] = [
-  {
-    version: '0.9.0',
-    date: 'Feb 10, 2026',
-    title: '10 New Components & CLI v0.3.0',
-    description: '10 new interactive components spanning modals, tooltips, dropdowns, progress indicators, and more — bringing the total to 50. CLI updated to v0.3.0.',
-    icon: <Sparkles className="h-4 w-4" />,
-    changes: [
-      { type: 'added', text: 'Modal Dialog — animated modal with backdrop blur, spring scale, Escape key, scroll lock, and ARIA attributes' },
-      { type: 'added', text: 'Tooltip — 4-position tooltip with configurable delay, direction-aware animation, and arrow pointer' },
-      { type: 'added', text: 'Dropdown Menu — full keyboard navigation, click-outside close, divider and disabled item support' },
-      { type: 'added', text: 'Progress Bar — animated bar with sm/md/lg sizes, candy-stripe overlay, custom colors, and label/value display' },
-      { type: 'added', text: 'Stepper — horizontal/vertical multi-step indicator with animated check icons and connector fill' },
-      { type: 'added', text: 'Image Comparison — before/after slider with pointer-capture drag, clip-based reveal, and animated handle' },
-      { type: 'added', text: 'Animated Counter — spring-physics number counter triggered on scroll into view with prefix/suffix/decimals' },
-      { type: 'added', text: 'Infinite Scroll — Intersection Observer-based with configurable threshold and animated loader' },
-      { type: 'added', text: 'Command Menu — search-filtered palette with grouped items, keyboard nav, match highlighting, and shortcut badges' },
-      { type: 'added', text: 'Animated Toggle — switch with spring-animated knob, 3 sizes, ARIA role="switch", and disabled state' },
-      { type: 'improved', text: 'CLI updated to v0.3.0 with all 50 components published to npm' },
-      { type: 'improved', text: 'Component count updated from 34 to 50 across landing page and registry' },
-    ],
-  },
-  {
-    version: '0.8.0',
-    date: 'Feb 2, 2026',
-    title: 'New Components, Theme Customizer & Open Source',
-    description: '10 new components, interactive theme customizer with export, Props Playground for all components, and full open-source community setup.',
-    icon: <Puzzle className="h-4 w-4" />,
-    changes: [
-      { type: 'added', text: 'Typewriter Text — animated typing effect with cursor and configurable speed' },
-      { type: 'added', text: 'Toast Notification — stackable toast system with multiple variants' },
-      { type: 'added', text: 'Accordion — smooth expand/collapse with icon rotation' },
-      { type: 'added', text: 'Animated Tabs — tab switcher with sliding indicator and content transitions' },
-      { type: 'added', text: 'Magnetic Cursor — element that pulls toward the mouse pointer' },
-      { type: 'added', text: 'Parallax Scroll — depth-based scroll animations for layered content' },
-      { type: 'added', text: 'Gradient Mesh — animated multi-point gradient background' },
-      { type: 'added', text: 'Skeleton Loader — pulsing placeholder for loading states' },
-      { type: 'added', text: 'Morphing Text — smooth text transitions between words' },
-      { type: 'added', text: 'Spotlight Card — card with mouse-following light effect' },
-      { type: 'added', text: 'Theme Customizer page (/customize) with color pickers, 6 presets, live preview, and CSS export' },
-      { type: 'added', text: 'Interactive Props Playground with live controls for all 34 components' },
-      { type: 'added', text: 'Live interactive demos on component showcase (landing page)' },
-      { type: 'added', text: '6 interactive template pages with preview toolbar and responsive viewport switcher' },
-      { type: 'added', text: 'CONTRIBUTING.md, CODE_OF_CONDUCT.md, issue templates, and PR template for open source' },
-      { type: 'improved', text: 'CLI updated to v0.2.0 with all 34 components' },
-      { type: 'improved', text: 'Component showcase redesigned with live demos instead of placeholder cards' },
-      { type: 'improved', text: 'Dark mode text contrast improved (--color-text-faint bumped to #6b6560)' },
-      { type: 'improved', text: 'Comprehensive responsive design fixes across all components and pages' },
-      { type: 'fixed', text: 'Nested <a> tags in ComponentShowcase — replaced Link with div + useRouter' },
-      { type: 'fixed', text: 'ToastContainer crash when toasts/onDismiss are undefined in playground' },
-      { type: 'fixed', text: 'LogoSlider animation shorthand/longhand conflict in React 19' },
-      { type: 'fixed', text: 'Missing playground defaults for glass-dock and logo-slider' },
-      { type: 'fixed', text: 'CopyButton invisible on touch devices — now always visible on mobile' },
-    ],
-  },
-  {
-    version: '0.7.0',
-    date: 'Jan 11, 2026',
-    title: 'SEO, Accessibility & Polish',
-    description: 'Comprehensive SEO metadata, accessibility audit fixes, and public assets.',
-    icon: <Shield className="h-4 w-4" />,
-    changes: [
-      { type: 'added', text: 'Open Graph and Twitter Card metadata across all pages' },
-      { type: 'added', text: 'Dynamic generateMetadata for all /docs/[slug] pages' },
-      { type: 'added', text: 'SVG favicon, robots.txt, and sitemap.xml' },
-      { type: 'improved', text: 'ARIA labels, roles, and keyboard navigation on Navbar, CommandPalette, Sidebar' },
-      { type: 'improved', text: 'Focus trap in command palette dialog' },
-      { type: 'improved', text: 'aria-current="page" on active sidebar links' },
-      { type: 'fixed', text: 'suppressHydrationWarning on body to handle browser extension attributes' },
-    ],
-  },
-  {
-    version: '0.6.0',
-    date: 'Jan 8, 2026',
-    title: 'Bug Fix Pass',
-    description: 'Major audit fixing 10 issues across the docs — broken links, duplicate pages, layout problems, and error handling.',
-    icon: <Wrench className="h-4 w-4" />,
-    changes: [
-      { type: 'fixed', text: 'Broken /docs/components links across 5 files — now points to /docs/components-overview' },
-      { type: 'fixed', text: 'Mobile menu not closing on link click in Navbar' },
-      { type: 'fixed', text: 'Duplicate IntroductionPage — single source of truth now' },
-      { type: 'improved', text: 'Docs layout.tsx extracted to server component + DocsShell client component' },
-      { type: 'fixed', text: 'ComponentPageClient dynamic import error handling with .catch() and error state' },
-      { type: 'fixed', text: 'Sidebar slug extraction for trailing slashes' },
-      { type: 'fixed', text: 'ComponentsOverviewPage uses sidebar order, removed dead code' },
-      { type: 'fixed', text: 'Component count corrected to 24, added missing Logo Slider' },
-      { type: 'fixed', text: 'GitHub links in Footer now point to actual repository' },
-    ],
-  },
-  {
-    version: '0.5.0',
-    date: 'Jan 7, 2026',
-    title: 'CLI Tool & Templates',
-    description: 'Added a CLI for scaffolding components and a templates gallery page.',
-    icon: <Terminal className="h-4 w-4" />,
-    changes: [
-      { type: 'added', text: 'npx praxys-ui CLI with init, add, and list commands' },
-      { type: 'added', text: 'Templates gallery page with 6 template previews' },
-      { type: 'added', text: 'CLI docs page at /docs/cli' },
-    ],
-  },
-  {
-    version: '0.4.0',
-    date: 'Jan 4, 2026',
-    title: 'Command Palette',
-    description: 'Ctrl+K fuzzy search across all components and documentation pages.',
-    icon: <Search className="h-4 w-4" />,
-    changes: [
-      { type: 'added', text: 'Ctrl+K / Cmd+K keyboard shortcut to open search' },
-      { type: 'added', text: 'Fuzzy matching with scoring (exact > starts with > contains > fuzzy)' },
-      { type: 'added', text: 'Arrow key navigation and Enter to select' },
-    ],
-  },
-  {
-    version: '0.3.0',
-    date: 'Jan 2, 2026',
-    title: 'Complete Component Library',
-    description: 'All 24 components implemented with live previews, code examples, and props tables.',
-    icon: <Sparkles className="h-4 w-4" />,
-    changes: [
-      { type: 'added', text: 'Interactive Book — 3D page-flip book component' },
-      { type: 'added', text: 'Logo Slider — infinite marquee logo carousel' },
-      { type: 'added', text: 'Animated Hero — cinematic hero section with parallax' },
-      { type: 'added', text: 'Masked Avatars — overlapping avatar stack with hover reveal' },
-      { type: 'added', text: 'Folder Preview — macOS-style folder with hover preview' },
-      { type: 'added', text: 'Liquid Ocean, Liquid Metal, Reveal Loader — visual effects' },
-      { type: 'added', text: 'Spotlight Navbar, Glass Dock — navigation components' },
-      { type: 'added', text: 'Flip Fade Text, 3D Displacement Text — text effects' },
-      { type: 'added', text: 'Testimonials Card, Staggered Grid, Expandable Bento Grid, Perspective Grid — cards & layout' },
-      { type: 'added', text: 'Creepy Button, Social Flip Button — button variants' },
-    ],
-  },
-  {
-    version: '0.2.0',
-    date: 'Dec 22, 2025',
-    title: 'Theme System & First Components',
-    description: 'Light/dark mode with CSS custom properties and the first 6 animated components.',
-    icon: <Palette className="h-4 w-4" />,
-    changes: [
-      { type: 'added', text: 'Light/dark theme toggle with localStorage persistence and FOUC prevention' },
-      { type: 'added', text: 'Animated Button, Flip Text, Glow Border Card, Animated Number, Line Hover Link, Light Lines' },
-      { type: 'added', text: 'Shiki dual-theme code blocks (vitesse-dark + vitesse-light)' },
-      { type: 'added', text: 'Component preview with Preview/Code tab switcher' },
-    ],
-  },
-  {
-    version: '0.1.0',
-    date: 'Dec 15, 2025',
-    title: 'Initial Release',
-    description: 'Project scaffolding, design system, landing page, and docs infrastructure.',
-    icon: <Zap className="h-4 w-4" />,
-    changes: [
-      { type: 'added', text: 'Next.js 16 project with React 19, Tailwind CSS 4, Framer Motion 12' },
-      { type: 'added', text: 'Praxys brand palette — Void, Obsidian, Ignite, Blush, Chalk' },
-      { type: 'added', text: 'Font stack — Geist Pixel Square, Satoshi, JetBrains Mono' },
-      { type: 'added', text: 'Landing page with 7 sections (Navbar, Hero, Showcase, Features, Grid, CTA, Footer)' },
-      { type: 'added', text: 'Docs with sidebar navigation and dynamic [slug] routing' },
-      { type: 'added', text: 'Getting Started pages (Installation, Tailwind, Utilities)' },
-      { type: 'added', text: 'Component registry architecture with lazy-loaded demos' },
-    ],
-  },
-]
-
-const typeColors = {
-  added: 'text-emerald-400',
-  fixed: 'text-amber-400',
-  improved: 'text-sky-400',
+function EntryIcon({ name }: { name: string }) {
+  const Icon = iconMap[name] ?? Zap
+  return <Icon className="h-4 w-4" />
 }
 
-const typeLabels = {
-  added: 'Added',
-  fixed: 'Fixed',
-  improved: 'Improved',
-}
+// ─── Type badge config ───────────────────────────────────
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.06 },
+const typeConfig = {
+  added: {
+    icon: Plus,
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-400/10',
+    border: 'border-emerald-400/20',
+    label: 'Added',
+  },
+  fixed: {
+    icon: Wrench,
+    color: 'text-amber-400',
+    bg: 'bg-amber-400/10',
+    border: 'border-amber-400/20',
+    label: 'Fixed',
+  },
+  improved: {
+    icon: ArrowUp,
+    color: 'text-sky-400',
+    bg: 'bg-sky-400/10',
+    border: 'border-sky-400/20',
+    label: 'Improved',
   },
 }
 
-const itemVariants = {
-  hidden: { opacity: 0, x: -10 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.3 } },
+// ─── Collapsible release card ────────────────────────────
+
+function ReleaseCard({ entry, defaultOpen }: { entry: ChangelogEntry; defaultOpen: boolean }) {
+  const [isOpen, setIsOpen] = useState(defaultOpen)
+
+  const addedCount = entry.changes.filter((c) => c.type === 'added').length
+  const fixedCount = entry.changes.filter((c) => c.type === 'fixed').length
+  const improvedCount = entry.changes.filter((c) => c.type === 'improved').length
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.4 }}
+      className="rounded-xl border border-border bg-obsidian/30 overflow-hidden transition-colors hover:border-border-light"
+    >
+      {/* Header — always visible, clickable */}
+      <button
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="flex w-full items-start gap-4 px-5 py-5 text-left cursor-pointer sm:items-center"
+      >
+        {/* Icon */}
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-ignite/20 bg-ignite/10 text-ignite">
+          <EntryIcon name={entry.iconName} />
+        </div>
+
+        {/* Content */}
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2 mb-1">
+            <span className="rounded-md border border-ignite/30 bg-ignite/10 px-2 py-0.5 font-mono text-xs font-medium text-ignite">
+              v{entry.version}
+            </span>
+            <span className="text-xs text-text-faint">{entry.date}</span>
+          </div>
+          <h2 className="font-pixel text-base font-bold text-chalk sm:text-lg">
+            {entry.title}
+          </h2>
+          {/* Stats pills */}
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {addedCount > 0 && (
+              <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
+                <Plus className="h-2.5 w-2.5" />
+                {addedCount} added
+              </span>
+            )}
+            {improvedCount > 0 && (
+              <span className="inline-flex items-center gap-1 rounded-full border border-sky-400/20 bg-sky-400/10 px-2 py-0.5 text-[10px] font-medium text-sky-400">
+                <ArrowUp className="h-2.5 w-2.5" />
+                {improvedCount} improved
+              </span>
+            )}
+            {fixedCount > 0 && (
+              <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/20 bg-amber-400/10 px-2 py-0.5 text-[10px] font-medium text-amber-400">
+                <CheckCircle className="h-2.5 w-2.5" />
+                {fixedCount} fixed
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Chevron */}
+        <motion.div
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.3 }}
+          className="shrink-0 text-text-faint mt-1"
+        >
+          <ChevronDown className="h-4 w-4" />
+        </motion.div>
+      </button>
+
+      {/* Expandable body */}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="border-t border-border/50 px-5 py-4">
+              <p className="mb-4 text-sm text-blush/80 leading-relaxed">
+                {entry.description}
+              </p>
+
+              <div className="space-y-2">
+                {entry.changes.map((change, i) => {
+                  const cfg = typeConfig[change.type]
+                  const Icon = cfg.icon
+                  return (
+                    <div key={i} className="flex items-start gap-2.5 text-sm">
+                      <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md ${cfg.bg} ${cfg.border} border`}>
+                        <Icon className={`h-2.5 w-2.5 ${cfg.color}`} />
+                      </span>
+                      <span className="text-chalk/80 leading-relaxed">{change.text}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  )
 }
+
+// ─── Main ────────────────────────────────────────────────
 
 export default function ChangelogContent() {
   return (
@@ -212,19 +173,11 @@ export default function ChangelogContent() {
 
       <main className="mx-auto max-w-3xl px-6 pt-28 pb-20">
         {/* Header */}
-        <div className="mb-4">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 text-sm text-blush transition-colors hover:text-chalk"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Back home
-          </Link>
-        </div>
-
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-3">
-            <BookOpen className="h-5 w-5 text-ignite" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-ignite/10 border border-ignite/20">
+              <BookOpen className="h-4 w-4 text-ignite" />
+            </div>
             <span className="font-pixel text-xs uppercase tracking-widest text-ignite">
               Changelog
             </span>
@@ -235,63 +188,48 @@ export default function ChangelogContent() {
           <p className="mt-3 max-w-2xl text-base text-blush leading-relaxed">
             A complete history of features, fixes, and improvements to Praxys UI.
           </p>
+
+          {/* Summary stats */}
+          <div className="mt-6 flex flex-wrap gap-3">
+            <div className="rounded-lg border border-border bg-obsidian/50 px-4 py-2.5">
+              <p className="font-mono text-lg font-bold text-chalk">{changelog.length}</p>
+              <p className="text-[10px] uppercase tracking-wider text-text-faint">Releases</p>
+            </div>
+            <div className="rounded-lg border border-border bg-obsidian/50 px-4 py-2.5">
+              <p className="font-mono text-lg font-bold text-emerald-400">
+                {changelog.reduce((n, e) => n + e.changes.filter((c) => c.type === 'added').length, 0)}
+              </p>
+              <p className="text-[10px] uppercase tracking-wider text-text-faint">Features</p>
+            </div>
+            <div className="rounded-lg border border-border bg-obsidian/50 px-4 py-2.5">
+              <p className="font-mono text-lg font-bold text-amber-400">
+                {changelog.reduce((n, e) => n + e.changes.filter((c) => c.type === 'fixed').length, 0)}
+              </p>
+              <p className="text-[10px] uppercase tracking-wider text-text-faint">Bug Fixes</p>
+            </div>
+          </div>
         </div>
 
         {/* Timeline */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="relative"
-        >
+        <div className="relative">
           {/* Vertical line */}
-          <div className="absolute left-[19px] top-2 bottom-2 w-px bg-border" />
+          <div className="absolute left-5 top-6 bottom-6 w-px bg-border hidden sm:block" />
 
-          <div className="space-y-10">
-            {changelog.map((entry) => (
-              <motion.div key={entry.version} variants={itemVariants} className="relative pl-12">
-                {/* Dot on timeline */}
-                <div className="absolute left-2 top-1.5 flex h-[22px] w-[22px] items-center justify-center rounded-full border border-border bg-obsidian text-ignite">
+          <div className="space-y-4 sm:pl-12">
+            {changelog.map((entry, i) => (
+              <div key={entry.version} className="relative">
+                {/* Timeline dot */}
+                <div className="absolute -left-12 top-6 hidden h-[22px] w-[22px] items-center justify-center rounded-full border border-border bg-obsidian text-ignite sm:flex">
                   <GitCommit className="h-3 w-3" />
                 </div>
-
-                {/* Version header */}
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="rounded-md border border-ignite/30 bg-ignite/10 px-2 py-0.5 font-mono text-xs font-medium text-ignite">
-                    v{entry.version}
-                  </span>
-                  <span className="text-xs text-text-faint">{entry.date}</span>
-                </div>
-
-                <h2 className="font-pixel text-lg font-bold text-chalk flex items-center gap-2">
-                  <span className="text-ignite/60">{entry.icon}</span>
-                  {entry.title}
-                </h2>
-                <p className="mt-1 text-sm text-blush/80 leading-relaxed">
-                  {entry.description}
-                </p>
-
-                {/* Changes list */}
-                <ul className="mt-3 space-y-1.5">
-                  {entry.changes.map((change, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm">
-                      <span className={`shrink-0 font-mono text-[10px] font-medium uppercase tracking-wide mt-0.5 ${typeColors[change.type]}`}>
-                        {typeLabels[change.type]}
-                      </span>
-                      <span className="text-chalk/80">{change.text}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
+                <ReleaseCard entry={entry} defaultOpen={i === 0} />
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </main>
 
-      {/* Floating theme toggle for mobile */}
-      <div className="fixed bottom-6 right-6 md:hidden z-30">
-        <ThemeToggle />
-      </div>
+      <Footer />
     </div>
   )
 }

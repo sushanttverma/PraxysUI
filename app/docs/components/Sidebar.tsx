@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { sidebarGroups } from "@/lib/registry";
@@ -36,13 +36,17 @@ const panelVariants = {
 
 export default function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const prevPathname = useRef(pathname);
 
   const stripped = pathname.replace(/\/docs\/?/, "");
   const currentSlug = stripped === "" ? "introduction" : stripped;
 
-  // Close on route change
+  // Close only on actual route *change*, not on mount
   useEffect(() => {
-    onClose();
+    if (prevPathname.current !== pathname) {
+      prevPathname.current = pathname;
+      onClose();
+    }
   }, [pathname, onClose]);
 
   // Lock body scroll on mobile when open
@@ -126,7 +130,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-40 bg-void/70 backdrop-blur-md lg:hidden"
+              className="fixed inset-0 z-[60] bg-void/70 backdrop-blur-md lg:hidden"
               onClick={onClose}
             />
 
@@ -137,7 +141,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
               animate="open"
               exit="closed"
               aria-label="Documentation navigation"
-              className="fixed top-0 right-0 bottom-0 z-50 flex w-[85vw] max-w-sm flex-col bg-void border-l border-border/60 overflow-hidden lg:hidden"
+              className="fixed top-0 right-0 bottom-0 z-[70] flex w-[85vw] max-w-sm flex-col bg-void border-l border-border/60 overflow-hidden lg:hidden"
             >
               {/* Top accent line */}
               <motion.div
