@@ -72,11 +72,17 @@ rm -f packages/cli/package.json.bak
 sed -i.bak "s/const VERSION = \".*\"/const VERSION = \"${VERSION}\"/" packages/cli/src/index.ts
 rm -f packages/cli/src/index.ts.bak
 
-# 3. Commit
+# 3. Regenerate CHANGELOG.md from data/changelog.ts
+if command -v npx &> /dev/null; then
+  npx tsx scripts/generate-changelog.ts
+  git add CHANGELOG.md packages/cli/CHANGELOG.md
+fi
+
+# 4. Commit
 git add packages/cli/package.json packages/cli/src/index.ts
 git commit -m "chore: release v${VERSION}"
 
-# 4. Tag
+# 5. Tag
 git tag -a "v${VERSION}" -m "v${VERSION}"
 
 echo ""

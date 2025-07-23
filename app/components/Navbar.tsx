@@ -10,17 +10,19 @@ import CommandPalette from "./CommandPalette";
 
 // ─── Animated hamburger (morphing circle button) ────────
 
-function HamburgerButton({
+export function HamburgerButton({
   open,
   onClick,
+  label = "menu",
 }: {
   open: boolean;
   onClick: () => void;
+  label?: string;
 }) {
   return (
     <motion.button
       onClick={onClick}
-      aria-label={open ? "Close menu" : "Open menu"}
+      aria-label={open ? `Close ${label}` : `Open ${label}`}
       aria-expanded={open}
       className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-obsidian text-blush transition-colors hover:text-chalk cursor-pointer"
       whileTap={{ scale: 0.9 }}
@@ -125,7 +127,12 @@ const footerVariants = {
 
 // ─── Navbar ──────────────────────────────────────────────
 
-export default function Navbar() {
+interface NavbarProps {
+  /** Optional slot rendered before the logo (e.g. docs sidebar toggle) */
+  leftSlot?: React.ReactNode;
+}
+
+export default function Navbar({ leftSlot }: NavbarProps = {}) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
@@ -153,15 +160,18 @@ export default function Navbar() {
         className="fixed top-0 left-0 right-0 z-50 border-b border-border/60 bg-void/85 backdrop-blur-xl"
       >
         <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          {/* Logo */}
-          <Link href="/" className="relative z-50 flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-ignite">
-              <span className="font-pixel text-sm font-bold text-void">P</span>
-            </div>
-            <span className="font-pixel text-lg font-semibold text-chalk">
-              Praxys UI
-            </span>
-          </Link>
+          {/* Left: optional slot + Logo */}
+          <div className="relative z-50 flex items-center gap-3">
+            {leftSlot}
+            <Link href="/" className="flex items-center gap-2.5">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-ignite">
+                <span className="font-pixel text-sm font-bold text-void">P</span>
+              </div>
+              <span className="font-pixel text-lg font-semibold text-chalk">
+                Praxys UI
+              </span>
+            </Link>
+          </div>
 
           {/* Desktop Nav — centered */}
           <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-8 md:flex">
