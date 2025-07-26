@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { sidebarGroups } from "@/lib/registry";
@@ -36,18 +36,16 @@ const panelVariants = {
 
 export default function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname();
-  const prevPathname = useRef(pathname);
+  const [prevPathname, setPrevPathname] = useState(pathname);
 
   const stripped = pathname.replace(/\/docs\/?/, "");
   const currentSlug = stripped === "" ? "introduction" : stripped;
 
   // Close only on actual route *change*, not on mount
-  useEffect(() => {
-    if (prevPathname.current !== pathname) {
-      prevPathname.current = pathname;
-      onClose();
-    }
-  }, [pathname, onClose]);
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
+    onClose();
+  }
 
   // Lock body scroll on mobile when open
   useEffect(() => {

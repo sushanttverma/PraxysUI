@@ -135,6 +135,13 @@ interface NavbarProps {
 export default function Navbar({ leftSlot }: NavbarProps = {}) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const [prevPathname, setPrevPathname] = useState(pathname);
+
+  // Close mobile menu on route change (React-recommended derived state pattern)
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
+    setMobileOpen(false);
+  }
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -147,11 +154,6 @@ export default function Navbar({ leftSlot }: NavbarProps = {}) {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
-
-  // Close on route change
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
 
   return (
     <>
