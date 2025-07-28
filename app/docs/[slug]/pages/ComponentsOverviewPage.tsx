@@ -139,6 +139,7 @@ export default function ComponentsOverviewPage() {
           <input
             type="text"
             placeholder="Search components..."
+            aria-label="Search components"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full rounded-xl border border-border bg-obsidian/50 py-2.5 pl-10 pr-4 text-sm text-chalk placeholder:text-text-faint outline-none transition-colors focus:border-ignite/40 focus:bg-obsidian"

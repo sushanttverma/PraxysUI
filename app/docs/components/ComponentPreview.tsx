@@ -51,8 +51,12 @@ export default function ComponentPreview({
     <div className="rounded-xl border border-border overflow-hidden">
       {/* Tabs + Controls */}
       <div className="flex items-center justify-between border-b border-border bg-obsidian/50">
-        <div className="flex">
+        <div role="tablist" aria-label="Component view" className="flex">
           <button
+            role="tab"
+            aria-selected={activeTab === "preview"}
+            aria-controls="panel-preview"
+            id="tab-preview"
             onClick={() => setActiveTab("preview")}
             className={cn(
               "px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer",
@@ -64,6 +68,10 @@ export default function ComponentPreview({
             Preview
           </button>
           <button
+            role="tab"
+            aria-selected={activeTab === "code"}
+            aria-controls="panel-code"
+            id="tab-code"
             onClick={() => setActiveTab("code")}
             className={cn(
               "px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer",
@@ -86,13 +94,13 @@ export default function ComponentPreview({
             <div className="relative">
               <button
                 onClick={() => setShowSpeed((s) => !s)}
+                aria-label="Animation speed"
                 className={cn(
                   "flex h-7 items-center gap-1 rounded-md px-2 text-[11px] font-medium transition-colors cursor-pointer",
                   speed !== 1
                     ? "text-ignite bg-ignite/10"
                     : "text-text-faint hover:text-blush"
                 )}
-                title="Animation speed"
               >
                 <Gauge className="h-3 w-3" />
                 {speed !== 1 && <span>{speed}x</span>}
@@ -131,8 +139,8 @@ export default function ComponentPreview({
             {/* Replay button */}
             <button
               onClick={handleReplay}
+              aria-label="Replay animation"
               className="flex h-7 w-7 items-center justify-center rounded-md text-text-faint transition-colors hover:text-blush cursor-pointer"
-              title="Replay animation"
             >
               <RotateCcw className="h-3 w-3" />
             </button>
@@ -141,37 +149,52 @@ export default function ComponentPreview({
       </div>
 
       {/* Content */}
-      {activeTab === "preview" ? (
-        <div
-          className="bg-void/50 p-4 sm:p-6 overflow-hidden transition-colors duration-200"
-          style={themeStyle}
-        >
-          <MotionConfig
-            transition={{
-              duration: 0.5 * durationScale,
-            }}
+      <div
+        id="panel-preview"
+        role="tabpanel"
+        aria-labelledby="tab-preview"
+        hidden={activeTab !== "preview"}
+      >
+        {activeTab === "preview" && (
+          <div
+            className="bg-void/50 p-4 sm:p-6 overflow-hidden transition-colors duration-200"
+            style={themeStyle}
           >
-            <Suspense
-              fallback={
-                <div className="flex h-32 items-center justify-center text-text-faint">
-                  Loading preview...
-                </div>
-              }
+            <MotionConfig
+              transition={{
+                duration: 0.5 * durationScale,
+              }}
             >
-              <div
-                key={replayKey}
-                style={{
-                  ["--motion-duration-scale" as string]: durationScale,
-                }}
+              <Suspense
+                fallback={
+                  <div className="flex h-32 items-center justify-center text-text-faint">
+                    Loading preview...
+                  </div>
+                }
               >
-                {preview}
-              </div>
-            </Suspense>
-          </MotionConfig>
-        </div>
-      ) : (
-        <div className="[&>div]:rounded-none [&>div]:border-0">{codeBlock}</div>
-      )}
+                <div
+                  key={replayKey}
+                  style={{
+                    ["--motion-duration-scale" as string]: durationScale,
+                  }}
+                >
+                  {preview}
+                </div>
+              </Suspense>
+            </MotionConfig>
+          </div>
+        )}
+      </div>
+      <div
+        id="panel-code"
+        role="tabpanel"
+        aria-labelledby="tab-code"
+        hidden={activeTab !== "code"}
+      >
+        {activeTab === "code" && (
+          <div className="[&>div]:rounded-none [&>div]:border-0">{codeBlock}</div>
+        )}
+      </div>
     </div>
   );
 }

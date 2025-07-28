@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import BackToTop from '../components/BackToTop'
 import { changelog, type ChangelogEntry } from '@/data/changelog'
 
 // ─── Icon resolver ───────────────────────────────────────
@@ -171,7 +172,7 @@ export default function ChangelogContent() {
     <div className="min-h-screen bg-void">
       <Navbar />
 
-      <main className="mx-auto max-w-3xl px-6 pt-28 pb-20">
+      <main id="main-content" className="mx-auto max-w-3xl px-6 pt-28 pb-20">
         {/* Header */}
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-3">
@@ -230,6 +231,7 @@ export default function ChangelogContent() {
       </main>
 
       <Footer />
+      <BackToTop />
     </div>
   )
 }
