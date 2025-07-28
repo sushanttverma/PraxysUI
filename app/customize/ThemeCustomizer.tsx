@@ -321,7 +321,7 @@ export default function ThemeCustomizer() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen pt-16">
+      <main id="main-content" className="min-h-screen pt-16">
         <div className="mx-auto max-w-7xl px-6 py-16">
           {/* Header */}
           <motion.div

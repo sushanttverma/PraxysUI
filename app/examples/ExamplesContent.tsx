@@ -1019,7 +1019,7 @@ export default function ExamplesContent() {
     <div className="min-h-screen bg-void">
       <Navbar />
 
-      <main className="mx-auto max-w-4xl px-6 pt-28 pb-20">
+      <main id="main-content" className="mx-auto max-w-4xl px-6 pt-28 pb-20">
         {/* Header */}
         <div className="mb-4">
           <Link

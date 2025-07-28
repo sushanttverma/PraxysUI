@@ -7,7 +7,7 @@ import IntroductionPage from "./[slug]/pages/IntroductionPage";
 export const metadata: Metadata = {
   title: "Documentation",
   description:
-    "Get started with Praxys UI. Learn how to install, configure, and use 24 animated React components in your project.",
+    "Get started with Praxys UI. Learn how to install, configure, and use 50+ animated React components in your project.",
 };
 
 export default function DocsIndexPage() {

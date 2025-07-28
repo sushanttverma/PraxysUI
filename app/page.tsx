@@ -10,11 +10,13 @@ export default function Home() {
   return (
     <>
       <Navbar />
+      <main id="main-content">
       <Hero />
       <ComponentShowcase />
       <Features />
       <ComponentGrid />
       <CTA />
+      </main>
       <Footer />
     </>
   );

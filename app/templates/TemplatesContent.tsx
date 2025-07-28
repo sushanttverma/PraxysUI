@@ -148,7 +148,7 @@ export default function TemplatesContent() {
     <div className="min-h-screen bg-void">
       <Navbar />
 
-      <main className="mx-auto max-w-6xl px-6 pt-28 pb-20">
+      <main id="main-content" className="mx-auto max-w-6xl px-6 pt-28 pb-20">
         {/* Header */}
         <div className="mb-4">
           <Link

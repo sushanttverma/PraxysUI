@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Github, Star, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 import ThemeToggle from "./ThemeToggle";
 import CommandPalette from "./CommandPalette";
 
@@ -155,8 +156,22 @@ export default function Navbar({ leftSlot }: NavbarProps = {}) {
     };
   }, [mobileOpen]);
 
+  // Check if a nav link is active
+  const isActive = (href: string) => {
+    if (href === "/docs") return pathname === "/docs";
+    return pathname.startsWith(href);
+  };
+
   return (
     <>
+      {/* Skip to content — accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-lg focus:bg-ignite focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-void"
+      >
+        Skip to content
+      </a>
+
       <nav
         aria-label="Main navigation"
         className="fixed top-0 left-0 right-0 z-50 border-b border-border/60 bg-void/85 backdrop-blur-xl"
@@ -181,7 +196,12 @@ export default function Navbar({ leftSlot }: NavbarProps = {}) {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm text-blush transition-colors hover:text-chalk"
+                className={cn(
+                  "text-sm transition-colors hover:text-chalk",
+                  isActive(link.href)
+                    ? "text-chalk font-medium"
+                    : "text-blush"
+                )}
               >
                 {link.label}
               </Link>

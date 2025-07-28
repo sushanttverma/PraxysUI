@@ -75,6 +75,34 @@ export function generateStaticParams() {
     .map((slug) => ({ slug }));
 }
 
+// ─── Breadcrumbs ─────────────────────────────────────────
+
+function Breadcrumbs({ items }: { items: { label: string; href?: string }[] }) {
+  return (
+    <nav aria-label="Breadcrumb" className="mb-4">
+      <ol className="flex items-center gap-1.5 text-xs text-text-faint">
+        {items.map((item, i) => (
+          <li key={i} className="flex items-center gap-1.5">
+            {i > 0 && (
+              <ChevronRight className="h-3 w-3 text-text-faint/50" />
+            )}
+            {item.href ? (
+              <Link
+                href={item.href}
+                className="transition-colors hover:text-blush"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <span className="text-blush">{item.label}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
 // ─── Page component ─────────────────────────────────────
 
 export default async function DocsSlugPage({
@@ -94,8 +122,15 @@ export default async function DocsSlugPage({
   // ── Doc page ──
   if (docPages[slug]) {
     const DocComponent = docPages[slug];
+    const pageTitle = docPageTitles[slug] || slug;
     return (
       <div>
+        <Breadcrumbs
+          items={[
+            { label: "Docs", href: "/docs" },
+            { label: pageTitle },
+          ]}
+        />
         <DocComponent />
         <PrevNextNav prev={prev} next={next} />
       </div>
@@ -108,13 +143,17 @@ export default async function DocsSlugPage({
 
     return (
       <div className="space-y-10">
-        {/* Header */}
+        {/* Breadcrumbs + Header */}
         <div>
+          <Breadcrumbs
+            items={[
+              { label: "Docs", href: "/docs" },
+              { label: "Components", href: "/docs/components-overview" },
+              { label: entry.title },
+            ]}
+          />
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="mb-2 font-pixel text-xs uppercase tracking-wider text-ignite">
-                Components
-              </p>
               <h1 className="font-pixel text-2xl sm:text-3xl font-bold text-chalk">
                 {entry.title}
               </h1>
