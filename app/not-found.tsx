@@ -54,7 +54,7 @@ export default function NotFound() {
 
           {/* Subtle hint */}
           <p className="mt-12 text-xs text-text-faint">
-            Praxys UI &mdash; 50+ components, 14 templates, infinite possibilities.
+            Praxys UI &mdash; 60+ components, 14 templates, infinite possibilities.
           </p>
         </div>
       </main>

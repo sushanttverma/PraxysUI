@@ -78,7 +78,7 @@ export default async function Image() {
             margin: 0,
           }}
         >
-          50+ beautifully crafted, animated React components.
+          60+ beautifully crafted, animated React components.
         </p>
         <p
           style={{

@@ -20,6 +20,38 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '1.1.0',
+    date: 'Feb 14, 2026',
+    title: '11 New Components — Forms, Layout & Data',
+    description:
+      '11 new components covering forms (Input, Select, Textarea, Checkbox, Radio), feedback (Alert, Sheet), data display (Pagination, Timeline, Stats Card), and layout (Divider) — bringing the total to 60. CLI updated to v1.1.0.',
+    iconName: 'sparkles',
+    changes: [
+      { type: 'added', text: 'Animated Input — floating label, animated focus ring, left/right icons, error state, 3 sizes' },
+      { type: 'added', text: 'Animated Select — custom dropdown with keyboard navigation, spring animations, click-outside close' },
+      { type: 'added', text: 'Animated Textarea — floating label, auto-resize, character counter, animated focus ring' },
+      { type: 'added', text: 'Checkbox — animated SVG checkmark with pathLength draw, spring scale, error state, ARIA checkbox role' },
+      { type: 'added', text: 'Radio Group — animated dot selection, horizontal/vertical layout, keyboard navigation, ARIA radiogroup' },
+      { type: 'added', text: 'Alert — 4 variants (info/success/warning/error) with auto-icons, dismissible with animated exit' },
+      { type: 'added', text: 'Pagination — sliding active indicator with layoutId, ellipsis, prev/next, 2 sizes' },
+      { type: 'added', text: 'Sheet — slide-in drawer from 4 sides, backdrop blur, Escape close, scroll lock' },
+      { type: 'added', text: 'Divider — horizontal/vertical with optional label, gradient mode, animated entrance' },
+      { type: 'added', text: 'Timeline — alternating two-column layout, staggered scroll animations, active/completed states' },
+      { type: 'added', text: 'Stats Card — animated counter with useSpring, trend indicator, icon slot' },
+      { type: 'improved', text: 'CLI updated to v1.1.0 with all 60 components published to npm' },
+      { type: 'improved', text: 'Component count updated from 50 to 60 across landing page and registry' },
+      { type: 'improved', text: 'Navbar — active link highlighting, skip-to-content accessibility link' },
+      { type: 'improved', text: 'Docs — breadcrumbs on all pages, slim footer, back-to-top button' },
+      { type: 'improved', text: 'Changelog — extracted data to single source of truth, auto-generates CHANGELOG.md' },
+      { type: 'improved', text: 'ComponentPreview — proper ARIA tab roles (tablist, tab, tabpanel)' },
+      { type: 'improved', text: '404 page — now has Navbar/Footer, fixed stale template count' },
+      { type: 'improved', text: 'Loading skeletons added to changelog, templates, examples, and customize pages' },
+      { type: 'fixed', text: 'Navbar — replaced useEffect setState with React-idiomatic derived state pattern for route change detection' },
+      { type: 'fixed', text: 'Sidebar — same derived state fix to comply with react-hooks/set-state-in-effect rule' },
+      { type: 'fixed', text: 'Header inconsistency — docs pages now use the shared Navbar instead of a separate custom header' },
+    ],
+  },
+  {
     version: '0.9.0',
     date: 'Feb 10, 2026',
     title: '10 New Components & CLI v0.3.0',

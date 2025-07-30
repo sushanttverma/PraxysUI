@@ -2,6 +2,43 @@
 
 All notable changes to Praxys UI are documented here.
 
+## [1.1.0] — Feb 14, 2026
+
+**11 New Components — Forms, Layout & Data**
+
+11 new components covering forms (Input, Select, Textarea, Checkbox, Radio), feedback (Alert, Sheet), data display (Pagination, Timeline, Stats Card), and layout (Divider) — bringing the total to 60. CLI updated to v1.1.0.
+
+### Added
+
+- Animated Input — floating label, animated focus ring, left/right icons, error state, 3 sizes
+- Animated Select — custom dropdown with keyboard navigation, spring animations, click-outside close
+- Animated Textarea — floating label, auto-resize, character counter, animated focus ring
+- Checkbox — animated SVG checkmark with pathLength draw, spring scale, error state, ARIA checkbox role
+- Radio Group — animated dot selection, horizontal/vertical layout, keyboard navigation, ARIA radiogroup
+- Alert — 4 variants (info/success/warning/error) with auto-icons, dismissible with animated exit
+- Pagination — sliding active indicator with layoutId, ellipsis, prev/next, 2 sizes
+- Sheet — slide-in drawer from 4 sides, backdrop blur, Escape close, scroll lock
+- Divider — horizontal/vertical with optional label, gradient mode, animated entrance
+- Timeline — alternating two-column layout, staggered scroll animations, active/completed states
+- Stats Card — animated counter with useSpring, trend indicator, icon slot
+
+### Fixed
+
+- Navbar — replaced useEffect setState with React-idiomatic derived state pattern for route change detection
+- Sidebar — same derived state fix to comply with react-hooks/set-state-in-effect rule
+- Header inconsistency — docs pages now use the shared Navbar instead of a separate custom header
+
+### Improved
+
+- CLI updated to v1.1.0 with all 60 components published to npm
+- Component count updated from 50 to 60 across landing page and registry
+- Navbar — active link highlighting, skip-to-content accessibility link
+- Docs — breadcrumbs on all pages, slim footer, back-to-top button
+- Changelog — extracted data to single source of truth, auto-generates CHANGELOG.md
+- ComponentPreview — proper ARIA tab roles (tablist, tab, tabpanel)
+- 404 page — now has Navbar/Footer, fixed stale template count
+- Loading skeletons added to changelog, templates, examples, and customize pages
+
 ## [0.9.0] — Feb 10, 2026
 
 **10 New Components & CLI v0.3.0**
