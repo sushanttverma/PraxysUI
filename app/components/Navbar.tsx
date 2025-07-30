@@ -144,6 +144,19 @@ export default function Navbar({ leftSlot }: NavbarProps = {}) {
     setMobileOpen(false);
   }
 
+  // Only render the skip-to-content link after a real Tab keypress
+  const [isTabbing, setIsTabbing] = useState(false);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Tab") {
+        setIsTabbing(true);
+        window.removeEventListener("keydown", onKey);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (mobileOpen) {
@@ -164,13 +177,15 @@ export default function Navbar({ leftSlot }: NavbarProps = {}) {
 
   return (
     <>
-      {/* Skip to content — accessibility */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-lg focus:bg-ignite focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-void"
-      >
-        Skip to content
-      </a>
+      {/* Skip to content — only appears on real keyboard Tab, never on route change */}
+      {isTabbing && (
+        <a
+          href="#main-content"
+          className="fixed -top-12 left-2 z-[100] rounded-lg bg-ignite px-4 py-2 text-sm font-medium text-void opacity-0 outline-none transition-[top,opacity] duration-200 focus-visible:top-2 focus-visible:opacity-100"
+        >
+          Skip to content
+        </a>
+      )}
 
       <nav
         aria-label="Main navigation"
