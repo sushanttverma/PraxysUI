@@ -60,6 +60,17 @@ import breadcrumbs from "./breadcrumbs";
 import tagInput from "./tag-input";
 import kbd from "./kbd";
 import dataTable from "./data-table";
+import animatedInput from "./animated-input";
+import animatedSelect from "./animated-select";
+import animatedTextarea from "./animated-textarea";
+import checkbox from "./checkbox";
+import radioGroup from "./radio-group";
+import alert from "./alert";
+import pagination from "./pagination";
+import sheet from "./sheet";
+import divider from "./divider";
+import timeline from "./timeline";
+import statsCard from "./stats-card";
 
 // ─── Sidebar structure ───────────────────────────────────
 
@@ -128,6 +139,17 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "breadcrumbs", title: "Breadcrumbs" },
       { slug: "kbd", title: "Kbd" },
       { slug: "data-table", title: "Data Table" },
+      { slug: "animated-input", title: "Animated Input" },
+      { slug: "animated-select", title: "Animated Select" },
+      { slug: "animated-textarea", title: "Animated Textarea" },
+      { slug: "checkbox", title: "Checkbox" },
+      { slug: "radio-group", title: "Radio Group" },
+      { slug: "alert", title: "Alert" },
+      { slug: "pagination", title: "Pagination" },
+      { slug: "sheet", title: "Sheet" },
+      { slug: "divider", title: "Divider" },
+      { slug: "timeline", title: "Timeline" },
+      { slug: "stats-card", title: "Stats Card" },
     ],
   },
 ];
@@ -207,6 +229,17 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "tag-input": tagInput,
   "kbd": kbd,
   "data-table": dataTable,
+  "animated-input": animatedInput,
+  "animated-select": animatedSelect,
+  "animated-textarea": animatedTextarea,
+  "checkbox": checkbox,
+  "radio-group": radioGroup,
+  "alert": alert,
+  "pagination": pagination,
+  "sheet": sheet,
+  "divider": divider,
+  "timeline": timeline,
+  "stats-card": statsCard,
 };
 
 // Helper: check if a slug is a component page

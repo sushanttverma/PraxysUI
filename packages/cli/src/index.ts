@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { execSync } from "child_process";
 
-const VERSION = "1.0.4";
+const VERSION = "1.1.0";
 
 // ─── Utility file contents ──────────────────────────────
 
@@ -27,19 +27,25 @@ const COMPONENTS_BASE_URL =
 
 const COMPONENT_LIST = [
   "accordion",
+  "alert",
   "animated-button",
   "animated-counter",
   "animated-hero",
+  "animated-input",
   "animated-number",
+  "animated-select",
   "animated-tabs",
+  "animated-textarea",
   "animated-toggle",
   "avatar-group",
   "badge",
   "breadcrumbs",
+  "checkbox",
   "command-menu",
   "creepy-button",
   "data-table",
   "displacement-text",
+  "divider",
   "dropdown-menu",
   "expandable-bento-grid",
   "flip-fade-text",
@@ -61,18 +67,23 @@ const COMPONENT_LIST = [
   "masked-avatars",
   "modal-dialog",
   "morphing-text",
+  "pagination",
   "parallax-scroll",
   "perspective-grid",
   "progress-bar",
+  "radio-group",
   "reveal-loader",
+  "sheet",
   "skeleton-loader",
   "social-flip-button",
   "spotlight-card",
   "spotlight-navbar",
   "staggered-grid",
+  "stats-card",
   "stepper",
   "tag-input",
   "testimonials-card",
+  "timeline",
   "toast-notification",
   "tooltip",
   "typewriter-text",
