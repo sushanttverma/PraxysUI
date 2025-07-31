@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { execSync } from "child_process";
 
-const VERSION = "1.1.0";
+const VERSION = "1.2.0";
 
 // ─── Utility file contents ──────────────────────────────
 
@@ -41,9 +41,12 @@ const COMPONENT_LIST = [
   "badge",
   "breadcrumbs",
   "checkbox",
+  "color-picker",
+  "combobox",
   "command-menu",
   "creepy-button",
   "data-table",
+  "date-picker",
   "displacement-text",
   "divider",
   "dropdown-menu",

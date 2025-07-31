@@ -71,6 +71,9 @@ import sheet from "./sheet";
 import divider from "./divider";
 import timeline from "./timeline";
 import statsCard from "./stats-card";
+import datePicker from "./date-picker";
+import combobox from "./combobox";
+import colorPicker from "./color-picker";
 
 // ─── Sidebar structure ───────────────────────────────────
 
@@ -150,6 +153,9 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "divider", title: "Divider" },
       { slug: "timeline", title: "Timeline" },
       { slug: "stats-card", title: "Stats Card" },
+      { slug: "date-picker", title: "Date Picker" },
+      { slug: "combobox", title: "Combobox" },
+      { slug: "color-picker", title: "Color Picker" },
     ],
   },
 ];
@@ -240,6 +246,9 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "divider": divider,
   "timeline": timeline,
   "stats-card": statsCard,
+  "date-picker": datePicker,
+  "combobox": combobox,
+  "color-picker": colorPicker,
 };
 
 // Helper: check if a slug is a component page

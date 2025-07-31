@@ -20,6 +20,23 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '1.2.0',
+    date: 'Feb 15, 2026',
+    title: '3 New Form Components — Complete Your Forms',
+    description:
+      'Essential form components to complete your UI toolkit: Date Picker with range selection, Combobox with search, and Color Picker with HSL controls — bringing the total to 63 components.',
+    iconName: 'sparkles',
+    changes: [
+      { type: 'added', text: 'Date Picker — animated calendar popup with month/year navigation, single/range selection, keyboard navigation, disabled dates support' },
+      { type: 'added', text: 'Combobox — searchable select with filtering, single/multi-select modes, keyboard navigation, search highlighting, loading state' },
+      { type: 'added', text: 'Color Picker — HSL sliders, hex input, preset swatches, alpha channel, format toggle (HEX/RGB/HSL), copy to clipboard' },
+      { type: 'improved', text: 'CLI updated to v1.2.0 with all 63 components' },
+      { type: 'improved', text: 'Component count updated from 60 to 63 across site' },
+      { type: 'fixed', text: 'Skip-to-content accessibility link — now only appears on real keyboard Tab, never on route navigation' },
+      { type: 'fixed', text: 'AnimatedInput and AnimatedTextarea — support both controlled and uncontrolled usage for Playground compatibility' },
+    ],
+  },
+  {
     version: '1.1.0',
     date: 'Feb 14, 2026',
     title: '11 New Components — Forms, Layout & Data',

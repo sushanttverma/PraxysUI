@@ -2,6 +2,28 @@
 
 All notable changes to Praxys UI are documented here.
 
+## [1.2.0] — Feb 15, 2026
+
+**3 New Form Components — Complete Your Forms**
+
+Essential form components to complete your UI toolkit: Date Picker with range selection, Combobox with search, and Color Picker with HSL controls — bringing the total to 63 components.
+
+### Added
+
+- Date Picker — animated calendar popup with month/year navigation, single/range selection, keyboard navigation, disabled dates support
+- Combobox — searchable select with filtering, single/multi-select modes, keyboard navigation, search highlighting, loading state
+- Color Picker — HSL sliders, hex input, preset swatches, alpha channel, format toggle (HEX/RGB/HSL), copy to clipboard
+
+### Fixed
+
+- Skip-to-content accessibility link — now only appears on real keyboard Tab, never on route navigation
+- AnimatedInput and AnimatedTextarea — support both controlled and uncontrolled usage for Playground compatibility
+
+### Improved
+
+- CLI updated to v1.2.0 with all 63 components
+- Component count updated from 60 to 63 across site
+
 ## [1.1.0] — Feb 14, 2026
 
 **11 New Components — Forms, Layout & Data**
