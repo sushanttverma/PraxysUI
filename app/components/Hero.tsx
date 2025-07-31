@@ -41,7 +41,7 @@ export default function Hero() {
         <div className="mb-8 flex items-center gap-2 rounded-full border border-border bg-obsidian px-4 py-1.5">
           <Sparkles className="h-3.5 w-3.5 text-ignite" />
           <span className="text-xs font-medium text-blush">
-            Praxys UI 1.1
+            Praxys UI 1.2
           </span>
           <span className="text-blush/40">|</span>
           <span className="text-xs text-blush/70">Now Available</span>

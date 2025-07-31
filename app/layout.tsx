@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s | Praxys UI",
   },
   description:
-    "A curated collection of 60+ beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+    "A curated collection of 63 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
   keywords: [
     "React",
     "components",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     siteName: "Praxys UI",
     title: "Praxys UI - Animated React Components",
     description:
-      "A curated collection of 60+ beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+      "A curated collection of 63 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
     images: [
       {
         url: `${SITE_URL}/opengraph-image`,
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Praxys UI - Animated React Components",
     description:
-      "A curated collection of 60+ beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+      "A curated collection of 63 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
     images: [`${SITE_URL}/opengraph-image`],
   },
   robots: {
