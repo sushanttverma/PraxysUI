@@ -588,13 +588,13 @@ export default function ThemeCustomizer() {
                         </div>
                         {/* Skeleton lines */}
                         <div className="space-y-1.5">
-                          {Array.from({ length: 3 }).map((_, j) => (
+                          {[85, 72, 95].map((width, j) => (
                             <div
                               key={j}
                               className="h-2 rounded"
                               style={{
                                 backgroundColor: 'var(--p-border)',
-                                width: `${70 + Math.random() * 30}%`,
+                                width: `${width}%`,
                               }}
                             />
                           ))}

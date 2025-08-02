@@ -20,6 +20,24 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '1.2.1',
+    date: 'Feb 15, 2026',
+    title: '6 New Components — Essential UI Elements',
+    description:
+      'Essential interactive components: Switch, Slider, File Upload, OTP Input, Rating, and Autocomplete with async search — bringing the total to 69 components.',
+    iconName: 'sparkles',
+    changes: [
+      { type: 'added', text: 'Switch — simple on/off toggle with spring animation, 3 sizes, optional label, keyboard accessible' },
+      { type: 'added', text: 'Slider — range input with draggable thumb, animated track fill, value tooltip, min/max labels, step support, keyboard navigation' },
+      { type: 'added', text: 'File Upload — drag-and-drop zone with animated borders, file list with remove buttons, progress bars, file type and size validation, multiple file support' },
+      { type: 'added', text: 'OTP Input — PIN/verification code input with auto-focus next/prev, paste support, animated focus rings, configurable length (4-6)' },
+      { type: 'added', text: 'Rating — interactive star rating with half-star support, hover preview, animated fill, read-only mode, 3 sizes, custom icon support' },
+      { type: 'added', text: 'Autocomplete — async search input with debouncing, loading state, keyboard navigation, highlighted matching text, empty state' },
+      { type: 'improved', text: 'CLI updated to v1.2.1 with all 69 components' },
+      { type: 'improved', text: 'Component count updated from 63 to 69 across site' },
+    ],
+  },
+  {
     version: '1.2.0',
     date: 'Feb 15, 2026',
     title: '3 New Form Components — Complete Your Forms',
