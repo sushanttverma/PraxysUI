@@ -74,6 +74,12 @@ import statsCard from "./stats-card";
 import datePicker from "./date-picker";
 import combobox from "./combobox";
 import colorPicker from "./color-picker";
+import switchComponent from "./switch";
+import slider from "./slider";
+import fileUpload from "./file-upload";
+import otpInput from "./otp-input";
+import rating from "./rating";
+import autocomplete from "./autocomplete";
 
 // ─── Sidebar structure ───────────────────────────────────
 
@@ -156,6 +162,12 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "date-picker", title: "Date Picker" },
       { slug: "combobox", title: "Combobox" },
       { slug: "color-picker", title: "Color Picker" },
+      { slug: "switch", title: "Switch" },
+      { slug: "slider", title: "Slider" },
+      { slug: "file-upload", title: "File Upload" },
+      { slug: "otp-input", title: "OTP Input" },
+      { slug: "rating", title: "Rating" },
+      { slug: "autocomplete", title: "Autocomplete" },
     ],
   },
 ];
@@ -249,6 +261,12 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "date-picker": datePicker,
   "combobox": combobox,
   "color-picker": colorPicker,
+  "switch": switchComponent,
+  "slider": slider,
+  "file-upload": fileUpload,
+  "otp-input": otpInput,
+  "rating": rating,
+  "autocomplete": autocomplete,
 };
 
 // Helper: check if a slug is a component page

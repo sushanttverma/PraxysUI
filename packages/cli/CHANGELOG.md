@@ -2,6 +2,26 @@
 
 All notable changes to Praxys UI are documented here.
 
+## [1.2.1] — Feb 15, 2026
+
+**6 New Components — Essential UI Elements**
+
+Essential interactive components: Switch, Slider, File Upload, OTP Input, Rating, and Autocomplete with async search — bringing the total to 69 components.
+
+### Added
+
+- Switch — simple on/off toggle with spring animation, 3 sizes, optional label, keyboard accessible
+- Slider — range input with draggable thumb, animated track fill, value tooltip, min/max labels, step support, keyboard navigation
+- File Upload — drag-and-drop zone with animated borders, file list with remove buttons, progress bars, file type and size validation, multiple file support
+- OTP Input — PIN/verification code input with auto-focus next/prev, paste support, animated focus rings, configurable length (4-6)
+- Rating — interactive star rating with half-star support, hover preview, animated fill, read-only mode, 3 sizes, custom icon support
+- Autocomplete — async search input with debouncing, loading state, keyboard navigation, highlighted matching text, empty state
+
+### Improved
+
+- CLI updated to v1.2.1 with all 69 components
+- Component count updated from 63 to 69 across site
+
 ## [1.2.0] — Feb 15, 2026
 
 **3 New Form Components — Complete Your Forms**
