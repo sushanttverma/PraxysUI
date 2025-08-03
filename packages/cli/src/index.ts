@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { execSync } from "child_process";
 
-const VERSION = "1.2.1";
+const VERSION = "1.2.2";
 
 // ─── Utility file contents ──────────────────────────────
 

@@ -2,6 +2,18 @@
 
 All notable changes to Praxys UI are documented here.
 
+## [1.2.2] — Feb 15, 2026
+
+**Autocomplete API Fix**
+
+Fixed Autocomplete component API to use onSelect callback instead of onChange for better clarity and type safety.
+
+### Fixed
+
+- Autocomplete — changed API from onChange to onSelect, now passes full option object instead of just value string
+- Autocomplete demo and documentation updated to reflect new API
+- TypeScript errors resolved in Autocomplete component
+
 ## [1.2.1] — Feb 15, 2026
 
 **6 New Components — Essential UI Elements**
