@@ -20,6 +20,19 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '1.2.2',
+    date: 'Feb 15, 2026',
+    title: 'Autocomplete API Fix',
+    description:
+      'Fixed Autocomplete component API to use onSelect callback instead of onChange for better clarity and type safety.',
+    iconName: 'wrench',
+    changes: [
+      { type: 'fixed', text: 'Autocomplete — changed API from onChange to onSelect, now passes full option object instead of just value string' },
+      { type: 'fixed', text: 'Autocomplete demo and documentation updated to reflect new API' },
+      { type: 'fixed', text: 'TypeScript errors resolved in Autocomplete component' },
+    ],
+  },
+  {
     version: '1.2.1',
     date: 'Feb 15, 2026',
     title: '6 New Components — Essential UI Elements',
