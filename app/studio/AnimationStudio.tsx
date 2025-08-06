@@ -71,9 +71,9 @@ export default function AnimationStudio() {
   }
 
   return (
-    <div className="min-h-screen bg-obsidian">
+    <div className="h-screen bg-obsidian flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="border-b border-border bg-obsidian/95 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-border bg-obsidian/95 backdrop-blur-sm flex-shrink-0">
         <div className="mx-auto max-w-[1800px] px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
@@ -107,44 +107,46 @@ export default function AnimationStudio() {
       </header>
 
       {/* Main Content */}
-      <div className="mx-auto max-w-[1800px] px-6 py-6">
-        <div className="grid grid-cols-12 gap-6 h-[calc(100vh-180px)]">
-          {/* Left Sidebar - Component Selector */}
-          <div className="col-span-12 lg:col-span-3">
-            <ComponentSelector
-              components={components}
-              selectedComponent={selectedComponent}
-              onSelectComponent={setSelectedComponent}
-            />
-          </div>
+      <div className="flex-1 overflow-hidden">
+        <div className="mx-auto max-w-[1800px] h-full px-6 py-6">
+          <div className="grid grid-cols-12 gap-6 h-full">
+            {/* Left Sidebar - Component Selector */}
+            <div className="col-span-12 lg:col-span-3 h-full">
+              <ComponentSelector
+                components={components}
+                selectedComponent={selectedComponent}
+                onSelectComponent={setSelectedComponent}
+              />
+            </div>
 
-          {/* Center - Preview Canvas */}
-          <div className="col-span-12 lg:col-span-6">
-            <PreviewCanvas
-              selectedComponent={selectedComponent}
-              config={config}
-              isPlaying={isPlaying}
-            />
-          </div>
+            {/* Center - Preview Canvas */}
+            <div className="col-span-12 lg:col-span-6 h-full">
+              <PreviewCanvas
+                selectedComponent={selectedComponent}
+                config={config}
+                isPlaying={isPlaying}
+              />
+            </div>
 
-          {/* Right Sidebar - Animation Controls */}
-          <div className="col-span-12 lg:col-span-3">
-            <div className="flex flex-col gap-6 h-full">
-              <AnimationControls config={config} onConfigChange={handleConfigChange} />
-              
-              {/* Code Generator Toggle */}
-              <button
-                onClick={() => setShowCode(!showCode)}
-                disabled={!selectedComponent}
-                className={cn(
-                  'px-4 py-3 rounded-lg text-sm font-medium transition-colors border',
-                  selectedComponent
-                    ? 'border-ignite bg-ignite/10 text-ignite hover:bg-ignite/20'
-                    : 'border-border bg-border/10 text-text-faint cursor-not-allowed'
-                )}
-              >
-                {showCode ? 'Hide Code' : 'Show Code'}
-              </button>
+            {/* Right Sidebar - Animation Controls */}
+            <div className="col-span-12 lg:col-span-3 h-full">
+              <div className="flex flex-col gap-4 h-full">
+                <AnimationControls config={config} onConfigChange={handleConfigChange} />
+                
+                {/* Code Generator Toggle */}
+                <button
+                  onClick={() => setShowCode(!showCode)}
+                  disabled={!selectedComponent}
+                  className={cn(
+                    'px-4 py-3 rounded-lg text-sm font-medium transition-colors border flex-shrink-0',
+                    selectedComponent
+                      ? 'border-ignite bg-ignite/10 text-ignite hover:bg-ignite/20'
+                      : 'border-border bg-border/10 text-text-faint cursor-not-allowed'
+                  )}
+                >
+                  {showCode ? 'Hide Code' : 'Show Code'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
