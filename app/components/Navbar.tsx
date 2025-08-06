@@ -73,6 +73,7 @@ export function HamburgerButton({
 
 const navLinks = [
   { href: "/docs/components-overview", label: "Components" },
+  { href: "/studio", label: "Studio" },
   { href: "/templates", label: "Templates" },
   { href: "/customize", label: "Customize" },
   { href: "/examples", label: "Examples" },
