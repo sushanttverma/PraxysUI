@@ -107,11 +107,11 @@ export default function AnimationStudio() {
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-auto">
         <div className="mx-auto max-w-[1800px] h-full px-6 py-6">
-          <div className="grid grid-cols-12 gap-6 h-full">
+          <div className="grid grid-cols-12 gap-6 lg:h-full">
             {/* Left Sidebar - Component Selector */}
-            <div className="col-span-12 lg:col-span-3 h-full">
+            <div className="col-span-12 lg:col-span-3 lg:h-full min-h-[400px]">
               <ComponentSelector
                 components={components}
                 selectedComponent={selectedComponent}
@@ -120,7 +120,7 @@ export default function AnimationStudio() {
             </div>
 
             {/* Center - Preview Canvas */}
-            <div className="col-span-12 lg:col-span-6 h-full">
+            <div className="col-span-12 lg:col-span-6 lg:h-full min-h-[500px]">
               <PreviewCanvas
                 selectedComponent={selectedComponent}
                 config={config}
@@ -129,7 +129,7 @@ export default function AnimationStudio() {
             </div>
 
             {/* Right Sidebar - Animation Controls */}
-            <div className="col-span-12 lg:col-span-3 h-full">
+            <div className="col-span-12 lg:col-span-3 lg:h-full min-h-[400px]">
               <div className="flex flex-col gap-4 h-full">
                 <AnimationControls config={config} onConfigChange={handleConfigChange} />
                 
