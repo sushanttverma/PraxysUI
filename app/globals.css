@@ -210,19 +210,22 @@ section {
 input[type="range"].slider-thumb {
   -webkit-appearance: none;
   appearance: none;
+  height: 8px;
+  background: transparent;
 }
 
 input[type="range"].slider-thumb::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--color-ignite);
   cursor: pointer;
   border: 2px solid var(--color-void);
   box-shadow: 0 2px 8px rgba(232, 78, 45, 0.3);
   transition: all 0.2s ease;
+  margin-top: -5px; /* Centers the thumb on the track */
 }
 
 input[type="range"].slider-thumb::-webkit-slider-thumb:hover {
@@ -231,8 +234,8 @@ input[type="range"].slider-thumb::-webkit-slider-thumb:hover {
 }
 
 input[type="range"].slider-thumb::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--color-ignite);
   cursor: pointer;
@@ -247,13 +250,7 @@ input[type="range"].slider-thumb::-moz-range-thumb:hover {
 }
 
 input[type="range"].slider-thumb::-webkit-slider-runnable-track {
-  background: linear-gradient(
-    to right,
-    var(--color-ignite) 0%,
-    var(--color-ignite) var(--value, 50%),
-    var(--color-border) var(--value, 50%),
-    var(--color-border) 100%
-  );
+  background: var(--color-border);
   border-radius: 4px;
   height: 8px;
 }
