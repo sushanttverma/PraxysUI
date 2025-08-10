@@ -127,21 +127,81 @@ export default function PreviewCanvas({
             className="relative z-10"
           >
             <div className={cn(
-              'px-8 py-6 rounded-xl border border-border bg-obsidian',
+              'rounded-xl border border-border bg-obsidian overflow-hidden',
               'shadow-lg shadow-black/20'
             )}>
-              <div className="text-center">
-                <h3 className="text-lg font-bold text-chalk mb-2">
-                  {componentEntry?.title}
-                </h3>
-                <p className="text-sm text-text-faint max-w-xs">
-                  {componentEntry?.description.split('.')[0]}.
-                </p>
-                <div className="mt-4 flex items-center justify-center gap-3">
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-ignite/20 to-blush/20 border border-ignite/30" />
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blush/20 to-ignite/20 border border-blush/30" />
+              {/* Component-specific preview */}
+              {componentEntry?.category === 'buttons' && (
+                <div className="px-8 py-6">
+                  <button className="px-6 py-3 rounded-lg bg-gradient-to-r from-ignite to-blush text-white font-semibold shadow-lg hover:shadow-xl transition-shadow">
+                    {componentEntry.title}
+                  </button>
                 </div>
-              </div>
+              )}
+              
+              {componentEntry?.category === 'cards' && (
+                <div className="p-6 max-w-sm">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-ignite/20 to-blush/20 border border-ignite/30" />
+                    <div>
+                      <h3 className="text-base font-bold text-chalk">{componentEntry.title}</h3>
+                      <p className="text-xs text-text-faint">Interactive card</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-text-faint">
+                    {componentEntry.description.split('.')[0]}.
+                  </p>
+                </div>
+              )}
+              
+              {componentEntry?.category === 'text' && (
+                <div className="px-8 py-6 text-center">
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-ignite via-blush to-ignite bg-clip-text text-transparent">
+                    {componentEntry.title}
+                  </h2>
+                  <p className="text-sm text-text-faint mt-2">Animated typography</p>
+                </div>
+              )}
+              
+              {componentEntry?.category === 'navigation' && (
+                <div className="px-8 py-6">
+                  <nav className="flex items-center gap-4">
+                    <a className="text-sm text-chalk hover:text-ignite transition-colors font-medium">Home</a>
+                    <a className="text-sm text-chalk hover:text-ignite transition-colors font-medium">About</a>
+                    <a className="text-sm text-ignite font-medium border-b-2 border-ignite">Studio</a>
+                    <a className="text-sm text-chalk hover:text-ignite transition-colors font-medium">Docs</a>
+                  </nav>
+                </div>
+              )}
+              
+              {componentEntry?.category === 'visual' && (
+                <div className="p-6">
+                  <div className="relative w-full h-32 rounded-lg bg-gradient-to-br from-ignite/10 via-blush/5 to-ignite/10 overflow-hidden">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-ignite to-blush opacity-50 blur-xl" />
+                    </div>
+                    <div className="relative z-10 flex items-center justify-center h-full">
+                      <p className="text-xs text-chalk font-medium">{componentEntry.title}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Default fallback */}
+              {!['buttons', 'cards', 'text', 'navigation', 'visual'].includes(componentEntry?.category || '') && (
+                <div className="px-8 py-6 text-center">
+                  <h3 className="text-lg font-bold text-chalk mb-2">
+                    {componentEntry?.title}
+                  </h3>
+                  <p className="text-sm text-text-faint max-w-xs mx-auto mb-4">
+                    {componentEntry?.description.split('.')[0]}.
+                  </p>
+                  <div className="flex items-center justify-center gap-3">
+                    <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-ignite/20 to-blush/20 border border-ignite/30" />
+                    <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blush/20 to-ignite/20 border border-blush/30" />
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
         ) : (
