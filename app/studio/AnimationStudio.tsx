@@ -53,11 +53,19 @@ export default function AnimationStudio() {
   const [config, setConfig] = useState<AnimationConfig>(defaultConfig)
   const [isPlaying, setIsPlaying] = useState(false)
   const [showCode, setShowCode] = useState(false)
+  const [autoPlay, setAutoPlay] = useState(true)
 
   const components = useMemo(() => getAllComponents(), [])
 
   const handleConfigChange = (key: keyof AnimationConfig, value: number | string) => {
     setConfig((prev) => ({ ...prev, [key]: value }))
+    // Auto-play when config changes if autoPlay is enabled
+    if (autoPlay && selectedComponent) {
+      setIsPlaying(true)
+      const duration = key === 'duration' ? (value as number) : config.duration
+      const delay = key === 'delay' ? (value as number) : config.delay
+      setTimeout(() => setIsPlaying(false), (duration + delay) * 1000 + 100)
+    }
   }
 
   const handleReset = () => {
@@ -67,7 +75,22 @@ export default function AnimationStudio() {
 
   const handlePlay = () => {
     setIsPlaying(true)
-    setTimeout(() => setIsPlaying(false), (config.duration + config.delay) * 1000)
+    const totalDuration = (config.duration + config.delay) * 1000
+    // If repeat is set, don't auto-stop
+    if (config.repeat === 0) {
+      setTimeout(() => setIsPlaying(false), totalDuration + 100)
+    }
+  }
+
+  const handleComponentSelect = (slug: string) => {
+    setSelectedComponent(slug)
+    if (autoPlay) {
+      // Trigger animation when component changes
+      setTimeout(() => {
+        setIsPlaying(true)
+        setTimeout(() => setIsPlaying(false), (config.duration + config.delay) * 1000 + 100)
+      }, 100)
+    }
   }
 
   return (
@@ -83,6 +106,15 @@ export default function AnimationStudio() {
               </p>
             </div>
             <div className="flex items-center gap-3">
+              <label className="flex items-center gap-2 text-sm text-text-faint cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={autoPlay}
+                  onChange={(e) => setAutoPlay(e.target.checked)}
+                  className="w-4 h-4 rounded border-border bg-border/20 text-ignite focus:ring-ignite focus:ring-2"
+                />
+                Auto-play
+              </label>
               <button
                 onClick={handleReset}
                 className="px-4 py-2 rounded-lg border border-border bg-obsidian text-chalk text-sm font-medium hover:bg-border/20 transition-colors"
@@ -112,11 +144,11 @@ export default function AnimationStudio() {
           <div className="grid grid-cols-12 gap-6 lg:h-full">
             {/* Left Sidebar - Component Selector */}
             <div className="col-span-12 lg:col-span-3 lg:h-full min-h-[400px]">
-              <ComponentSelector
-                components={components}
-                selectedComponent={selectedComponent}
-                onSelectComponent={setSelectedComponent}
-              />
+            <ComponentSelector
+              components={components}
+              selectedComponent={selectedComponent}
+              onSelectComponent={handleComponentSelect}
+            />
             </div>
 
             {/* Center - Preview Canvas */}
