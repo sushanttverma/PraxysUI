@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { getAllComponents } from '@/lib/registry'
@@ -8,94 +8,143 @@ import ComponentSelector from './ComponentSelector'
 import AnimationControls from './AnimationControls'
 import PreviewCanvas from './PreviewCanvas'
 import CodeGenerator from './CodeGenerator'
+import { presets, type AnimationPreset } from './presets'
 
-export interface AnimationConfig {
-  duration: number
-  delay: number
-  ease: string
-  type: 'tween' | 'spring' | 'inertia'
-  // Spring properties
-  stiffness: number
-  damping: number
-  mass: number
-  // Transform properties
+/* ─── Types ──────────────────────────────────────────────── */
+
+export interface MotionState {
   x: number
   y: number
   scale: number
   rotate: number
   opacity: number
-  // Advanced
+  skewX: number
+  skewY: number
+}
+
+export interface TransitionConfig {
+  type: 'tween' | 'spring'
+  duration: number
+  delay: number
+  ease: string
+  // spring
+  stiffness: number
+  damping: number
+  mass: number
+  // repeat
   repeat: number
   repeatType: 'loop' | 'reverse' | 'mirror'
   repeatDelay: number
 }
 
-const defaultConfig: AnimationConfig = {
+export interface AnimationConfig {
+  initial: MotionState
+  animate: MotionState
+  transition: TransitionConfig
+}
+
+/* ─── Defaults ───────────────────────────────────────────── */
+
+export const defaultInitial: MotionState = {
+  x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, skewX: 0, skewY: 0,
+}
+
+export const defaultAnimate: MotionState = {
+  x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, skewX: 0, skewY: 0,
+}
+
+export const defaultTransition: TransitionConfig = {
+  type: 'tween',
   duration: 0.5,
   delay: 0,
   ease: 'easeInOut',
-  type: 'tween',
   stiffness: 100,
   damping: 10,
   mass: 1,
-  x: 0,
-  y: 0,
-  scale: 1,
-  rotate: 0,
-  opacity: 1,
   repeat: 0,
   repeatType: 'loop',
   repeatDelay: 0,
 }
 
+export const defaultConfig: AnimationConfig = {
+  initial: { ...defaultInitial },
+  animate: { ...defaultAnimate },
+  transition: { ...defaultTransition },
+}
+
+/* ─── Component ──────────────────────────────────────────── */
+
 export default function AnimationStudio() {
   const [selectedComponent, setSelectedComponent] = useState<string | null>(null)
   const [config, setConfig] = useState<AnimationConfig>(defaultConfig)
-  const [isPlaying, setIsPlaying] = useState(false)
   const [showCode, setShowCode] = useState(false)
-  const [autoPlay, setAutoPlay] = useState(true)
+  const [playKey, setPlayKey] = useState(0)
 
   const components = useMemo(() => getAllComponents(), [])
 
-  const handleConfigChange = (key: keyof AnimationConfig, value: number | string) => {
-    setConfig((prev) => ({ ...prev, [key]: value }))
-    // Auto-play when config changes if autoPlay is enabled
-    if (autoPlay && selectedComponent) {
-      setIsPlaying(true)
-      const duration = key === 'duration' ? (value as number) : config.duration
-      const delay = key === 'delay' ? (value as number) : config.delay
-      setTimeout(() => setIsPlaying(false), (duration + delay) * 1000 + 100)
-    }
-  }
+  /* ── Handlers ─────── */
 
-  const handleReset = () => {
+  const replay = useCallback(() => {
+    setPlayKey((k) => k + 1)
+  }, [])
+
+  const applyPreset = useCallback((preset: AnimationPreset) => {
+    setConfig({
+      initial: { ...defaultInitial, ...preset.initial },
+      animate: { ...defaultAnimate, ...preset.animate },
+      transition: { ...defaultTransition, ...preset.transition },
+    })
+    setTimeout(replay, 50)
+  }, [replay])
+
+  const handleReset = useCallback(() => {
     setConfig(defaultConfig)
-    setIsPlaying(false)
-  }
+    replay()
+  }, [replay])
 
-  const handlePlay = () => {
-    setIsPlaying(true)
-    const totalDuration = (config.duration + config.delay) * 1000
-    // If repeat is set, don't auto-stop
-    if (config.repeat === 0) {
-      setTimeout(() => setIsPlaying(false), totalDuration + 100)
-    }
-  }
+  const handleInitialChange = useCallback(
+    (key: keyof MotionState, value: number) => {
+      setConfig((prev) => ({
+        ...prev,
+        initial: { ...prev.initial, [key]: value },
+      }))
+    },
+    []
+  )
 
-  const handleComponentSelect = (slug: string) => {
-    setSelectedComponent(slug)
-    if (autoPlay) {
-      // Trigger animation when component changes
-      setTimeout(() => {
-        setIsPlaying(true)
-        setTimeout(() => setIsPlaying(false), (config.duration + config.delay) * 1000 + 100)
-      }, 100)
-    }
-  }
+  const handleAnimateChange = useCallback(
+    (key: keyof MotionState, value: number) => {
+      setConfig((prev) => ({
+        ...prev,
+        animate: { ...prev.animate, [key]: value },
+      }))
+    },
+    []
+  )
+
+  const handleTransitionChange = useCallback(
+    (key: keyof TransitionConfig, value: number | string) => {
+      setConfig((prev) => ({
+        ...prev,
+        transition: { ...prev.transition, [key]: value },
+      }))
+    },
+    []
+  )
+
+  const handleComponentSelect = useCallback(
+    (slug: string) => {
+      setSelectedComponent(slug)
+      setTimeout(replay, 50)
+    },
+    [replay]
+  )
+
+  /* ── Render ─────── */
 
   return (
     <div className="h-screen bg-obsidian flex flex-col overflow-hidden">
-      {/* Header */}
+      {/* ── Header ── */}
       <header className="border-b border-border bg-obsidian/95 backdrop-blur-sm flex-shrink-0">
         <div className="mx-auto max-w-[1800px] px-6 py-4">
           <div className="flex items-center justify-between">
@@ -106,15 +155,6 @@ export default function AnimationStudio() {
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <label className="flex items-center gap-2 text-sm text-text-faint cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={autoPlay}
-                  onChange={(e) => setAutoPlay(e.target.checked)}
-                  className="w-4 h-4 rounded border-border bg-border/20 text-ignite focus:ring-ignite focus:ring-2"
-                />
-                Auto-play
-              </label>
               <button
                 onClick={handleReset}
                 className="px-4 py-2 rounded-lg border border-border bg-obsidian text-chalk text-sm font-medium hover:bg-border/20 transition-colors"
@@ -122,7 +162,7 @@ export default function AnimationStudio() {
                 Reset
               </button>
               <button
-                onClick={handlePlay}
+                onClick={replay}
                 disabled={!selectedComponent}
                 className={cn(
                   'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
@@ -131,41 +171,49 @@ export default function AnimationStudio() {
                     : 'bg-border/20 text-text-faint cursor-not-allowed'
                 )}
               >
-                Play Animation
+                Replay
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* ── Main content ── */}
       <div className="flex-1 overflow-auto">
         <div className="mx-auto max-w-[1800px] h-full px-6 py-6">
           <div className="grid grid-cols-12 gap-6 lg:h-full">
-            {/* Left Sidebar - Component Selector */}
-            <div className="col-span-12 lg:col-span-3 lg:h-full min-h-[400px]">
-            <ComponentSelector
-              components={components}
-              selectedComponent={selectedComponent}
-              onSelectComponent={handleComponentSelect}
-            />
+            {/* Left — Component Selector */}
+            <div className="col-span-12 lg:col-span-2 lg:h-full min-h-[400px]">
+              <ComponentSelector
+                components={components}
+                selectedComponent={selectedComponent}
+                onSelectComponent={handleComponentSelect}
+              />
             </div>
 
-            {/* Center - Preview Canvas */}
+            {/* Centre — Preview Canvas */}
             <div className="col-span-12 lg:col-span-6 lg:h-full min-h-[500px]">
               <PreviewCanvas
                 selectedComponent={selectedComponent}
                 config={config}
-                isPlaying={isPlaying}
+                playKey={playKey}
               />
             </div>
 
-            {/* Right Sidebar - Animation Controls */}
-            <div className="col-span-12 lg:col-span-3 lg:h-full min-h-[400px]">
+            {/* Right — Controls */}
+            <div className="col-span-12 lg:col-span-4 lg:h-full min-h-[400px]">
               <div className="flex flex-col gap-4 h-full">
-                <AnimationControls config={config} onConfigChange={handleConfigChange} />
-                
-                {/* Code Generator Toggle */}
+                <AnimationControls
+                  config={config}
+                  onInitialChange={handleInitialChange}
+                  onAnimateChange={handleAnimateChange}
+                  onTransitionChange={handleTransitionChange}
+                  onApplyPreset={applyPreset}
+                  onReplay={replay}
+                  presets={presets}
+                />
+
+                {/* Show Code */}
                 <button
                   onClick={() => setShowCode(!showCode)}
                   disabled={!selectedComponent}
@@ -176,7 +224,7 @@ export default function AnimationStudio() {
                       : 'border-border bg-border/10 text-text-faint cursor-not-allowed'
                   )}
                 >
-                  {showCode ? 'Hide Code' : 'Show Code'}
+                  {showCode ? 'Hide Code' : 'Get Code'}
                 </button>
               </div>
             </div>
@@ -184,7 +232,7 @@ export default function AnimationStudio() {
         </div>
       </div>
 
-      {/* Code Generator Modal */}
+      {/* ── Code Generator Modal ── */}
       <AnimatePresence>
         {showCode && selectedComponent && (
           <CodeGenerator

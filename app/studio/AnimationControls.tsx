@@ -1,330 +1,316 @@
 'use client'
 
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
-import type { AnimationConfig } from './AnimationStudio'
+import type { AnimationConfig, MotionState, TransitionConfig } from './AnimationStudio'
+import type { AnimationPreset } from './presets'
+
+/* ─── Props ──────────────────────────────────────────────── */
 
 interface AnimationControlsProps {
   config: AnimationConfig
-  onConfigChange: (key: keyof AnimationConfig, value: number | string) => void
+  onInitialChange: (key: keyof MotionState, value: number) => void
+  onAnimateChange: (key: keyof MotionState, value: number) => void
+  onTransitionChange: (key: keyof TransitionConfig, value: number | string) => void
+  onApplyPreset: (preset: AnimationPreset) => void
+  onReplay: () => void
+  presets: AnimationPreset[]
 }
 
-const easeOptions = [
-  'linear',
-  'easeIn',
-  'easeOut',
-  'easeInOut',
-  'circIn',
-  'circOut',
-  'circInOut',
-  'backIn',
-  'backOut',
-  'backInOut',
+/* ─── Ease options ───────────────────────────────────────── */
+
+const EASES = [
+  'linear', 'easeIn', 'easeOut', 'easeInOut',
+  'circIn', 'circOut', 'circInOut',
+  'backIn', 'backOut', 'backInOut',
   'anticipate',
 ]
 
-export default function AnimationControls({ config, onConfigChange }: AnimationControlsProps) {
+/* ─── Tab types ──────────────────────────────────────────── */
+
+type Tab = 'presets' | 'initial' | 'animate' | 'transition'
+
+const PRESET_CATS = ['entrance', 'attention', 'exit', 'loop'] as const
+
+/* ─── Component ──────────────────────────────────────────── */
+
+export default function AnimationControls({
+  config,
+  onInitialChange,
+  onAnimateChange,
+  onTransitionChange,
+  onApplyPreset,
+  onReplay,
+  presets,
+}: AnimationControlsProps) {
+  const [tab, setTab] = useState<Tab>('presets')
+  const [presetCat, setPresetCat] = useState<string>('entrance')
+
   return (
     <div className="bg-obsidian border border-border rounded-xl h-full flex flex-col overflow-hidden">
-      {/* Header */}
-      <div className="p-4 border-b border-border">
-        <h2 className="text-sm font-semibold text-chalk">Animation Controls</h2>
+      {/* Tab bar */}
+      <div className="flex border-b border-border flex-shrink-0">
+        {(['presets', 'initial', 'animate', 'transition'] as Tab[]).map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={cn(
+              'flex-1 py-3 text-xs font-medium capitalize transition-colors',
+              tab === t
+                ? 'text-ignite border-b-2 border-ignite bg-ignite/5'
+                : 'text-text-faint hover:text-chalk'
+            )}
+          >
+            {t}
+          </button>
+        ))}
       </div>
 
-      {/* Controls */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-6">
-        {/* Animation Type */}
-        <div>
-          <label className="block text-xs font-medium text-text-faint mb-2">
-            Animation Type
-          </label>
-          <div className="flex gap-2">
-            {(['tween', 'spring', 'inertia'] as const).map((type) => (
-              <button
-                key={type}
-                onClick={() => onConfigChange('type', type)}
-                className={cn(
-                  'flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-colors capitalize',
-                  config.type === type
-                    ? 'bg-ignite text-white'
-                    : 'bg-border/20 text-text-faint hover:bg-border/40'
-                )}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Timing Controls */}
-        <div className="space-y-4">
-          <h3 className="text-xs font-semibold text-chalk uppercase tracking-wider">Timing</h3>
-          
-          {/* Duration */}
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-xs text-text-faint">Duration</label>
-              <span className="text-xs text-chalk font-mono">{config.duration}s</span>
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-5">
+        {/* ── Presets tab ── */}
+        {tab === 'presets' && (
+          <>
+            <div className="flex flex-wrap gap-2">
+              {PRESET_CATS.map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setPresetCat(c)}
+                  className={cn(
+                    'px-2.5 py-1 rounded-md text-xs font-medium capitalize transition-colors',
+                    presetCat === c
+                      ? 'bg-ignite text-white'
+                      : 'bg-border/20 text-text-faint hover:bg-border/40'
+                  )}
+                >
+                  {c}
+                </button>
+              ))}
             </div>
-            <input
-              type="range"
-              min="0"
-              max="3"
-              step="0.1"
-              value={config.duration}
-              onChange={(e) => onConfigChange('duration', parseFloat(e.target.value))}
-              className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider-thumb"
-            />
-          </div>
 
-          {/* Delay */}
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-xs text-text-faint">Delay</label>
-              <span className="text-xs text-chalk font-mono">{config.delay}s</span>
-            </div>
-            <input
-              type="range"
-              min="0"
-              max="2"
-              step="0.1"
-              value={config.delay}
-              onChange={(e) => onConfigChange('delay', parseFloat(e.target.value))}
-              className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider-thumb"
-            />
-          </div>
-
-          {/* Ease (only for tween) */}
-          {config.type === 'tween' && (
-            <div>
-              <label className="block text-xs text-text-faint mb-2">Easing Function</label>
-              <select
-                value={config.ease}
-                onChange={(e) => onConfigChange('ease', e.target.value)}
-                className="w-full px-3 py-2 bg-border/20 border border-border rounded-lg text-sm text-chalk focus:outline-none focus:ring-1 focus:ring-ignite"
-              >
-                {easeOptions.map((ease) => (
-                  <option key={ease} value={ease}>
-                    {ease}
-                  </option>
+            <div className="grid grid-cols-2 gap-2">
+              {presets
+                .filter((p) => p.category === presetCat)
+                .map((preset) => (
+                  <button
+                    key={preset.name}
+                    onClick={() => {
+                      onApplyPreset(preset)
+                      onReplay()
+                    }}
+                    className="px-3 py-2.5 rounded-lg border border-border bg-border/10 text-xs font-medium text-chalk hover:bg-ignite/10 hover:border-ignite/50 hover:text-ignite transition-colors text-left"
+                  >
+                    {preset.name}
+                  </button>
                 ))}
-              </select>
             </div>
-          )}
-        </div>
-
-        {/* Spring Properties */}
-        {config.type === 'spring' && (
-          <div className="space-y-4">
-            <h3 className="text-xs font-semibold text-chalk uppercase tracking-wider">
-              Spring Physics
-            </h3>
-
-            {/* Stiffness */}
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="text-xs text-text-faint">Stiffness</label>
-                <span className="text-xs text-chalk font-mono">{config.stiffness}</span>
-              </div>
-              <input
-                type="range"
-                min="10"
-                max="500"
-                step="10"
-                value={config.stiffness}
-                onChange={(e) => onConfigChange('stiffness', parseFloat(e.target.value))}
-                className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider-thumb"
-              />
-            </div>
-
-            {/* Damping */}
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="text-xs text-text-faint">Damping</label>
-                <span className="text-xs text-chalk font-mono">{config.damping}</span>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="50"
-                step="1"
-                value={config.damping}
-                onChange={(e) => onConfigChange('damping', parseFloat(e.target.value))}
-                className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider-thumb"
-              />
-            </div>
-
-            {/* Mass */}
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="text-xs text-text-faint">Mass</label>
-                <span className="text-xs text-chalk font-mono">{config.mass}</span>
-              </div>
-              <input
-                type="range"
-                min="0.1"
-                max="5"
-                step="0.1"
-                value={config.mass}
-                onChange={(e) => onConfigChange('mass', parseFloat(e.target.value))}
-                className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider-thumb"
-              />
-            </div>
-          </div>
+          </>
         )}
 
-        {/* Transform Properties */}
-        <div className="space-y-4">
-          <h3 className="text-xs font-semibold text-chalk uppercase tracking-wider">
-            Transform
-          </h3>
+        {/* ── Initial state tab ── */}
+        {tab === 'initial' && (
+          <MotionStateControls
+            label="Initial State"
+            sublabel="Where the animation starts from"
+            state={config.initial}
+            onChange={onInitialChange}
+          />
+        )}
 
-          {/* X */}
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-xs text-text-faint">X Position</label>
-              <span className="text-xs text-chalk font-mono">{config.x}px</span>
-            </div>
-            <input
-              type="range"
-              min="-200"
-              max="200"
-              step="10"
-              value={config.x}
-              onChange={(e) => onConfigChange('x', parseFloat(e.target.value))}
-              className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider-thumb"
-            />
-          </div>
+        {/* ── Animate state tab ── */}
+        {tab === 'animate' && (
+          <MotionStateControls
+            label="Animate State"
+            sublabel="Where the animation ends at"
+            state={config.animate}
+            onChange={onAnimateChange}
+          />
+        )}
 
-          {/* Y */}
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-xs text-text-faint">Y Position</label>
-              <span className="text-xs text-chalk font-mono">{config.y}px</span>
-            </div>
-            <input
-              type="range"
-              min="-200"
-              max="200"
-              step="10"
-              value={config.y}
-              onChange={(e) => onConfigChange('y', parseFloat(e.target.value))}
-              className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider-thumb"
-            />
-          </div>
+        {/* ── Transition tab ── */}
+        {tab === 'transition' && (
+          <TransitionControls config={config.transition} onChange={onTransitionChange} />
+        )}
+      </div>
+    </div>
+  )
+}
 
-          {/* Scale */}
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-xs text-text-faint">Scale</label>
-              <span className="text-xs text-chalk font-mono">{config.scale}</span>
-            </div>
-            <input
-              type="range"
-              min="0"
-              max="2"
-              step="0.1"
-              value={config.scale}
-              onChange={(e) => onConfigChange('scale', parseFloat(e.target.value))}
-              className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider-thumb"
-            />
-          </div>
+/* ─── Motion State Controls (initial / animate) ──────────── */
 
-          {/* Rotate */}
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-xs text-text-faint">Rotate</label>
-              <span className="text-xs text-chalk font-mono">{config.rotate}°</span>
-            </div>
-            <input
-              type="range"
-              min="-180"
-              max="180"
-              step="15"
-              value={config.rotate}
-              onChange={(e) => onConfigChange('rotate', parseFloat(e.target.value))}
-              className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider-thumb"
-            />
-          </div>
+function MotionStateControls({
+  label,
+  sublabel,
+  state,
+  onChange,
+}: {
+  label: string
+  sublabel: string
+  state: MotionState
+  onChange: (key: keyof MotionState, value: number) => void
+}) {
+  return (
+    <div className="space-y-5">
+      <div>
+        <h3 className="text-xs font-semibold text-chalk">{label}</h3>
+        <p className="text-xs text-text-faint mt-0.5">{sublabel}</p>
+      </div>
 
-          {/* Opacity */}
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-xs text-text-faint">Opacity</label>
-              <span className="text-xs text-chalk font-mono">{config.opacity}</span>
-            </div>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.1"
-              value={config.opacity}
-              onChange={(e) => onConfigChange('opacity', parseFloat(e.target.value))}
-              className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider-thumb"
-            />
-          </div>
-        </div>
+      <Slider label="X" unit="px" min={-200} max={200} step={5} value={state.x} onChange={(v) => onChange('x', v)} />
+      <Slider label="Y" unit="px" min={-200} max={200} step={5} value={state.y} onChange={(v) => onChange('y', v)} />
+      <Slider label="Scale" unit="" min={0} max={3} step={0.05} value={state.scale} onChange={(v) => onChange('scale', v)} />
+      <Slider label="Rotate" unit="°" min={-360} max={360} step={5} value={state.rotate} onChange={(v) => onChange('rotate', v)} />
+      <Slider label="Opacity" unit="" min={0} max={1} step={0.05} value={state.opacity} onChange={(v) => onChange('opacity', v)} />
+      <Slider label="Skew X" unit="°" min={-45} max={45} step={1} value={state.skewX} onChange={(v) => onChange('skewX', v)} />
+      <Slider label="Skew Y" unit="°" min={-45} max={45} step={1} value={state.skewY} onChange={(v) => onChange('skewY', v)} />
+    </div>
+  )
+}
 
-        {/* Repeat */}
-        <div className="space-y-4">
-          <h3 className="text-xs font-semibold text-chalk uppercase tracking-wider">Repeat</h3>
+/* ─── Transition Controls ────────────────────────────────── */
 
-          {/* Repeat Count */}
-          <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-xs text-text-faint">Repeat Count</label>
-              <span className="text-xs text-chalk font-mono">
-                {config.repeat === 0 ? 'None' : config.repeat === -1 ? '∞' : config.repeat}
-              </span>
-            </div>
-            <input
-              type="range"
-              min="-1"
-              max="10"
-              step="1"
-              value={config.repeat}
-              onChange={(e) => onConfigChange('repeat', parseFloat(e.target.value))}
-              className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider-thumb"
-            />
-          </div>
-
-          {/* Repeat Type */}
-          {config.repeat !== 0 && (
-            <div>
-              <label className="block text-xs text-text-faint mb-2">Repeat Type</label>
-              <select
-                value={config.repeatType}
-                onChange={(e) =>
-                  onConfigChange('repeatType', e.target.value as 'loop' | 'reverse' | 'mirror')
-                }
-                className="w-full px-3 py-2 bg-border/20 border border-border rounded-lg text-sm text-chalk focus:outline-none focus:ring-1 focus:ring-ignite"
-              >
-                <option value="loop">Loop</option>
-                <option value="reverse">Reverse</option>
-                <option value="mirror">Mirror</option>
-              </select>
-            </div>
-          )}
-
-          {/* Repeat Delay */}
-          {config.repeat !== 0 && (
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="text-xs text-text-faint">Repeat Delay</label>
-                <span className="text-xs text-chalk font-mono">{config.repeatDelay}s</span>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="2"
-                step="0.1"
-                value={config.repeatDelay}
-                onChange={(e) => onConfigChange('repeatDelay', parseFloat(e.target.value))}
-                className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider-thumb"
-              />
-            </div>
-          )}
+function TransitionControls({
+  config,
+  onChange,
+}: {
+  config: TransitionConfig
+  onChange: (key: keyof TransitionConfig, value: number | string) => void
+}) {
+  return (
+    <div className="space-y-5">
+      {/* Type */}
+      <div>
+        <label className="block text-xs font-medium text-text-faint mb-2">Type</label>
+        <div className="flex gap-2">
+          {(['tween', 'spring'] as const).map((t) => (
+            <button
+              key={t}
+              onClick={() => onChange('type', t)}
+              className={cn(
+                'flex-1 px-3 py-2 rounded-lg text-xs font-medium capitalize transition-colors',
+                config.type === t
+                  ? 'bg-ignite text-white'
+                  : 'bg-border/20 text-text-faint hover:bg-border/40'
+              )}
+            >
+              {t}
+            </button>
+          ))}
         </div>
       </div>
+
+      <Slider label="Duration" unit="s" min={0} max={5} step={0.1} value={config.duration} onChange={(v) => onChange('duration', v)} />
+      <Slider label="Delay" unit="s" min={0} max={3} step={0.1} value={config.delay} onChange={(v) => onChange('delay', v)} />
+
+      {/* Ease (tween only) */}
+      {config.type === 'tween' && (
+        <div>
+          <label className="block text-xs text-text-faint mb-2">Easing</label>
+          <select
+            value={config.ease}
+            onChange={(e) => onChange('ease', e.target.value)}
+            className="w-full px-3 py-2 bg-border/20 border border-border rounded-lg text-sm text-chalk focus:outline-none focus:ring-1 focus:ring-ignite"
+          >
+            {EASES.map((e) => (
+              <option key={e} value={e}>{e}</option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {/* Spring properties */}
+      {config.type === 'spring' && (
+        <>
+          <Slider label="Stiffness" unit="" min={10} max={500} step={10} value={config.stiffness} onChange={(v) => onChange('stiffness', v)} />
+          <Slider label="Damping" unit="" min={1} max={50} step={1} value={config.damping} onChange={(v) => onChange('damping', v)} />
+          <Slider label="Mass" unit="" min={0.1} max={5} step={0.1} value={config.mass} onChange={(v) => onChange('mass', v)} />
+        </>
+      )}
+
+      {/* Repeat */}
+      <div>
+        <div className="flex justify-between items-center mb-2">
+          <label className="text-xs text-text-faint">Repeat</label>
+          <span className="text-xs text-chalk font-mono">
+            {config.repeat === -1 ? '∞' : config.repeat === 0 ? 'None' : config.repeat}
+          </span>
+        </div>
+        <input
+          type="range"
+          min={-1}
+          max={10}
+          step={1}
+          value={config.repeat}
+          onChange={(e) => onChange('repeat', parseInt(e.target.value))}
+          className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider-thumb"
+        />
+      </div>
+
+      {config.repeat !== 0 && (
+        <>
+          <div>
+            <label className="block text-xs text-text-faint mb-2">Repeat Type</label>
+            <div className="flex gap-2">
+              {(['loop', 'reverse', 'mirror'] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => onChange('repeatType', t)}
+                  className={cn(
+                    'flex-1 px-2 py-1.5 rounded-lg text-xs font-medium capitalize transition-colors',
+                    config.repeatType === t
+                      ? 'bg-ignite text-white'
+                      : 'bg-border/20 text-text-faint hover:bg-border/40'
+                  )}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+          </div>
+          <Slider label="Repeat Delay" unit="s" min={0} max={2} step={0.1} value={config.repeatDelay} onChange={(v) => onChange('repeatDelay', v)} />
+        </>
+      )}
+    </div>
+  )
+}
+
+/* ─── Reusable Slider ────────────────────────────────────── */
+
+function Slider({
+  label,
+  unit,
+  min,
+  max,
+  step,
+  value,
+  onChange,
+}: {
+  label: string
+  unit: string
+  min: number
+  max: number
+  step: number
+  value: number
+  onChange: (v: number) => void
+}) {
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-2">
+        <label className="text-xs text-text-faint">{label}</label>
+        <span className="text-xs text-chalk font-mono">
+          {Number.isInteger(value) ? value : value.toFixed(2)}
+          {unit}
+        </span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(parseFloat(e.target.value))}
+        className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer slider-thumb"
+      />
     </div>
   )
 }
