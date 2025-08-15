@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo, useCallback } from 'react'
+import Link from 'next/link'
 import { AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { getAllComponents } from '@/lib/registry'
@@ -148,11 +149,22 @@ export default function AnimationStudio() {
       <header className="border-b border-border bg-obsidian/95 backdrop-blur-sm flex-shrink-0">
         <div className="mx-auto max-w-[1800px] px-6 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-chalk">Animation Studio</h1>
-              <p className="text-sm text-text-faint mt-1">
-                Customize animations with real-time preview and code generation
-              </p>
+            <div className="flex items-center gap-4">
+              <Link
+                href="/"
+                className="p-2 rounded-lg border border-border bg-obsidian text-text-faint hover:text-chalk hover:bg-border/20 transition-colors"
+                aria-label="Back to home"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+              </Link>
+              <div>
+                <h1 className="text-2xl font-bold text-chalk">Animation Studio</h1>
+                <p className="text-sm text-text-faint mt-1">
+                  Customize animations with real-time preview and code generation
+                </p>
+              </div>
             </div>
             <div className="flex items-center gap-3">
               <button
