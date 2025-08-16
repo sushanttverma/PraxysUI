@@ -56,32 +56,32 @@ export default function ComponentSelector({
   return (
     <div className="bg-obsidian border border-border rounded-xl h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b border-border">
-        <h2 className="text-sm font-semibold text-chalk mb-3">Select Component</h2>
+      <div className="p-3 md:p-4 border-b border-border">
+        <h2 className="text-sm font-semibold text-chalk mb-2 md:mb-3 lg:block hidden">Select Component</h2>
+        <h2 className="text-sm font-semibold text-chalk mb-2 lg:hidden">Component</h2>
         
         {/* Search */}
-        <div className="relative mb-3">
-          <SearchIcon />
+        <div className="relative mb-2 md:mb-3">
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search components..."
-            className="w-full pl-9 pr-3 py-2 bg-border/20 border border-border rounded-lg text-sm text-chalk placeholder:text-text-faint focus:outline-none focus:ring-1 focus:ring-ignite"
+            placeholder="Search..."
+            className="w-full pl-9 pr-3 py-1.5 md:py-2 bg-border/20 border border-border rounded-lg text-xs md:text-sm text-chalk placeholder:text-text-faint focus:outline-none focus:ring-1 focus:ring-ignite"
           />
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-faint">
             <SearchIcon />
           </span>
         </div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap gap-2">
+        {/* Category Filter - Horizontal scroll on mobile */}
+        <div className="flex gap-1.5 md:gap-2 overflow-x-auto pb-1 scrollbar-thin">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setCategoryFilter(cat)}
               className={cn(
-                'px-2.5 py-1 rounded-md text-xs font-medium transition-colors capitalize',
+                'px-2 md:px-2.5 py-0.5 md:py-1 rounded-md text-xs font-medium capitalize transition-colors whitespace-nowrap flex-shrink-0',
                 categoryFilter === cat
                   ? 'bg-ignite text-white'
                   : 'bg-border/20 text-text-faint hover:bg-border/40'
@@ -101,16 +101,16 @@ export default function ComponentSelector({
               key={component.slug}
               onClick={() => onSelectComponent(component.slug)}
               className={cn(
-                'w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors',
+                'w-full text-left px-2.5 md:px-3 py-2 md:py-2.5 rounded-lg text-xs md:text-sm transition-colors',
                 selectedComponent === component.slug
                   ? 'bg-ignite/10 border border-ignite text-ignite'
                   : 'bg-transparent hover:bg-border/20 text-chalk border border-transparent'
               )}
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="font-medium">{component.title}</div>
-              <div className="text-xs text-text-faint mt-0.5 capitalize">
+              <div className="font-medium leading-tight">{component.title}</div>
+              <div className="text-xs text-text-faint mt-0.5 capitalize hidden md:block">
                 {component.category}
               </div>
             </motion.button>
@@ -118,14 +118,14 @@ export default function ComponentSelector({
         </div>
 
         {filteredComponents.length === 0 && (
-          <div className="text-center py-12 text-text-faint text-sm">
+          <div className="text-center py-8 md:py-12 text-text-faint text-xs md:text-sm">
             No components found
           </div>
         )}
       </div>
 
       {/* Footer */}
-      <div className="p-3 border-t border-border bg-border/5 text-xs text-text-faint">
+      <div className="p-2 md:p-3 border-t border-border bg-border/5 text-xs text-text-faint">
         {filteredComponents.length} component{filteredComponents.length !== 1 ? 's' : ''}
       </div>
     </div>

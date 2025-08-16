@@ -137,7 +137,7 @@ export default function Animated${title.replace(/\s/g, '')}() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-6"
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 md:p-6"
       onClick={onClose}
     >
       <motion.div
@@ -145,68 +145,68 @@ export default function Animated${title.replace(/\s/g, '')}() {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-obsidian border border-border rounded-xl shadow-2xl w-full max-w-3xl max-h-[80vh] flex flex-col overflow-hidden"
+        className="bg-obsidian border border-border rounded-xl shadow-2xl w-full max-w-3xl max-h-[85vh] md:max-h-[80vh] flex flex-col overflow-hidden"
       >
         {/* Header */}
-        <div className="p-6 border-b border-border flex items-center justify-between flex-shrink-0">
+        <div className="p-4 md:p-6 border-b border-border flex items-center justify-between flex-shrink-0">
           <div>
-            <h2 className="text-xl font-bold text-chalk">Generated Code</h2>
-            <p className="text-sm text-text-faint mt-1">Copy and paste into your project</p>
+            <h2 className="text-lg md:text-xl font-bold text-chalk">Generated Code</h2>
+            <p className="text-xs md:text-sm text-text-faint mt-1">Copy and paste into your project</p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-border/20 text-text-faint hover:text-chalk transition-colors"
+            className="p-1.5 md:p-2 rounded-lg hover:bg-border/20 text-text-faint hover:text-chalk transition-colors"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="px-6 pt-4 flex gap-2 flex-shrink-0">
+        <div className="px-4 md:px-6 pt-3 md:pt-4 flex gap-2 flex-shrink-0">
           {(['framer', 'css'] as const).map((t) => (
             <button
               key={t}
               onClick={() => setCodeType(t)}
               className={cn(
-                'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+                'px-3 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors',
                 codeType === t
                   ? 'bg-ignite text-white'
                   : 'bg-border/20 text-text-faint hover:bg-border/40'
               )}
             >
-              {t === 'framer' ? 'Framer Motion' : 'CSS Animation'}
+              {t === 'framer' ? 'Framer' : 'CSS'}
             </button>
           ))}
         </div>
 
         {/* Code */}
-        <div className="flex-1 overflow-auto p-6">
+        <div className="flex-1 overflow-auto p-4 md:p-6">
           <div className="relative">
-            <pre className="bg-black/40 rounded-lg p-4 text-sm text-chalk font-mono overflow-x-auto border border-border/50">
+            <pre className="bg-black/40 rounded-lg p-3 md:p-4 text-xs md:text-sm text-chalk font-mono overflow-x-auto border border-border/50">
               <code>{code}</code>
             </pre>
             <button
               onClick={handleCopy}
               className={cn(
-                'absolute top-3 right-3 px-3 py-1.5 rounded-md text-xs font-medium transition-colors',
+                'absolute top-2 md:top-3 right-2 md:right-3 px-2.5 md:px-3 py-1 md:py-1.5 rounded-md text-xs font-medium transition-colors',
                 copied
                   ? 'bg-green-500/20 text-green-400 border border-green-500/50'
                   : 'bg-ignite/10 text-ignite border border-ignite/50 hover:bg-ignite/20'
               )}
             >
-              {copied ? 'Copied!' : 'Copy Code'}
+              {copied ? 'Copied!' : 'Copy'}
             </button>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-border bg-border/5 flex-shrink-0">
+        <div className="p-4 md:p-6 border-t border-border bg-border/5 flex-shrink-0">
           <p className="text-xs text-text-faint">
             {codeType === 'framer'
-              ? 'Requires framer-motion — npm install framer-motion'
-              : 'Pure CSS — no dependencies required'}
+              ? 'npm install framer-motion'
+              : 'Pure CSS — no dependencies'}
           </p>
         </div>
       </motion.div>

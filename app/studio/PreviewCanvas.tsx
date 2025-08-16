@@ -45,21 +45,21 @@ export default function PreviewCanvas({
   return (
     <div className="bg-obsidian border border-border rounded-xl h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b border-border flex items-center justify-between flex-shrink-0">
+      <div className="p-3 md:p-4 border-b border-border flex items-center justify-between flex-shrink-0">
         <div>
-          <h2 className="text-sm font-semibold text-chalk">Preview</h2>
+          <h2 className="text-xs md:text-sm font-semibold text-chalk">Preview</h2>
           {componentEntry && (
-            <p className="text-xs text-text-faint mt-0.5">{componentEntry.title}</p>
+            <p className="text-xs text-text-faint mt-0.5 hidden md:block">{componentEntry.title}</p>
           )}
         </div>
-        <div className="flex items-center gap-3 text-xs text-text-faint">
-          <span>{config.transition.type === 'spring' ? 'Spring' : config.transition.ease}</span>
+        <div className="flex items-center gap-2 md:gap-3 text-xs text-text-faint">
+          <span className="hidden sm:inline">{config.transition.type === 'spring' ? 'Spring' : config.transition.ease}</span>
           <span>{config.transition.duration}s</span>
         </div>
       </div>
 
       {/* Canvas */}
-      <div className="flex-1 flex items-center justify-center p-8 relative overflow-hidden">
+      <div className="flex-1 flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
         {/* Grid */}
         <div
           className="absolute inset-0 opacity-10"
@@ -71,8 +71,8 @@ export default function PreviewCanvas({
         />
 
         {selectedComponent ? (
-          <div className="relative z-10 rounded-xl border border-border bg-obsidian shadow-lg shadow-black/20 overflow-hidden">
-            <div className="p-8">
+          <div className="relative z-10 rounded-xl border border-border bg-obsidian shadow-lg shadow-black/20 overflow-hidden max-w-full">
+            <div className="p-4 md:p-8">
               <motion.div
                 key={playKey}
                 initial={initial}
@@ -92,17 +92,18 @@ export default function PreviewCanvas({
       </div>
 
       {/* Footer */}
-      <div className="p-3 border-t border-border bg-border/5 flex-shrink-0">
+      <div className="p-2 md:p-3 border-t border-border bg-border/5 flex-shrink-0">
         <div className="flex items-center justify-between text-xs text-text-faint">
-          <span>
+          <span className="hidden sm:inline">
             initial → animate &nbsp;·&nbsp;{' '}
             <span className="text-chalk capitalize">{config.transition.type}</span>
           </span>
+          <span className="sm:hidden text-chalk capitalize">{config.transition.type}</span>
           <span>
             {config.transition.repeat === -1
-              ? '∞ Loop'
+              ? '∞'
               : config.transition.repeat > 0
-                ? `${config.transition.repeat}× repeat`
+                ? `${config.transition.repeat}×`
                 : 'Once'}
           </span>
         </div>
@@ -117,18 +118,18 @@ function ComponentPreview({ category, title }: { category: string; title: string
   switch (category) {
     case 'buttons':
       return (
-        <button className="px-6 py-3 rounded-lg bg-gradient-to-r from-ignite to-blush text-white font-semibold shadow-lg text-sm whitespace-nowrap">
+        <button className="px-4 md:px-6 py-2 md:py-3 rounded-lg bg-gradient-to-r from-ignite to-blush text-white font-semibold shadow-lg text-xs md:text-sm whitespace-nowrap">
           {title}
         </button>
       )
     case 'cards':
       return (
-        <div className="w-56">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-ignite/20 to-blush/20 border border-ignite/30 flex-shrink-0" />
+        <div className="w-48 md:w-56">
+          <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+            <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-br from-ignite/20 to-blush/20 border border-ignite/30 flex-shrink-0" />
             <div>
-              <p className="text-sm font-bold text-chalk">{title}</p>
-              <p className="text-xs text-text-faint">Card component</p>
+              <p className="text-xs md:text-sm font-bold text-chalk leading-tight">{title}</p>
+              <p className="text-xs text-text-faint">Card</p>
             </div>
           </div>
           <div className="space-y-1.5">
@@ -139,18 +140,18 @@ function ComponentPreview({ category, title }: { category: string; title: string
       )
     case 'text':
       return (
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-ignite via-blush to-ignite bg-clip-text text-transparent whitespace-nowrap">
+        <h2 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-ignite via-blush to-ignite bg-clip-text text-transparent whitespace-nowrap">
           {title}
         </h2>
       )
     case 'navigation':
       return (
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-2 md:gap-4">
           {['Home', 'About', 'Studio', 'Docs'].map((t) => (
             <span
               key={t}
               className={cn(
-                'text-sm font-medium',
+                'text-xs md:text-sm font-medium',
                 t === 'Studio'
                   ? 'text-ignite border-b-2 border-ignite pb-0.5'
                   : 'text-chalk'
@@ -163,17 +164,17 @@ function ComponentPreview({ category, title }: { category: string; title: string
       )
     case 'visual':
       return (
-        <div className="relative w-48 h-24 rounded-lg bg-gradient-to-br from-ignite/10 via-blush/5 to-ignite/10 overflow-hidden flex items-center justify-center">
-          <div className="absolute w-16 h-16 rounded-full bg-gradient-to-br from-ignite to-blush opacity-40 blur-xl" />
+        <div className="relative w-40 md:w-48 h-20 md:h-24 rounded-lg bg-gradient-to-br from-ignite/10 via-blush/5 to-ignite/10 overflow-hidden flex items-center justify-center">
+          <div className="absolute w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-ignite to-blush opacity-40 blur-xl" />
           <p className="relative text-xs text-chalk font-medium">{title}</p>
         </div>
       )
     default:
       return (
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-ignite/20 to-blush/20 border border-ignite/30" />
+        <div className="flex items-center gap-2 md:gap-3">
+          <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-br from-ignite/20 to-blush/20 border border-ignite/30 flex-shrink-0" />
           <div>
-            <p className="text-sm font-bold text-chalk">{title}</p>
+            <p className="text-xs md:text-sm font-bold text-chalk">{title}</p>
             <p className="text-xs text-text-faint capitalize">{category}</p>
           </div>
         </div>
@@ -183,14 +184,14 @@ function ComponentPreview({ category, title }: { category: string; title: string
 
 function EmptyState() {
   return (
-    <div className="text-center relative z-10">
-      <div className="w-16 h-16 rounded-2xl bg-border/20 border-2 border-dashed border-border mx-auto mb-4 flex items-center justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-text-faint">
+    <div className="text-center relative z-10 px-4">
+      <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-border/20 border-2 border-dashed border-border mx-auto mb-3 md:mb-4 flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 md:w-8 md:h-8 text-text-faint">
           <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
         </svg>
       </div>
-      <p className="text-text-faint text-sm font-medium">Select a component</p>
-      <p className="text-text-faint text-xs mt-1">Then pick a preset or customise the animation</p>
+      <p className="text-text-faint text-xs md:text-sm font-medium">Select a component</p>
+      <p className="text-text-faint text-xs mt-1 hidden md:block">Then pick a preset or customise the animation</p>
     </div>
   )
 }
