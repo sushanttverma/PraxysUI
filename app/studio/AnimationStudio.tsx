@@ -147,29 +147,29 @@ export default function AnimationStudio() {
     <div className="h-screen bg-obsidian flex flex-col overflow-hidden">
       {/* ── Header ── */}
       <header className="border-b border-border bg-obsidian/95 backdrop-blur-sm flex-shrink-0">
-        <div className="mx-auto max-w-[1800px] px-6 py-4">
+        <div className="mx-auto max-w-[1800px] px-4 md:px-6 py-3 md:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4 min-w-0">
               <Link
                 href="/"
-                className="p-2 rounded-lg border border-border bg-obsidian text-text-faint hover:text-chalk hover:bg-border/20 transition-colors"
+                className="p-1.5 md:p-2 rounded-lg border border-border bg-obsidian text-text-faint hover:text-chalk hover:bg-border/20 transition-colors flex-shrink-0"
                 aria-label="Back to home"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                 </svg>
               </Link>
-              <div>
-                <h1 className="text-2xl font-bold text-chalk">Animation Studio</h1>
-                <p className="text-sm text-text-faint mt-1">
-                  Customize animations with real-time preview and code generation
+              <div className="min-w-0">
+                <h1 className="text-lg md:text-2xl font-bold text-chalk truncate">Animation Studio</h1>
+                <p className="text-xs md:text-sm text-text-faint mt-0.5 md:mt-1 hidden sm:block">
+                  Customize animations with real-time preview
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
               <button
                 onClick={handleReset}
-                className="px-4 py-2 rounded-lg border border-border bg-obsidian text-chalk text-sm font-medium hover:bg-border/20 transition-colors"
+                className="px-3 md:px-4 py-1.5 md:py-2 rounded-lg border border-border bg-obsidian text-chalk text-xs md:text-sm font-medium hover:bg-border/20 transition-colors"
               >
                 Reset
               </button>
@@ -177,7 +177,7 @@ export default function AnimationStudio() {
                 onClick={replay}
                 disabled={!selectedComponent}
                 className={cn(
-                  'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+                  'px-3 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors',
                   selectedComponent
                     ? 'bg-ignite text-white hover:bg-ignite/90'
                     : 'bg-border/20 text-text-faint cursor-not-allowed'
@@ -192,10 +192,10 @@ export default function AnimationStudio() {
 
       {/* ── Main content ── */}
       <div className="flex-1 overflow-auto">
-        <div className="mx-auto max-w-[1800px] h-full px-6 py-6">
-          <div className="grid grid-cols-12 gap-6 lg:h-full">
-            {/* Left — Component Selector */}
-            <div className="col-span-12 lg:col-span-2 lg:h-full min-h-[400px]">
+        <div className="mx-auto max-w-[1800px] h-full px-4 md:px-6 py-4 md:py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 lg:h-full">
+            {/* Component Selector — Hidden on mobile, use modal */}
+            <div className="hidden lg:block lg:col-span-2 lg:h-full">
               <ComponentSelector
                 components={components}
                 selectedComponent={selectedComponent}
@@ -203,8 +203,17 @@ export default function AnimationStudio() {
               />
             </div>
 
-            {/* Centre — Preview Canvas */}
-            <div className="col-span-12 lg:col-span-6 lg:h-full min-h-[500px]">
+            {/* Mobile Component Selector — Compact dropdown */}
+            <div className="lg:hidden col-span-1">
+              <ComponentSelector
+                components={components}
+                selectedComponent={selectedComponent}
+                onSelectComponent={handleComponentSelect}
+              />
+            </div>
+
+            {/* Preview Canvas */}
+            <div className="col-span-1 lg:col-span-6 lg:h-full min-h-[300px] md:min-h-[400px]">
               <PreviewCanvas
                 selectedComponent={selectedComponent}
                 config={config}
@@ -212,9 +221,9 @@ export default function AnimationStudio() {
               />
             </div>
 
-            {/* Right — Controls */}
-            <div className="col-span-12 lg:col-span-4 lg:h-full min-h-[400px]">
-              <div className="flex flex-col gap-4 h-full">
+            {/* Controls */}
+            <div className="col-span-1 lg:col-span-4 lg:h-full min-h-[400px]">
+              <div className="flex flex-col gap-3 md:gap-4 h-full">
                 <AnimationControls
                   config={config}
                   onInitialChange={handleInitialChange}
@@ -225,12 +234,12 @@ export default function AnimationStudio() {
                   presets={presets}
                 />
 
-                {/* Show Code */}
+                {/* Get Code */}
                 <button
                   onClick={() => setShowCode(!showCode)}
                   disabled={!selectedComponent}
                   className={cn(
-                    'px-4 py-3 rounded-lg text-sm font-medium transition-colors border flex-shrink-0',
+                    'px-4 py-2.5 md:py-3 rounded-lg text-sm font-medium transition-colors border flex-shrink-0',
                     selectedComponent
                       ? 'border-ignite bg-ignite/10 text-ignite hover:bg-ignite/20'
                       : 'border-border bg-border/10 text-text-faint cursor-not-allowed'
