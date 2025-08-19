@@ -194,17 +194,8 @@ export default function AnimationStudio() {
       <div className="flex-1 overflow-auto">
         <div className="mx-auto max-w-[1800px] h-full px-4 md:px-6 py-4 md:py-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6 lg:h-full">
-            {/* Component Selector — Hidden on mobile, use modal */}
-            <div className="hidden lg:block lg:col-span-2 lg:h-full">
-              <ComponentSelector
-                components={components}
-                selectedComponent={selectedComponent}
-                onSelectComponent={handleComponentSelect}
-              />
-            </div>
-
-            {/* Mobile Component Selector — Compact dropdown */}
-            <div className="lg:hidden col-span-1">
+            {/* Component Selector */}
+            <div className="col-span-1 lg:col-span-2 lg:h-full min-h-0">
               <ComponentSelector
                 components={components}
                 selectedComponent={selectedComponent}

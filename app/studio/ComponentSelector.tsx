@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import type { ComponentEntry } from '@/lib/registry'
 
@@ -28,6 +28,21 @@ const SearchIcon = () => (
   </svg>
 )
 
+const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
+  <motion.svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={2}
+    stroke="currentColor"
+    className="w-4 h-4"
+    animate={{ rotate: isOpen ? 180 : 0 }}
+    transition={{ duration: 0.2 }}
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+  </motion.svg>
+)
+
 export default function ComponentSelector({
   components,
   selectedComponent,
@@ -35,6 +50,7 @@ export default function ComponentSelector({
 }: ComponentSelectorProps) {
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   // Get unique categories
   const categories = useMemo(() => {
@@ -53,13 +69,110 @@ export default function ComponentSelector({
     })
   }, [components, search, categoryFilter])
 
+  const selectedEntry = selectedComponent
+    ? components.find((c) => c.slug === selectedComponent)
+    : null
+
   return (
-    <div className="bg-obsidian border border-border rounded-xl h-full flex flex-col overflow-hidden">
+    <>
+      {/* Desktop View - Full Sidebar */}
+      <div className="hidden lg:flex bg-obsidian border border-border rounded-xl h-full flex-col overflow-hidden">
+        <SidebarContent
+          search={search}
+          setSearch={setSearch}
+          categories={categories}
+          categoryFilter={categoryFilter}
+          setCategoryFilter={setCategoryFilter}
+          filteredComponents={filteredComponents}
+          selectedComponent={selectedComponent}
+          onSelectComponent={onSelectComponent}
+        />
+      </div>
+
+      {/* Mobile View - Compact Dropdown */}
+      <div className="lg:hidden relative">
+        <button
+          onClick={() => setIsMobileOpen(!isMobileOpen)}
+          className="w-full px-4 py-3 rounded-lg border border-border bg-obsidian text-left flex items-center justify-between hover:bg-border/20 transition-colors"
+        >
+          <div>
+            <p className="text-xs text-text-faint mb-0.5">Component</p>
+            <p className="text-sm font-medium text-chalk">
+              {selectedEntry?.title || 'Select a component'}
+            </p>
+          </div>
+          <ChevronIcon isOpen={isMobileOpen} />
+        </button>
+
+        {/* Dropdown */}
+        <AnimatePresence>
+          {isMobileOpen && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: -10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -10 }}
+              transition={{ duration: 0.15 }}
+              className="absolute z-50 mt-2 w-full bg-obsidian border border-border rounded-xl shadow-2xl max-h-[60vh] flex flex-col overflow-hidden"
+            >
+              <SidebarContent
+                search={search}
+                setSearch={setSearch}
+                categories={categories}
+                categoryFilter={categoryFilter}
+                setCategoryFilter={setCategoryFilter}
+                filteredComponents={filteredComponents}
+                selectedComponent={selectedComponent}
+                onSelectComponent={(slug) => {
+                  onSelectComponent(slug)
+                  setIsMobileOpen(false)
+                }}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Backdrop */}
+        <AnimatePresence>
+          {isMobileOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 z-40"
+              onClick={() => setIsMobileOpen(false)}
+            />
+          )}
+        </AnimatePresence>
+      </div>
+    </>
+  )
+}
+
+/* ─── Shared Sidebar Content ──────────────────────────────── */
+
+function SidebarContent({
+  search,
+  setSearch,
+  categories,
+  categoryFilter,
+  setCategoryFilter,
+  filteredComponents,
+  selectedComponent,
+  onSelectComponent,
+}: {
+  search: string
+  setSearch: (s: string) => void
+  categories: string[]
+  categoryFilter: string
+  setCategoryFilter: (c: string) => void
+  filteredComponents: ComponentEntry[]
+  selectedComponent: string | null
+  onSelectComponent: (slug: string) => void
+}) {
+  return (
+    <>
       {/* Header */}
-      <div className="p-3 md:p-4 border-b border-border">
-        <h2 className="text-sm font-semibold text-chalk mb-2 md:mb-3 lg:block hidden">Select Component</h2>
-        <h2 className="text-sm font-semibold text-chalk mb-2 lg:hidden">Component</h2>
-        
+      <div className="p-3 md:p-4 border-b border-border flex-shrink-0">
         {/* Search */}
         <div className="relative mb-2 md:mb-3">
           <input
@@ -74,7 +187,7 @@ export default function ComponentSelector({
           </span>
         </div>
 
-        {/* Category Filter - Horizontal scroll on mobile */}
+        {/* Category Filter */}
         <div className="flex gap-1.5 md:gap-2 overflow-x-auto pb-1 scrollbar-thin">
           {categories.map((cat) => (
             <button
@@ -125,9 +238,9 @@ export default function ComponentSelector({
       </div>
 
       {/* Footer */}
-      <div className="p-2 md:p-3 border-t border-border bg-border/5 text-xs text-text-faint">
+      <div className="p-2 md:p-3 border-t border-border bg-border/5 text-xs text-text-faint flex-shrink-0">
         {filteredComponents.length} component{filteredComponents.length !== 1 ? 's' : ''}
       </div>
-    </div>
+    </>
   )
 }
