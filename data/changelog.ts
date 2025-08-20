@@ -20,6 +20,26 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '1.2.5',
+    date: 'Feb 15, 2026',
+    title: 'Animation Studio — Visual Animation Builder',
+    description:
+      'Introducing the Animation Studio, a killer feature that sets PraxysUI apart. Visually design animations for any component with live preview, presets, and instant code generation.',
+    iconName: 'zap',
+    changes: [
+      { type: 'added', text: 'Animation Studio (/studio) — Interactive visual playground for designing component animations' },
+      { type: 'added', text: 'Live Preview Canvas — See animations play in real-time as you adjust parameters' },
+      { type: 'added', text: 'Animation Controls — Fine-tune initial state, animate state, and transitions with intuitive sliders' },
+      { type: 'added', text: '30+ Animation Presets — Pre-built entrance, attention, exit, and loop animations (fade, slide, bounce, scale, flip, rotate, etc.)' },
+      { type: 'added', text: 'Component Selector — Search and filter through all 69 components with category filters' },
+      { type: 'added', text: 'Code Generator — Instantly copy Framer Motion or CSS @keyframes code for your custom animations' },
+      { type: 'added', text: 'Auto-Play Mode — Automatically replay animations when changing parameters or components' },
+      { type: 'added', text: 'Category-Specific Previews — Realistic mockups for buttons, cards, text, navigation, and visual components' },
+      { type: 'improved', text: 'Mobile Responsive — Compact dropdown component selector on mobile, full experience preserved' },
+      { type: 'improved', text: 'Navbar — Added "Studio" link for easy access' },
+    ],
+  },
+  {
     version: '1.2.2',
     date: 'Feb 15, 2026',
     title: 'Autocomplete API Fix',
