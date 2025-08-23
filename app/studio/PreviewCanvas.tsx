@@ -4,17 +4,20 @@ import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import type { AnimationConfig } from './AnimationStudio'
 import { componentRegistry } from '@/lib/registry'
+import type { ColorScheme } from './colorSchemes'
 
 interface PreviewCanvasProps {
   selectedComponent: string | null
   config: AnimationConfig
   playKey: number
+  colorScheme: ColorScheme
 }
 
 export default function PreviewCanvas({
   selectedComponent,
   config,
   playKey,
+  colorScheme,
 }: PreviewCanvasProps) {
   const componentEntry = selectedComponent ? componentRegistry[selectedComponent] : null
 
@@ -82,6 +85,7 @@ export default function PreviewCanvas({
                 <ComponentPreview
                   category={componentEntry?.category || ''}
                   title={componentEntry?.title || ''}
+                  colorScheme={colorScheme}
                 />
               </motion.div>
             </div>
@@ -114,11 +118,22 @@ export default function PreviewCanvas({
 
 /* ─── Category-specific preview elements ─── */
 
-function ComponentPreview({ category, title }: { category: string; title: string }) {
+function ComponentPreview({ category, title, colorScheme }: { category: string; title: string; colorScheme: ColorScheme }) {
+  const primaryColor = colorScheme.primary
+  const secondaryColor = colorScheme.secondary
+  const accentColor = colorScheme.accent
+  const textColor = colorScheme.text
+  
   switch (category) {
     case 'buttons':
       return (
-        <button className="px-4 md:px-6 py-2 md:py-3 rounded-lg bg-gradient-to-r from-ignite to-blush text-white font-semibold shadow-lg text-xs md:text-sm whitespace-nowrap">
+        <button 
+          className="px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold shadow-lg text-xs md:text-sm whitespace-nowrap"
+          style={{ 
+            background: `linear-gradient(to right, ${primaryColor}, ${secondaryColor})`,
+            color: textColor 
+          }}
+        >
           {title}
         </button>
       )
@@ -126,21 +141,37 @@ function ComponentPreview({ category, title }: { category: string; title: string
       return (
         <div className="w-48 md:w-56">
           <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-br from-ignite/20 to-blush/20 border border-ignite/30 flex-shrink-0" />
+            <div 
+              className="w-8 h-8 md:w-10 md:h-10 rounded-lg flex-shrink-0" 
+              style={{ 
+                background: `linear-gradient(135deg, ${primaryColor}33, ${secondaryColor}33)`,
+                borderColor: `${primaryColor}66`,
+                borderWidth: '1px',
+                borderStyle: 'solid'
+              }}
+            />
             <div>
-              <p className="text-xs md:text-sm font-bold text-chalk leading-tight">{title}</p>
-              <p className="text-xs text-text-faint">Card</p>
+              <p className="text-xs md:text-sm font-bold leading-tight" style={{ color: textColor }}>{title}</p>
+              <p className="text-xs opacity-60" style={{ color: textColor }}>Card</p>
             </div>
           </div>
           <div className="space-y-1.5">
-            <div className="h-2 w-full rounded bg-border/40" />
-            <div className="h-2 w-3/4 rounded bg-border/40" />
+            <div className="h-2 w-full rounded" style={{ backgroundColor: `${primaryColor}33` }} />
+            <div className="h-2 w-3/4 rounded" style={{ backgroundColor: `${primaryColor}33` }} />
           </div>
         </div>
       )
     case 'text':
       return (
-        <h2 className="text-xl md:text-3xl font-bold bg-gradient-to-r from-ignite via-blush to-ignite bg-clip-text text-transparent whitespace-nowrap">
+        <h2 
+          className="text-xl md:text-3xl font-bold whitespace-nowrap"
+          style={{
+            background: `linear-gradient(to right, ${primaryColor}, ${secondaryColor}, ${accentColor})`,
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent'
+          }}
+        >
           {title}
         </h2>
       )
@@ -150,12 +181,11 @@ function ComponentPreview({ category, title }: { category: string; title: string
           {['Home', 'About', 'Studio', 'Docs'].map((t) => (
             <span
               key={t}
-              className={cn(
-                'text-xs md:text-sm font-medium',
-                t === 'Studio'
-                  ? 'text-ignite border-b-2 border-ignite pb-0.5'
-                  : 'text-chalk'
-              )}
+              className={cn('text-xs md:text-sm font-medium', t === 'Studio' && 'border-b-2 pb-0.5')}
+              style={{
+                color: t === 'Studio' ? primaryColor : textColor,
+                borderColor: t === 'Studio' ? primaryColor : 'transparent'
+              }}
             >
               {t}
             </span>
@@ -164,18 +194,29 @@ function ComponentPreview({ category, title }: { category: string; title: string
       )
     case 'visual':
       return (
-        <div className="relative w-40 md:w-48 h-20 md:h-24 rounded-lg bg-gradient-to-br from-ignite/10 via-blush/5 to-ignite/10 overflow-hidden flex items-center justify-center">
-          <div className="absolute w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-ignite to-blush opacity-40 blur-xl" />
-          <p className="relative text-xs text-chalk font-medium">{title}</p>
+        <div className="relative w-40 md:w-48 h-20 md:h-24 rounded-lg overflow-hidden flex items-center justify-center"
+          style={{ background: `linear-gradient(135deg, ${primaryColor}1A, ${secondaryColor}0D, ${accentColor}1A)` }}
+        >
+          <div className="absolute w-12 h-12 md:w-16 md:h-16 rounded-full opacity-40 blur-xl"
+            style={{ background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})` }}
+          />
+          <p className="relative text-xs font-medium" style={{ color: textColor }}>{title}</p>
         </div>
       )
     default:
       return (
         <div className="flex items-center gap-2 md:gap-3">
-          <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gradient-to-br from-ignite/20 to-blush/20 border border-ignite/30 flex-shrink-0" />
+          <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg flex-shrink-0"
+            style={{ 
+              background: `linear-gradient(135deg, ${primaryColor}33, ${secondaryColor}33)`,
+              borderColor: `${primaryColor}66`,
+              borderWidth: '1px',
+              borderStyle: 'solid'
+            }}
+          />
           <div>
-            <p className="text-xs md:text-sm font-bold text-chalk">{title}</p>
-            <p className="text-xs text-text-faint capitalize">{category}</p>
+            <p className="text-xs md:text-sm font-bold" style={{ color: textColor }}>{title}</p>
+            <p className="text-xs capitalize opacity-60" style={{ color: textColor }}>{category}</p>
           </div>
         </div>
       )
