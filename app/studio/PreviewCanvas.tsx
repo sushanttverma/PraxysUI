@@ -130,7 +130,7 @@ function ComponentPreview({ category, title, colorScheme }: { category: string; 
         <button 
           className="px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold shadow-lg text-xs md:text-sm whitespace-nowrap"
           style={{ 
-            background: `linear-gradient(to right, ${primaryColor}, ${secondaryColor})`,
+            backgroundImage: `linear-gradient(to right, ${primaryColor}, ${secondaryColor})`,
             color: textColor 
           }}
         >
@@ -144,7 +144,7 @@ function ComponentPreview({ category, title, colorScheme }: { category: string; 
             <div 
               className="w-8 h-8 md:w-10 md:h-10 rounded-lg flex-shrink-0" 
               style={{ 
-                background: `linear-gradient(135deg, ${primaryColor}33, ${secondaryColor}33)`,
+                backgroundImage: `linear-gradient(135deg, ${primaryColor}33, ${secondaryColor}33)`,
                 borderColor: `${primaryColor}66`,
                 borderWidth: '1px',
                 borderStyle: 'solid'
@@ -166,7 +166,7 @@ function ComponentPreview({ category, title, colorScheme }: { category: string; 
         <h2 
           className="text-xl md:text-3xl font-bold whitespace-nowrap"
           style={{
-            background: `linear-gradient(to right, ${primaryColor}, ${secondaryColor}, ${accentColor})`,
+            backgroundImage: `linear-gradient(to right, ${primaryColor}, ${secondaryColor}, ${accentColor})`,
             WebkitBackgroundClip: 'text',
             backgroundClip: 'text',
             color: 'transparent'
@@ -195,10 +195,10 @@ function ComponentPreview({ category, title, colorScheme }: { category: string; 
     case 'visual':
       return (
         <div className="relative w-40 md:w-48 h-20 md:h-24 rounded-lg overflow-hidden flex items-center justify-center"
-          style={{ background: `linear-gradient(135deg, ${primaryColor}1A, ${secondaryColor}0D, ${accentColor}1A)` }}
+          style={{ backgroundImage: `linear-gradient(135deg, ${primaryColor}1A, ${secondaryColor}0D, ${accentColor}1A)` }}
         >
           <div className="absolute w-12 h-12 md:w-16 md:h-16 rounded-full opacity-40 blur-xl"
-            style={{ background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})` }}
+            style={{ backgroundImage: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})` }}
           />
           <p className="relative text-xs font-medium" style={{ color: textColor }}>{title}</p>
         </div>
@@ -208,7 +208,7 @@ function ComponentPreview({ category, title, colorScheme }: { category: string; 
         <div className="flex items-center gap-2 md:gap-3">
           <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg flex-shrink-0"
             style={{ 
-              background: `linear-gradient(135deg, ${primaryColor}33, ${secondaryColor}33)`,
+              backgroundImage: `linear-gradient(135deg, ${primaryColor}33, ${secondaryColor}33)`,
               borderColor: `${primaryColor}66`,
               borderWidth: '1px',
               borderStyle: 'solid'
