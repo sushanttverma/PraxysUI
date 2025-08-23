@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import type { AnimationConfig, MotionState, TransitionConfig } from './AnimationStudio'
 import type { AnimationPreset } from './presets'
+import { colorSchemes, hslToHex, type ColorScheme } from './colorSchemes'
 
 /* ─── Props ──────────────────────────────────────────────── */
 
@@ -15,6 +16,9 @@ interface AnimationControlsProps {
   onApplyPreset: (preset: AnimationPreset) => void
   onReplay: () => void
   presets: AnimationPreset[]
+  colorScheme: ColorScheme
+  onColorSchemeChange: (scheme: ColorScheme) => void
+  onRandomColors: () => void
 }
 
 /* ─── Ease options ───────────────────────────────────────── */
@@ -28,7 +32,7 @@ const EASES = [
 
 /* ─── Tab types ──────────────────────────────────────────── */
 
-type Tab = 'presets' | 'initial' | 'animate' | 'transition'
+type Tab = 'presets' | 'colors' | 'initial' | 'animate' | 'transition'
 
 const PRESET_CATS = ['entrance', 'attention', 'exit', 'loop'] as const
 
@@ -42,6 +46,9 @@ export default function AnimationControls({
   onApplyPreset,
   onReplay,
   presets,
+  colorScheme,
+  onColorSchemeChange,
+  onRandomColors,
 }: AnimationControlsProps) {
   const [tab, setTab] = useState<Tab>('presets')
   const [presetCat, setPresetCat] = useState<string>('entrance')
@@ -50,7 +57,7 @@ export default function AnimationControls({
     <div className="bg-obsidian border border-border rounded-xl h-full flex flex-col overflow-hidden">
       {/* Tab bar */}
       <div className="flex border-b border-border flex-shrink-0 overflow-x-auto">
-        {(['presets', 'initial', 'animate', 'transition'] as Tab[]).map((t) => (
+        {(['presets', 'colors', 'initial', 'animate', 'transition'] as Tab[]).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -103,6 +110,79 @@ export default function AnimationControls({
                     {preset.name}
                   </button>
                 ))}
+            </div>
+          </>
+        )}
+
+        {/* ── Colors tab ── */}
+        {tab === 'colors' && (
+          <>
+            <div className="space-y-3">
+              <div>
+                <h3 className="text-sm font-medium text-chalk mb-2">Color Schemes</h3>
+                <p className="text-xs text-text-faint mb-3">
+                  Apply pre-made color themes or generate random colors
+                </p>
+              </div>
+
+              {/* Preset Color Schemes */}
+              <div className="grid grid-cols-2 gap-2">
+                {colorSchemes.map((scheme) => (
+                  <button
+                    key={scheme.id}
+                    onClick={() => onColorSchemeChange(scheme)}
+                    className={cn(
+                      'p-3 rounded-lg border transition-all text-left',
+                      colorScheme.id === scheme.id
+                        ? 'border-ignite bg-ignite/10'
+                        : 'border-border bg-border/10 hover:border-border-light'
+                    )}
+                  >
+                    <div className="text-xs font-medium text-chalk mb-2">{scheme.name}</div>
+                    <div className="flex gap-1">
+                      {[scheme.primary, scheme.secondary, scheme.accent].map((color, i) => (
+                        <div
+                          key={i}
+                          className="w-6 h-6 rounded border border-border-light"
+                          style={{ backgroundColor: color.startsWith('hsl') ? hslToHex(color) : color }}
+                          title={color}
+                        />
+                      ))}
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {/* Random Colors Button */}
+              <button
+                onClick={onRandomColors}
+                className="w-full px-4 py-3 rounded-lg border-2 border-dashed border-ignite/50 bg-ignite/5 text-ignite hover:bg-ignite/10 transition-colors text-sm font-medium"
+              >
+                🎲 Generate Random Colors
+              </button>
+
+              {/* Current Scheme Preview */}
+              <div className="p-3 rounded-lg bg-border/10 border border-border">
+                <div className="text-xs font-medium text-text-faint mb-2">Current Scheme</div>
+                <div className="text-sm font-medium text-chalk mb-2">{colorScheme.name}</div>
+                <div className="grid grid-cols-5 gap-2">
+                  {[
+                    { label: 'Primary', color: colorScheme.primary },
+                    { label: 'Secondary', color: colorScheme.secondary },
+                    { label: 'Accent', color: colorScheme.accent },
+                    { label: 'BG', color: colorScheme.background },
+                    { label: 'Text', color: colorScheme.text },
+                  ].map(({ label, color }) => (
+                    <div key={label}>
+                      <div
+                        className="w-full h-10 rounded border border-border-light mb-1"
+                        style={{ backgroundColor: color.startsWith('hsl') ? hslToHex(color) : color }}
+                      />
+                      <div className="text-xs text-text-faint text-center truncate">{label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </>
         )}

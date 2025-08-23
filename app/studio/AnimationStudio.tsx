@@ -10,6 +10,7 @@ import AnimationControls from './AnimationControls'
 import PreviewCanvas from './PreviewCanvas'
 import CodeGenerator from './CodeGenerator'
 import { presets, type AnimationPreset } from './presets'
+import { colorSchemes, generateRandomColorScheme, type ColorScheme } from './colorSchemes'
 
 /* ─── Types ──────────────────────────────────────────────── */
 
@@ -80,6 +81,7 @@ export default function AnimationStudio() {
   const [config, setConfig] = useState<AnimationConfig>(defaultConfig)
   const [showCode, setShowCode] = useState(false)
   const [playKey, setPlayKey] = useState(0)
+  const [colorScheme, setColorScheme] = useState<ColorScheme>(colorSchemes[0])
 
   const components = useMemo(() => getAllComponents(), [])
 
@@ -102,6 +104,15 @@ export default function AnimationStudio() {
     setConfig(defaultConfig)
     replay()
   }, [replay])
+
+  const applyColorScheme = useCallback((scheme: ColorScheme) => {
+    setColorScheme(scheme)
+  }, [])
+
+  const applyRandomColors = useCallback(() => {
+    const randomScheme = generateRandomColorScheme()
+    setColorScheme(randomScheme)
+  }, [])
 
   const handleInitialChange = useCallback(
     (key: keyof MotionState, value: number) => {
@@ -209,6 +220,7 @@ export default function AnimationStudio() {
                 selectedComponent={selectedComponent}
                 config={config}
                 playKey={playKey}
+                colorScheme={colorScheme}
               />
             </div>
 
@@ -223,6 +235,9 @@ export default function AnimationStudio() {
                   onApplyPreset={applyPreset}
                   onReplay={replay}
                   presets={presets}
+                  colorScheme={colorScheme}
+                  onColorSchemeChange={applyColorScheme}
+                  onRandomColors={applyRandomColors}
                 />
 
                 {/* Get Code */}
