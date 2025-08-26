@@ -114,6 +114,16 @@ export default function AnimationStudio() {
     setColorScheme(randomScheme)
   }, [])
 
+  const updateCustomColor = useCallback((key: keyof ColorScheme, value: string) => {
+    if (key === 'id' || key === 'name') return
+    setColorScheme((prev) => ({
+      ...prev,
+      [key]: value,
+      id: 'custom-' + Date.now(),
+      name: 'Custom',
+    }))
+  }, [])
+
   const handleInitialChange = useCallback(
     (key: keyof MotionState, value: number) => {
       setConfig((prev) => ({
@@ -238,6 +248,7 @@ export default function AnimationStudio() {
                   colorScheme={colorScheme}
                   onColorSchemeChange={applyColorScheme}
                   onRandomColors={applyRandomColors}
+                  onCustomColorChange={updateCustomColor}
                 />
 
                 {/* Get Code */}

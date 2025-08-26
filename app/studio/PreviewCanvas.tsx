@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import type { AnimationConfig } from './AnimationStudio'
 import { componentRegistry } from '@/lib/registry'
-import type { ColorScheme } from './colorSchemes'
+import { hslToHex, type ColorScheme } from './colorSchemes'
 
 interface PreviewCanvasProps {
   selectedComponent: string | null
@@ -119,10 +119,11 @@ export default function PreviewCanvas({
 /* ─── Category-specific preview elements ─── */
 
 function ComponentPreview({ category, title, colorScheme }: { category: string; title: string; colorScheme: ColorScheme }) {
-  const primaryColor = colorScheme.primary
-  const secondaryColor = colorScheme.secondary
-  const accentColor = colorScheme.accent
-  const textColor = colorScheme.text
+  // Convert HSL to hex if needed
+  const primaryColor = colorScheme.primary.startsWith('hsl') ? hslToHex(colorScheme.primary) : colorScheme.primary
+  const secondaryColor = colorScheme.secondary.startsWith('hsl') ? hslToHex(colorScheme.secondary) : colorScheme.secondary
+  const accentColor = colorScheme.accent.startsWith('hsl') ? hslToHex(colorScheme.accent) : colorScheme.accent
+  const textColor = colorScheme.text.startsWith('hsl') ? hslToHex(colorScheme.text) : colorScheme.text
   
   switch (category) {
     case 'buttons':
