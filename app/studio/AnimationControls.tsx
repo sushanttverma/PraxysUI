@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import type { AnimationConfig, MotionState, TransitionConfig } from './AnimationStudio'
 import type { AnimationPreset } from './presets'
-import { colorSchemes, hslToHex, type ColorScheme } from './colorSchemes'
+import { colorSchemes, hslToHex, generateRandomHexColor, type ColorScheme } from './colorSchemes'
 
 /* ─── Props ──────────────────────────────────────────────── */
 
@@ -19,6 +19,7 @@ interface AnimationControlsProps {
   colorScheme: ColorScheme
   onColorSchemeChange: (scheme: ColorScheme) => void
   onRandomColors: () => void
+  onCustomColorChange: (key: keyof ColorScheme, value: string) => void
 }
 
 /* ─── Ease options ───────────────────────────────────────── */
@@ -49,6 +50,7 @@ export default function AnimationControls({
   colorScheme,
   onColorSchemeChange,
   onRandomColors,
+  onCustomColorChange,
 }: AnimationControlsProps) {
   const [tab, setTab] = useState<Tab>('presets')
   const [presetCat, setPresetCat] = useState<string>('entrance')
@@ -161,24 +163,44 @@ export default function AnimationControls({
                 🎲 Generate Random Colors
               </button>
 
-              {/* Current Scheme Preview */}
+              {/* Current Scheme Preview & Customize */}
               <div className="p-3 rounded-lg bg-border/10 border border-border">
-                <div className="text-xs font-medium text-text-faint mb-2">Current Scheme</div>
-                <div className="text-sm font-medium text-chalk mb-2">{colorScheme.name}</div>
-                <div className="grid grid-cols-5 gap-2">
+                <div className="text-xs font-medium text-text-faint mb-2">Current Scheme - Customize</div>
+                <div className="text-sm font-medium text-chalk mb-3">{colorScheme.name}</div>
+                <div className="space-y-2">
                   {[
-                    { label: 'Primary', color: colorScheme.primary },
-                    { label: 'Secondary', color: colorScheme.secondary },
-                    { label: 'Accent', color: colorScheme.accent },
-                    { label: 'BG', color: colorScheme.background },
-                    { label: 'Text', color: colorScheme.text },
-                  ].map(({ label, color }) => (
-                    <div key={label}>
-                      <div
-                        className="w-full h-10 rounded border border-border-light mb-1"
-                        style={{ backgroundColor: color.startsWith('hsl') ? hslToHex(color) : color }}
-                      />
-                      <div className="text-xs text-text-faint text-center truncate">{label}</div>
+                    { label: 'Primary', key: 'primary' as keyof ColorScheme, color: colorScheme.primary },
+                    { label: 'Secondary', key: 'secondary' as keyof ColorScheme, color: colorScheme.secondary },
+                    { label: 'Accent', key: 'accent' as keyof ColorScheme, color: colorScheme.accent },
+                    { label: 'Background', key: 'background' as keyof ColorScheme, color: colorScheme.background },
+                    { label: 'Text', key: 'text' as keyof ColorScheme, color: colorScheme.text },
+                  ].map(({ label, key, color }) => (
+                    <div key={label} className="flex items-center gap-2">
+                      <div className="flex-1">
+                        <label className="text-xs text-text-faint mb-1 block">{label}</label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={color.startsWith('hsl') ? hslToHex(color) : color}
+                            onChange={(e) => onCustomColorChange(key, e.target.value)}
+                            className="w-12 h-8 rounded border border-border cursor-pointer bg-transparent"
+                          />
+                          <input
+                            type="text"
+                            value={color}
+                            onChange={(e) => onCustomColorChange(key, e.target.value)}
+                            className="flex-1 px-2 py-1 text-xs rounded border border-border bg-obsidian text-chalk focus:outline-none focus:ring-1 focus:ring-ignite"
+                            placeholder="#FF4405"
+                          />
+                          <button
+                            onClick={() => onCustomColorChange(key, generateRandomHexColor())}
+                            className="px-2 py-1 rounded border border-border bg-border/20 hover:bg-ignite/10 hover:border-ignite/50 transition-colors text-xs"
+                            title="Random color"
+                          >
+                            🎲
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
