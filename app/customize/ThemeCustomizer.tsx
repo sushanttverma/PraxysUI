@@ -302,6 +302,61 @@ export default function ThemeCustomizer() {
     setLightColors({ ...preset.light })
   }, [])
 
+  const generateRandomPalette = useCallback(() => {
+    const generateRandomColor = () => {
+      const hue = Math.floor(Math.random() * 360)
+      const saturation = 60 + Math.floor(Math.random() * 20) // 60-80%
+      const lightness = activeMode === 'dark' 
+        ? 10 + Math.floor(Math.random() * 30)  // 10-40% for dark mode
+        : 50 + Math.floor(Math.random() * 30)  // 50-80% for light mode
+      
+      const hslToHex = (h: number, s: number, l: number): string => {
+        s /= 100
+        l /= 100
+        const c = (1 - Math.abs(2 * l - 1)) * s
+        const x = c * (1 - Math.abs(((h / 60) % 2) - 1))
+        const m = l - c / 2
+        let r = 0, g = 0, b = 0
+        
+        if (h >= 0 && h < 60) { r = c; g = x; b = 0 }
+        else if (h >= 60 && h < 120) { r = x; g = c; b = 0 }
+        else if (h >= 120 && h < 180) { r = 0; g = c; b = x }
+        else if (h >= 180 && h < 240) { r = 0; g = x; b = c }
+        else if (h >= 240 && h < 300) { r = x; g = 0; b = c }
+        else { r = c; g = 0; b = x }
+        
+        const toHex = (n: number) => {
+          const hex = Math.round((n + m) * 255).toString(16)
+          return hex.length === 1 ? '0' + hex : hex
+        }
+        
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`
+      }
+      
+      return hslToHex(hue, saturation, lightness)
+    }
+
+    const baseHue = Math.floor(Math.random() * 360)
+    
+    if (activeMode === 'dark') {
+      setDarkColors({
+        void: generateRandomColor(),
+        obsidian: generateRandomColor(),
+        ignite: generateRandomColor(),
+        blush: generateRandomColor(),
+        chalk: generateRandomColor(),
+      })
+    } else {
+      setLightColors({
+        void: generateRandomColor(),
+        obsidian: generateRandomColor(),
+        ignite: generateRandomColor(),
+        blush: generateRandomColor(),
+        chalk: generateRandomColor(),
+      })
+    }
+  }, [activeMode])
+
   // Live preview CSS vars scoped to the preview panel
   const previewVars = useMemo(() => {
     const c = activeColors
@@ -439,6 +494,14 @@ export default function ThemeCustomizer() {
                     </button>
                   ))}
                 </div>
+                
+                {/* Random Colors Button */}
+                <button
+                  onClick={generateRandomPalette}
+                  className="w-full mt-3 px-4 py-3 rounded-lg border-2 border-dashed border-ignite/50 bg-ignite/5 text-ignite hover:bg-ignite/10 transition-colors text-sm font-medium"
+                >
+                  🎲 Generate Random Palette
+                </button>
               </div>
 
               {/* Actions */}
