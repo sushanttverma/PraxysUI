@@ -107,12 +107,12 @@ export const colorSchemes: ColorScheme[] = [
 export function generateRandomColorScheme(): ColorScheme {
   const baseHue = Math.floor(Math.random() * 360)
   
-  // Convert HSL to hex immediately
-  const primary = hslToHex(`hsl(${baseHue}, 70%, 50%)`)
-  const secondary = hslToHex(`hsl(${(baseHue + 30) % 360}, 65%, 55%)`)
-  const accent = hslToHex(`hsl(${(baseHue + 60) % 360}, 75%, 60%)`)
-  const background = hslToHex(`hsl(${baseHue}, 20%, 8%)`)
-  const text = hslToHex(`hsl(${baseHue}, 10%, 92%)`)
+  // Convert HSL to hex immediately for better color harmony
+  const primary = hslToHex(`hsl(${baseHue}, 75%, 55%)`)         // Vibrant primary
+  const secondary = hslToHex(`hsl(${(baseHue + 30) % 360}, 70%, 60%)`)  // Analogous secondary
+  const accent = hslToHex(`hsl(${(baseHue + 60) % 360}, 80%, 65%)`)     // Complementary accent
+  const background = hslToHex(`hsl(${baseHue}, 15%, 8%)`)       // Dark bg
+  const text = hslToHex(`hsl(${baseHue}, 5%, 92%)`)             // Light text
   
   return {
     id: 'random-' + Date.now(),
@@ -125,11 +125,11 @@ export function generateRandomColorScheme(): ColorScheme {
   }
 }
 
-// Generate a single random hex color
+// Generate a single random hex color (more vibrant for accents)
 export function generateRandomHexColor(): string {
   const hue = Math.floor(Math.random() * 360)
-  const saturation = 60 + Math.floor(Math.random() * 20) // 60-80%
-  const lightness = 45 + Math.floor(Math.random() * 15) // 45-60%
+  const saturation = 65 + Math.floor(Math.random() * 20) // 65-85% (more vibrant)
+  const lightness = 50 + Math.floor(Math.random() * 15)  // 50-65% (good contrast)
   return hslToHex(`hsl(${hue}, ${saturation}%, ${lightness}%)`)
 }
 
