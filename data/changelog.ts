@@ -20,6 +20,26 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '1.2.6',
+    date: 'Feb 15, 2026',
+    title: 'Color Customization & Enhanced Studio',
+    description:
+      'Added comprehensive color customization to Animation Studio and Theme Customizer with random palette generation and per-color editing.',
+    iconName: 'palette',
+    changes: [
+      { type: 'added', text: 'Color Scheme Customization — 10 pre-made color schemes (Ocean, Forest, Sunset, Purple, Rose Gold, Mint, Fire, Cyberpunk, Monochrome)' },
+      { type: 'added', text: 'Theme Customizer Panel — "Make it yours" section with individual color editing (Primary, Secondary, Accent, Background, Text)' },
+      { type: 'added', text: 'Random Palette Generator — 🎲 Generate harmonious color palettes with one click in both Studio and /customize' },
+      { type: 'added', text: 'Per-Color Randomization — Random button (🎲) for each individual color property' },
+      { type: 'added', text: 'Color Pickers — Visual color selection with hex/HSL text input support' },
+      { type: 'improved', text: 'Random Color Algorithm — Uses color theory (analogous + complementary hues) for harmonious palettes' },
+      { type: 'improved', text: 'Color Contrast — Fixed lightness/saturation values ensure readable, professional themes' },
+      { type: 'improved', text: 'Live Preview Updates — All component previews dynamically use selected color scheme' },
+      { type: 'fixed', text: 'React Style Warning — Changed background to backgroundImage to avoid conflicts with backgroundClip' },
+      { type: 'fixed', text: 'HSL to Hex Conversion — All colors properly converted for CSS compatibility' },
+    ],
+  },
+  {
     version: '1.2.5',
     date: 'Feb 15, 2026',
     title: 'Animation Studio — Visual Animation Builder',
