@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Github, Star, ArrowUpRight } from "lucide-react";
+import { Github, Star, ArrowUpRight, ChevronDown, Palette, Paintbrush, Wand2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "./ThemeToggle";
@@ -73,15 +73,20 @@ export function HamburgerButton({
 
 const navLinks = [
   { href: "/docs/components-overview", label: "Components" },
-  { href: "/studio", label: "Studio" },
   { href: "/templates", label: "Templates" },
-  { href: "/customize", label: "Customize" },
   { href: "/examples", label: "Examples" },
   { href: "/docs", label: "Docs" },
 ];
 
+const toolsLinks = [
+  { href: "/studio", label: "Studio", icon: Wand2 },
+  { href: "/gradient-maker", label: "Gradient Maker", icon: Palette },
+  { href: "/customize", label: "Theme Builder", icon: Paintbrush },
+];
+
 const mobileLinks = [
   ...navLinks,
+  ...toolsLinks.map((t) => ({ href: t.href, label: t.label })),
   { href: "/changelog", label: "Changelog" },
 ];
 
@@ -222,6 +227,40 @@ export default function Navbar({ leftSlot }: NavbarProps = {}) {
                 {link.label}
               </Link>
             ))}
+
+            {/* Tools dropdown */}
+            <div className="group relative">
+              <button
+                className={cn(
+                  "flex items-center gap-1 text-sm transition-colors hover:text-chalk",
+                  toolsLinks.some((t) => isActive(t.href))
+                    ? "text-chalk font-medium"
+                    : "text-blush"
+                )}
+              >
+                Tools
+                <ChevronDown className="h-3 w-3 transition-transform group-hover:rotate-180" />
+              </button>
+              <div className="pointer-events-none absolute left-1/2 top-full -translate-x-1/2 pt-2 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100">
+                <div className="min-w-[180px] overflow-hidden rounded-xl border border-border/60 bg-void/95 p-1.5 shadow-xl backdrop-blur-xl">
+                  {toolsLinks.map((tool) => (
+                    <Link
+                      key={tool.href}
+                      href={tool.href}
+                      className={cn(
+                        "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-white/5 hover:text-chalk",
+                        isActive(tool.href)
+                          ? "text-chalk bg-white/5"
+                          : "text-blush"
+                      )}
+                    >
+                      <tool.icon className="h-3.5 w-3.5" />
+                      {tool.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Right side — desktop */}

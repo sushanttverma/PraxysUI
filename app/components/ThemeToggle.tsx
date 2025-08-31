@@ -1,11 +1,29 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Sun, Moon } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Render a static placeholder until mounted to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <button
+        className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-blush transition-colors hover:border-border-light hover:text-chalk"
+        aria-label="Toggle theme"
+      >
+        <span className="h-4 w-4" />
+      </button>
+    );
+  }
 
   return (
     <button
