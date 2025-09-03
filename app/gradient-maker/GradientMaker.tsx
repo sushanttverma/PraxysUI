@@ -738,8 +738,8 @@ export default function GradientMaker() {
 
                             {/* Export code */}
                             <div className="overflow-hidden rounded-xl border border-border bg-obsidian">
-                                <div className="flex items-center justify-between border-b border-border px-4 py-3">
-                                    <div className="flex items-center gap-1">
+                                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3">
+                                    <div className="flex flex-wrap items-center gap-1">
                                         {formatTabs.map((fmt) => (
                                             <button
                                                 key={fmt.key}
@@ -774,7 +774,7 @@ export default function GradientMaker() {
                                         )}
                                     </button>
                                 </div>
-                                <pre className="max-h-52 overflow-auto p-4 font-mono text-xs leading-relaxed text-blush">
+                                <pre className="max-h-52 overflow-auto whitespace-pre-wrap break-all p-4 font-mono text-xs leading-relaxed text-blush">
                                     <code>{exportOutput}</code>
                                 </pre>
                             </div>
@@ -788,7 +788,7 @@ export default function GradientMaker() {
                             className="space-y-5"
                         >
                             {/* Actions bar */}
-                            <div className="flex gap-2">
+                            <div className="flex flex-wrap gap-2">
                                 <button
                                     onClick={randomize}
                                     className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-ignite/30 bg-ignite/5 px-3 py-2.5 text-xs font-medium text-ignite transition-colors hover:bg-ignite/10"

@@ -311,25 +311,25 @@ export default function ThemeCustomizer() {
       const x = c * (1 - Math.abs(((h / 60) % 2) - 1))
       const m = l - c / 2
       let r = 0, g = 0, b = 0
-      
+
       if (h >= 0 && h < 60) { r = c; g = x; b = 0 }
       else if (h >= 60 && h < 120) { r = x; g = c; b = 0 }
       else if (h >= 120 && h < 180) { r = 0; g = c; b = x }
       else if (h >= 180 && h < 240) { r = 0; g = x; b = c }
       else if (h >= 240 && h < 300) { r = x; g = 0; b = c }
       else { r = c; g = 0; b = x }
-      
+
       const toHex = (n: number) => {
         const hex = Math.round((n + m) * 255).toString(16)
         return hex.length === 1 ? '0' + hex : hex
       }
-      
+
       return `#${toHex(r)}${toHex(g)}${toHex(b)}`
     }
 
     // Generate a base hue and create a harmonious palette
     const baseHue = Math.floor(Math.random() * 360)
-    
+
     if (activeMode === 'dark') {
       // Dark mode palette - dark backgrounds, vibrant accents
       setDarkColors({
@@ -370,8 +370,8 @@ export default function ThemeCustomizer() {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="min-h-screen pt-16">
-        <div className="mx-auto max-w-7xl px-6 py-16">
+      <main id="main-content" className="min-h-screen overflow-x-hidden pt-16">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-16">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -391,13 +391,13 @@ export default function ThemeCustomizer() {
             </p>
           </motion.div>
 
-          <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
+          <div className="grid gap-6 lg:grid-cols-[360px_1fr] lg:gap-8">
             {/* ── Left panel: Controls ── */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className="space-y-6"
+              className="min-w-0 space-y-6"
             >
               {/* Mode toggle */}
               <div className="rounded-xl border border-border bg-obsidian p-4">
@@ -407,21 +407,19 @@ export default function ThemeCustomizer() {
                 <div className="flex rounded-lg border border-border bg-void p-1">
                   <button
                     onClick={() => setActiveMode('dark')}
-                    className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
-                      activeMode === 'dark'
-                        ? 'bg-ignite text-void'
-                        : 'text-blush hover:text-chalk'
-                    }`}
+                    className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${activeMode === 'dark'
+                      ? 'bg-ignite text-void'
+                      : 'text-blush hover:text-chalk'
+                      }`}
                   >
                     Dark Mode
                   </button>
                   <button
                     onClick={() => setActiveMode('light')}
-                    className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
-                      activeMode === 'light'
-                        ? 'bg-ignite text-void'
-                        : 'text-blush hover:text-chalk'
-                    }`}
+                    className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${activeMode === 'light'
+                      ? 'bg-ignite text-void'
+                      : 'text-blush hover:text-chalk'
+                      }`}
                   >
                     Light Mode
                   </button>
@@ -488,7 +486,7 @@ export default function ThemeCustomizer() {
                     </button>
                   ))}
                 </div>
-                
+
                 {/* Random Colors Button */}
                 <button
                   onClick={generateRandomPalette}
@@ -522,7 +520,7 @@ export default function ThemeCustomizer() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="space-y-6"
+              className="min-w-0 space-y-6"
             >
               {/* Live preview */}
               <div
@@ -693,11 +691,10 @@ export default function ThemeCustomizer() {
                       <button
                         key={fmt.key}
                         onClick={() => { setExportFormat(fmt.key); setCopied(false) }}
-                        className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all ${
-                          exportFormat === fmt.key
-                            ? 'bg-ignite/10 text-ignite border border-ignite/20'
-                            : 'text-text-faint hover:text-blush border border-transparent'
-                        }`}
+                        className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all ${exportFormat === fmt.key
+                          ? 'bg-ignite/10 text-ignite border border-ignite/20'
+                          : 'text-text-faint hover:text-blush border border-transparent'
+                          }`}
                       >
                         {fmt.icon}
                         <span className="hidden sm:inline">{fmt.label}</span>
