@@ -10,7 +10,9 @@ export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    // Defer mount state to avoid substitution warning and ensure client-side only rendering
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
   }, []);
 
   // Render a static placeholder until mounted to avoid hydration mismatch

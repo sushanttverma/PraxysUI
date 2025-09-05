@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
     Copy,
     Check,
-    Download,
     Maximize2,
     Minimize2,
     Plus,
@@ -15,7 +14,6 @@ import {
     Sparkles,
     Code,
     Image as ImageIcon,
-    X,
 } from 'lucide-react'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
@@ -683,7 +681,7 @@ export default function GradientMaker() {
                                         </svg>
 
                                         {/* Draggable mesh control points */}
-                                        {blobs.map((blob, index) => {
+                                        {blobs.map((blob) => {
                                             const isActive = activeBlob === blob.id || draggingBlob === blob.id
                                             return (
                                                 <div
