@@ -228,9 +228,7 @@ ${circles}
 
 // ─── Default State ───────────────────────────────────────
 
-function makeDefaultBlobs(): ColorBlob[] {
-    return presets[0].blobs.map((b) => ({ ...b, id: generateId() }))
-}
+
 
 // ─── Export Format Type ──────────────────────────────────
 
@@ -377,8 +375,8 @@ export default function GradientMaker() {
 
     // ── Reset ──
     const handleReset = useCallback(() => {
-        setBlobs(makeDefaultBlobs())
-        setBackground(presets[0].background)
+        setBlobs([])
+        setBackground('#0a0a0a')
         setActiveBlob(null)
     }, [])
 
