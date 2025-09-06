@@ -4,12 +4,12 @@ const entry: ComponentEntry = {
 slug: "flip-text",
 title: "Flip Text",
 description:
-  "Characters flip in one-by-one with a smooth 3D rotation, great for headings and titles.",
+  "Characters flip in with a smooth 3D rotation on mount and on hover, great for headings and titles.",
 category: "text",
 dependencies: ["framer-motion", "clsx", "tailwind-merge"],
 code: `'use client'
 
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
@@ -23,26 +23,44 @@ interface FlipTextProps {
 const FlipText: React.FC<FlipTextProps> = ({
   text,
   className = '',
-  staggerDelay = 0.05,
+  staggerDelay = 0.015,
   duration = 0.5,
 }) => {
+  const [key, setKey] = useState(0)
+
+  const replay = useCallback(() => {
+    setKey((k) => k + 1)
+  }, [])
+
   return (
-<span className={cn('inline-flex overflow-hidden', className)}>
+<span
+  className={cn('inline-flex', className)}
+  onMouseEnter={replay}
+>
   {text.split('').map((char, i) => (
-    <motion.span
-      key={i}
-      className="inline-block"
-      initial={{ rotateX: 90, opacity: 0 }}
-      animate={{ rotateX: 0, opacity: 1 }}
-      transition={{
-        delay: i * staggerDelay,
-        duration,
-        ease: [0.2, 0.65, 0.3, 0.9],
-      }}
-      style={{ transformOrigin: 'bottom', display: 'inline-block' }}
+    <span
+      key={\`\${key}-\${i}\`}
+      className="inline-block [perspective:600px]"
     >
-      {char === ' ' ? '\\u00A0' : char}
-    </motion.span>
+      <motion.span
+        className="inline-block"
+        initial={{ rotateX: -90 }}
+        animate={{ rotateX: 0 }}
+        transition={{
+          delay: i * staggerDelay,
+          duration,
+          ease: [0.2, 0.65, 0.3, 0.9],
+        }}
+        style={{
+          transformOrigin: 'center center',
+          transformStyle: 'preserve-3d',
+          backfaceVisibility: 'hidden',
+          display: 'inline-block',
+        }}
+      >
+        {char === ' ' ? '\\u00A0' : char}
+      </motion.span>
+    </span>
   ))}
 </span>
   )
@@ -75,7 +93,7 @@ props: [
   {
     name: "staggerDelay",
     type: "number",
-    default: "0.05",
+    default: "0.015",
     description: "Delay between each character animation (seconds).",
   },
   {
@@ -88,7 +106,7 @@ props: [
 playground: {
   controls: [
     { name: "text", label: "Text", type: "text", default: "Hello World" },
-    { name: "staggerDelay", label: "Stagger Delay", type: "number", default: 0.05, min: 0.01, max: 0.3, step: 0.01 },
+    { name: "staggerDelay", label: "Stagger Delay", type: "number", default: 0.015, min: 0.005, max: 0.1, step: 0.005 },
     { name: "duration", label: "Duration", type: "number", default: 0.5, min: 0.1, max: 2, step: 0.1 },
   ],
 },
