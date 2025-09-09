@@ -2,6 +2,19 @@
 
 All notable changes to Praxys UI are documented here.
 
+## [1.2.7] — Feb 24, 2026
+
+**Flip Text — Hover Replay & 3D Fix**
+
+Fixed Flip Text component with proper 3D per-character flip animation and hover-to-replay support.
+
+### Fixed
+
+- Flip Text — added per-character 3D rotation with perspective, backface-visibility, and preserve-3d
+- Flip Text — animation now replays on hover via key remount
+- Flip Text — reduced default stagger delay for near-simultaneous character flips
+- Flip Text registry updated with new code and adjusted playground controls
+
 ## [1.2.2] — Feb 15, 2026
 
 **Autocomplete API Fix**
