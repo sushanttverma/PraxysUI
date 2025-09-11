@@ -80,6 +80,7 @@ import fileUpload from "./file-upload";
 import otpInput from "./otp-input";
 import rating from "./rating";
 import autocomplete from "./autocomplete";
+import floatingMenu from "./floating-menu";
 
 // ─── Sidebar structure ───────────────────────────────────
 
@@ -168,6 +169,7 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "otp-input", title: "OTP Input" },
       { slug: "rating", title: "Rating" },
       { slug: "autocomplete", title: "Autocomplete" },
+      { slug: "floating-menu", title: "Floating Menu" },
     ],
   },
 ];
@@ -267,6 +269,7 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "otp-input": otpInput,
   "rating": rating,
   "autocomplete": autocomplete,
+  "floating-menu": floatingMenu,
 };
 
 // Helper: check if a slug is a component page
