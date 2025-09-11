@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { execSync } from "child_process";
 
-const VERSION = "1.2.6";
+const VERSION = "1.2.7";
 
 // ─── Utility file contents ──────────────────────────────
 
@@ -55,6 +55,7 @@ const COMPONENT_LIST = [
   "file-upload",
   "flip-fade-text",
   "flip-text",
+  "floating-menu",
   "folder-preview",
   "glass-dock",
   "glow-border-card",
