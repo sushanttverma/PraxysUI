@@ -7,7 +7,7 @@ export default function NotFound() {
     <div className="flex min-h-screen flex-col bg-void">
       <Navbar />
 
-      <main id="main-content" className="flex flex-1 flex-col items-center justify-center px-6">
+      <main id="main-content" className="flex flex-1 flex-col items-center justify-center px-6 pt-20">
         {/* Glow effects */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 h-[300px] w-[300px] rounded-full bg-ignite/5 blur-[120px]" />
@@ -54,7 +54,7 @@ export default function NotFound() {
 
           {/* Subtle hint */}
           <p className="mt-12 text-xs text-text-faint">
-            Praxys UI &mdash; 69 components, 14 templates, infinite possibilities.
+            Praxys UI &mdash; 70 components, 14 templates, infinite possibilities.
           </p>
         </div>
       </main>

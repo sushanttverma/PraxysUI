@@ -40,7 +40,7 @@ const componentCategories = [
   },
   {
     name: "Navigation & Menus",
-    count: 9,
+    count: 10,
     items: [
       "Spotlight Navbar",
       "Glass Dock",
@@ -51,6 +51,7 @@ const componentCategories = [
       "Tooltip",
       "Command Menu",
       "Breadcrumbs",
+      "Floating Menu",
     ],
   },
   {
@@ -107,7 +108,7 @@ export default function ComponentGrid() {
             transition={{ delay: 0.1 }}
             className="font-pixel text-3xl font-bold text-chalk md:text-5xl"
           >
-            50 Components
+            51 Components
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
