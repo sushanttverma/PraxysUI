@@ -4,11 +4,11 @@ import AnimationStudio from './AnimationStudio'
 export const metadata: Metadata = {
   title: 'Animation Studio | Praxys UI',
   description:
-    'Interactive animation studio - customize animations for any component with real-time preview and code generation.',
+    'Visual CSS animation configurator with live preview, keyframes editor, easing curves, and multi-format export.',
   openGraph: {
     title: 'Animation Studio | Praxys UI',
     description:
-      'Interactive animation studio - customize animations for any component with real-time preview and code generation.',
+      'Visual CSS animation configurator with live preview, keyframes editor, easing curves, and multi-format export.',
   },
 }
 
