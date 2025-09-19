@@ -47,18 +47,17 @@ export default function DocsShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-void">
-      {/* Shared Navbar with sidebar toggle injected on the left */}
-      <Navbar
-        leftSlot={
-          <div className="lg:hidden">
-            <HamburgerButton
-              open={sidebarOpen}
-              onClick={() => setSidebarOpen((prev) => !prev)}
-              label="sidebar"
-            />
-          </div>
-        }
-      />
+      {/* Floating menu navbar */}
+      <Navbar />
+
+      {/* Sidebar toggle — fixed bottom-left on mobile */}
+      <div className="fixed bottom-5 left-5 z-50 lg:hidden">
+        <HamburgerButton
+          open={sidebarOpen}
+          onClick={() => setSidebarOpen((prev) => !prev)}
+          label="sidebar"
+        />
+      </div>
 
       {/* Layout body */}
       <div className="flex min-h-screen pt-16">
