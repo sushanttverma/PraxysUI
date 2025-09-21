@@ -1,18 +1,33 @@
 'use client'
 
-import React, { useRef, useEffect, useCallback, useImperativeHandle, forwardRef, useState } from 'react'
+import React, { useRef, useEffect, useCallback, useImperativeHandle, forwardRef, useState, useMemo, Suspense } from 'react'
 import gsap from 'gsap'
 import {
     PreviewShape, AnimationConfig, SequencerConfig, MotionPathConfig,
     SpringConfig, EasingMode, OnionSkinConfig, GridSnapConfig,
     ComparisonConfig, buildTransformString,
+    isRegistryShape, getRegistrySlug,
 } from '../lib/types'
 import { buildTimeline, buildStaggeredTimelines, buildMotionPathTimeline } from '../lib/gsapEngine'
 import { cubicPointsToString } from '../lib/easing'
 import { springToCSSEasing } from '../lib/spring'
 import { samplePathEvenly } from '../lib/motionPath'
 import { cn } from '@/lib/utils'
+import { componentRegistry } from '@/lib/registry'
+import ErrorBoundary from './ErrorBoundary'
 import CanvasToolbar from './CanvasToolbar'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const componentCache = new Map<string, React.LazyExoticComponent<React.ComponentType<any>>>()
+
+function getOrCreateLazy(slug: string) {
+    if (!componentCache.has(slug)) {
+        const entry = componentRegistry[slug]
+        if (!entry) return null
+        componentCache.set(slug, React.lazy(entry.component))
+    }
+    return componentCache.get(slug)!
+}
 
 export interface PreviewCanvasHandle {
     getTimeline: () => gsap.core.Timeline | null
@@ -41,39 +56,8 @@ interface PreviewCanvasProps {
     onGridSnapChange: (config: GridSnapConfig) => void
     comparison: ComparisonConfig
     activePerspective: number
+    componentProps?: Record<string, unknown>
 }
-
-interface ShapeCategory {
-    label: string
-    shapes: { key: PreviewShape; label: string }[]
-}
-
-const shapeCategories: ShapeCategory[] = [
-    {
-        label: 'Basic',
-        shapes: [
-            { key: 'box', label: 'Box' },
-            { key: 'circle', label: 'Circle' },
-            { key: 'card', label: 'Card' },
-            { key: 'text', label: 'Text' },
-        ],
-    },
-    {
-        label: 'Praxys UI',
-        shapes: [
-            { key: 'button', label: 'Button' },
-            { key: 'input', label: 'Input' },
-            { key: 'toggle', label: 'Toggle' },
-            { key: 'checkbox', label: 'Checkbox' },
-            { key: 'badge', label: 'Badge' },
-            { key: 'tooltip', label: 'Tooltip' },
-            { key: 'toast', label: 'Toast' },
-            { key: 'dock', label: 'Dock' },
-            { key: 'modal', label: 'Modal' },
-            { key: 'stats', label: 'Stats' },
-        ],
-    },
-]
 
 const PreviewCanvas = forwardRef<PreviewCanvasHandle, PreviewCanvasProps>(function PreviewCanvas(
     {
@@ -96,6 +80,7 @@ const PreviewCanvas = forwardRef<PreviewCanvasHandle, PreviewCanvasProps>(functi
         onGridSnapChange,
         comparison,
         activePerspective,
+        componentProps,
     },
     ref,
 ) {
@@ -269,9 +254,52 @@ const PreviewCanvas = forwardRef<PreviewCanvasHandle, PreviewCanvasProps>(functi
         if (tl) tl.timeScale(speed)
     }, [speed])
 
+    const allCategories = useMemo(() => {
+        const basic = {
+            label: 'Basic',
+            shapes: [
+                { key: 'box' as PreviewShape, label: 'Box' },
+                { key: 'circle' as PreviewShape, label: 'Circle' },
+                { key: 'card' as PreviewShape, label: 'Card' },
+                { key: 'text' as PreviewShape, label: 'Text' },
+            ],
+        }
+
+        const grouped: Record<string, { key: PreviewShape; label: string }[]> = {}
+        for (const [slug, entry] of Object.entries(componentRegistry)) {
+            const cat = entry.category
+            if (!grouped[cat]) grouped[cat] = []
+            grouped[cat].push({ key: `registry:${slug}` as PreviewShape, label: entry.title })
+        }
+
+        const order = ['buttons', 'cards', 'text', 'navigation', 'visual', 'media'] as const
+        const registryCats = order
+            .filter(cat => grouped[cat]?.length)
+            .map(cat => ({
+                label: cat.charAt(0).toUpperCase() + cat.slice(1),
+                shapes: grouped[cat],
+            }))
+
+        return [basic, ...registryCats]
+    }, [])
+
     const renderShape = () => {
+        // Registry component rendering
+        const slug = getRegistrySlug(previewShape)
+        if (slug) {
+            const LazyComp = getOrCreateLazy(slug)
+            if (!LazyComp) return <div className="text-xs text-red-400">Component not found</div>
+            return (
+                <Suspense fallback={<div className="w-24 h-24 rounded-xl bg-white/[0.06] animate-pulse" />}>
+                    <ErrorBoundary fallback={<div className="text-xs text-red-400">Preview unavailable</div>}>
+                        <LazyComp {...componentProps} />
+                    </ErrorBoundary>
+                </Suspense>
+            )
+        }
+
+        // Basic shapes
         switch (previewShape) {
-            // ── Basic ──
             case 'box':
                 return <div className="w-24 h-24 rounded-xl" style={{ background: 'linear-gradient(135deg, #E84E2D 0%, #C9958A 50%, #050505 100%)' }} />
             case 'circle':
@@ -288,174 +316,6 @@ const PreviewCanvas = forwardRef<PreviewCanvasHandle, PreviewCanvasProps>(functi
                 )
             case 'text':
                 return <span className="text-4xl font-bold text-chalk select-none">Hello</span>
-
-            // ── Praxys UI Components ──
-            case 'button':
-                return (
-                    <button className="relative overflow-hidden px-6 py-2.5 rounded-lg border border-ignite/30 bg-ignite/10">
-                        <span className="absolute inset-0 rounded-lg" style={{ background: 'linear-gradient(-75deg, transparent 30%, rgba(232,78,45,0.15) 50%, transparent 70%)' }} />
-                        <span className="relative z-10 text-sm font-medium tracking-wide text-chalk flex items-center gap-2">
-                            <svg className="h-4 w-4 text-ignite" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                            Get Started
-                        </span>
-                    </button>
-                )
-
-            case 'input':
-                return (
-                    <div className="w-[260px]">
-                        <div className="relative h-11 rounded-lg">
-                            <div className="absolute inset-0 rounded-lg" style={{ boxShadow: '0 0 0 1.5px rgba(232,78,45,0.6), 0 0 0 4px rgba(232,78,45,0.1)' }} />
-                            <div className="absolute inset-0 rounded-lg bg-obsidian" />
-                            <span className="absolute z-[2] left-3 -top-2 text-[10px] font-medium text-ignite bg-obsidian px-1 rounded-sm">Email</span>
-                            <div className="relative z-[1] h-full flex items-center px-3.5">
-                                <span className="text-sm text-chalk">hello@praxys.design</span>
-                            </div>
-                        </div>
-                    </div>
-                )
-
-            case 'toggle':
-                return (
-                    <div className="flex items-center gap-8">
-                        <div className="flex items-center gap-3">
-                            <div className="relative h-6 w-11 rounded-full border-2 border-border bg-obsidian">
-                                <div className="absolute top-[3px] left-[3px] h-[14px] w-[14px] rounded-full bg-blush shadow-sm" />
-                            </div>
-                            <span className="text-sm font-medium text-blush">Off</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="relative h-6 w-11 rounded-full border-2 border-ignite bg-ignite">
-                                <div className="absolute top-[3px] right-[3px] h-[14px] w-[14px] rounded-full bg-chalk shadow-sm" />
-                            </div>
-                            <span className="text-sm font-medium text-chalk">On</span>
-                        </div>
-                    </div>
-                )
-
-            case 'checkbox':
-                return (
-                    <div className="flex flex-col gap-4">
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-5 w-5 items-center justify-center rounded-md border border-ignite bg-ignite/20">
-                                <svg className="h-3.5 w-3.5 text-ignite" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7.5L5.5 10L11 4" /></svg>
-                            </div>
-                            <span className="text-sm text-chalk">Notifications enabled</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-5 w-5 items-center justify-center rounded-md border border-border bg-obsidian" />
-                            <span className="text-sm text-blush">Marketing emails</span>
-                        </div>
-                    </div>
-                )
-
-            case 'badge':
-                return (
-                    <div className="flex flex-wrap items-center gap-2">
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-ignite/30 bg-ignite/10 px-2.5 py-1 text-xs font-medium text-ignite">
-                            <span className="h-1.5 w-1.5 rounded-full bg-ignite" />New
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/10 px-2.5 py-1 text-xs font-medium text-green-400">
-                            <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" /></svg>Active
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-400">Pending</span>
-                        <span className="inline-flex items-center rounded-full border border-border bg-obsidian px-2.5 py-1 text-xs font-medium text-blush">Draft</span>
-                    </div>
-                )
-
-            case 'tooltip':
-                return (
-                    <div className="flex flex-col items-center gap-1">
-                        <div className="relative rounded-md border border-border bg-obsidian px-3 py-1.5 text-xs text-chalk shadow-lg">
-                            Copy to clipboard
-                            <span className="absolute top-full left-1/2 -translate-x-1/2 h-0 w-0 border-[4px] border-b-transparent border-x-transparent border-t-obsidian" />
-                        </div>
-                        <div className="mt-2 flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-obsidian text-blush">
-                            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" /></svg>
-                        </div>
-                    </div>
-                )
-
-            case 'toast':
-                return (
-                    <div className="flex flex-col gap-2 w-[280px]">
-                        <div className="flex items-center gap-3 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm shadow-lg">
-                            <svg className="h-4 w-4 shrink-0 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14" strokeLinecap="round" /><path d="M22 4L12 14.01l-3-3" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                            <span className="flex-1 text-green-400">Changes saved</span>
-                            <svg className="h-3.5 w-3.5 shrink-0 text-green-400/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" /></svg>
-                        </div>
-                        <div className="flex items-center gap-3 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm shadow-lg">
-                            <svg className="h-4 w-4 shrink-0 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M15 9l-6 6M9 9l6 6" strokeLinecap="round" /></svg>
-                            <span className="flex-1 text-red-400">Upload failed</span>
-                            <svg className="h-3.5 w-3.5 shrink-0 text-red-400/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" /></svg>
-                        </div>
-                    </div>
-                )
-
-            case 'dock':
-                return (
-                    <div className="inline-flex items-end gap-2 rounded-2xl border border-white/[0.06] bg-obsidian/60 px-3 py-2 backdrop-blur-xl shadow-lg">
-                        {[
-                            <svg key="h" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>,
-                            <svg key="s" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>,
-                            <svg key="st" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>,
-                            <svg key="u" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>,
-                            <svg key="g" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" /></svg>,
-                        ].map((icon, i) => (
-                            <div key={i} className="group flex flex-col items-center">
-                                <div className={cn(
-                                    'flex items-center justify-center rounded-xl border p-2.5 transition-colors',
-                                    i === 2
-                                        ? 'border-ignite/30 bg-ignite/10 text-ignite'
-                                        : 'border-white/[0.05] bg-obsidian text-blush'
-                                )} style={{ width: 44, height: 44 }}>
-                                    {icon}
-                                </div>
-                                <div className={cn('mt-1 h-1 w-1 rounded-full', i === 2 ? 'bg-ignite/50' : 'bg-transparent')} />
-                            </div>
-                        ))}
-                    </div>
-                )
-
-            case 'modal':
-                return (
-                    <div className="w-[320px] rounded-xl border border-border bg-obsidian p-5 shadow-xl relative">
-                        <div className="absolute right-3 top-3 rounded-md p-1 text-blush">
-                            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" /></svg>
-                        </div>
-                        <div className="mb-4 pr-6">
-                            <h2 className="text-base font-medium text-chalk">Delete project?</h2>
-                            <p className="mt-1 text-xs text-blush">This action cannot be undone. All data will be permanently removed.</p>
-                        </div>
-                        <div className="flex items-center justify-end gap-2">
-                            <button className="rounded-lg border border-border bg-obsidian px-3 py-1.5 text-xs font-medium text-blush">Cancel</button>
-                            <button className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400">Delete</button>
-                        </div>
-                    </div>
-                )
-
-            case 'stats':
-                return (
-                    <div className="w-[240px] relative overflow-hidden rounded-xl border border-border bg-obsidian p-5">
-                        <div className="pointer-events-none absolute inset-x-0 top-0 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(232,78,45,0.2), transparent)' }} />
-                        <div className="flex items-start justify-between gap-3">
-                            <div className="min-w-0 flex-1">
-                                <p className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-text-faint">Revenue</p>
-                                <p className="text-3xl font-bold text-chalk leading-tight">
-                                    <span className="text-lg font-medium text-text-faint">$</span>48.2<span className="text-lg font-medium text-text-faint">k</span>
-                                </p>
-                                <div className="mt-2.5 inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
-                                    <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 15l-6-6-6 6" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                                    +12.5%
-                                </div>
-                            </div>
-                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-ignite/20 bg-ignite/10 text-ignite">
-                                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" /></svg>
-                            </div>
-                        </div>
-                    </div>
-                )
-
             default:
                 return <div className="w-24 h-24 rounded-xl bg-ignite" />
         }
@@ -579,13 +439,13 @@ const PreviewCanvas = forwardRef<PreviewCanvasHandle, PreviewCanvasProps>(functi
             {/* Shape selector */}
             {!hideShapeSelector && (
                 <div className="flex flex-col gap-2 px-4 pt-4">
-                    <div className="flex items-center gap-3">
-                        {shapeCategories.map((cat, i) => (
+                    <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-0.5">
+                        {allCategories.map((cat, i) => (
                             <button
                                 key={cat.label}
                                 onClick={() => setActiveCat(i)}
                                 className={cn(
-                                    'text-[10px] font-semibold uppercase tracking-wider transition-colors',
+                                    'text-[10px] font-semibold uppercase tracking-wider transition-colors whitespace-nowrap',
                                     activeCat === i
                                         ? canvasTheme === 'light' ? 'text-gray-900' : 'text-chalk'
                                         : canvasTheme === 'light' ? 'text-gray-400 hover:text-gray-600' : 'text-white/25 hover:text-white/40'
@@ -595,8 +455,8 @@ const PreviewCanvas = forwardRef<PreviewCanvasHandle, PreviewCanvasProps>(functi
                             </button>
                         ))}
                     </div>
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                        {shapeCategories[activeCat].shapes.map(s => (
+                    <div className="flex items-center gap-1.5 flex-wrap max-h-[72px] overflow-y-auto scrollbar-none">
+                        {allCategories[activeCat]?.shapes.map(s => (
                             <button
                                 key={s.key}
                                 onClick={() => onShapeChange(s.key)}
