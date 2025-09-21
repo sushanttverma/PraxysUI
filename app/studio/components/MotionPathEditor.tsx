@@ -3,9 +3,8 @@
 import React, { useRef, useCallback, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { MotionPathConfig, PathPoint } from '../lib/types'
+import { MotionPathConfig } from '../lib/types'
 import { pointsToSvgD, getTemplatePath } from '../lib/motionPath'
-import { cn } from '@/lib/utils'
 
 interface MotionPathEditorProps {
     config: MotionPathConfig

@@ -4,7 +4,6 @@ import React, { useState, useCallback } from 'react'
 import { X, Upload, Check, AlertCircle } from 'lucide-react'
 import { AnimationKeyframe, AnimationChain, ChainPhase } from '../lib/types'
 import { parseCSSKeyframes } from '../lib/cssParser'
-import { cn } from '@/lib/utils'
 
 interface ImportModalProps {
     isOpen: boolean

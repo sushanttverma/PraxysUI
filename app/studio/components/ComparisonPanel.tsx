@@ -3,7 +3,7 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, ChevronUp, Columns2 } from 'lucide-react'
-import { ComparisonConfig, AnimationConfig } from '../lib/types'
+import { ComparisonConfig } from '../lib/types'
 import { presets } from '../lib/presets'
 import { cn } from '@/lib/utils'
 

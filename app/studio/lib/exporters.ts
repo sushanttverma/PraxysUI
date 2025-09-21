@@ -6,7 +6,6 @@ import {
     MotionPathConfig,
     PathPoint,
     SpringConfig,
-    EasingMode,
 } from './types'
 import { easingToCubicPoints } from './easing'
 
@@ -14,6 +13,7 @@ export function generateCSS(
     config: AnimationConfig,
     sequencer?: SequencerConfig,
     motionPath?: MotionPathConfig,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     springConfig?: SpringConfig,
 ): string {
     const lines: string[] = []

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { AnimationPreset } from '../lib/types'
-import { presetCategories, PresetCategory } from '../lib/presets'
+import { presetCategories } from '../lib/presets'
 import { cn } from '@/lib/utils'
 
 interface PresetsPanelProps {
