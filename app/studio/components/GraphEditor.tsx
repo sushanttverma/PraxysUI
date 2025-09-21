@@ -187,7 +187,7 @@ export default function GraphEditor({
                                     return (
                                         <g key={prop.key}>
                                             <path d={d} fill="none" stroke={prop.color} strokeWidth={1.5} opacity={0.8} />
-                                            {sortedKfs.map((kf, sortedIdx) => {
+                                            {sortedKfs.map((kf) => {
                                                 const realIdx = keyframes.indexOf(kf)
                                                 const norm = normalizeValue((kf[prop.key] as number) ?? prop.defaultVal, prop)
                                                 const x = PAD + kf.offset * (W - 2 * PAD)

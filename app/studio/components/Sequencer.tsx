@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { SequencerConfig, StaggerDirection } from '../lib/types'
@@ -21,24 +21,29 @@ const directions: { key: StaggerDirection; label: string }[] = [
 ]
 
 export default function Sequencer({ config, onChange, expanded, onToggle }: SequencerProps) {
-    const computeDelays = (): number[] => {
-        const delays: number[] = []
+    // Stable random seeds stored in state (generated once per element count change)
+    const [randomSeeds] = useState(() => {
+        const seeds: number[] = []
+        for (let i = 0; i < 32; i++) seeds.push(Math.random())
+        return seeds
+    })
+
+    const delays = useMemo(() => {
+        const result: number[] = []
         for (let i = 0; i < config.elementCount; i++) {
             switch (config.staggerDirection) {
-                case 'forward': delays.push(i * config.staggerDelay); break
-                case 'reverse': delays.push((config.elementCount - 1 - i) * config.staggerDelay); break
+                case 'forward': result.push(i * config.staggerDelay); break
+                case 'reverse': result.push((config.elementCount - 1 - i) * config.staggerDelay); break
                 case 'center': {
                     const mid = (config.elementCount - 1) / 2
-                    delays.push(Math.abs(i - mid) * config.staggerDelay)
+                    result.push(Math.abs(i - mid) * config.staggerDelay)
                     break
                 }
-                case 'random': delays.push(Math.random() * (config.elementCount - 1) * config.staggerDelay); break
+                case 'random': result.push((randomSeeds[i % randomSeeds.length]) * (config.elementCount - 1) * config.staggerDelay); break
             }
         }
-        return delays
-    }
-
-    const delays = computeDelays()
+        return result
+    }, [config.elementCount, config.staggerDelay, config.staggerDirection, randomSeeds])
     const maxDelay = Math.max(...delays, 0.001)
 
     return (

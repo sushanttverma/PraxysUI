@@ -208,7 +208,7 @@ const PreviewCanvas = forwardRef<PreviewCanvasHandle, PreviewCanvasProps>(functi
                 tlRef.current = null
             }
         }
-    }, [config, getEffectiveEasing, sequencer, motionPath, speed, loop])
+    }, [config, getEffectiveEasing, sequencer, motionPath, speed, loop, playing, progressRef])
 
     // Build comparison B timeline
     useEffect(() => {
@@ -467,7 +467,7 @@ const PreviewCanvas = forwardRef<PreviewCanvasHandle, PreviewCanvasProps>(functi
         const sorted = [...config.keyframes].sort((a, b) => a.offset - b.offset)
         const ghosts = sorted.slice(0, 8)
 
-        return ghosts.map((kf, i) => (
+        return ghosts.map((kf) => (
             <div
                 key={`ghost-${kf.id}`}
                 className="absolute pointer-events-none"

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react'
+import React, { useState, useMemo, useCallback, useRef } from 'react'
 import {
     RotateCcw,
     Play,
@@ -34,7 +34,7 @@ import {
     makeDefaultChain,
 } from './lib/types'
 import { presets } from './lib/presets'
-import { easingToCubicPoints, cubicPointsToString } from './lib/easing'
+import { cubicPointsToString } from './lib/easing'
 import { springToCSSEasing } from './lib/spring'
 import {
     generateCSS, generateFramerMotion, generateTailwind,
@@ -61,19 +61,30 @@ import ChainPanel from './components/ChainPanel'
 import ComparisonPanel from './components/ComparisonPanel'
 import ImportModal from './components/ImportModal'
 
+function getInitialUrlState() {
+    if (typeof window === 'undefined') return null
+    const hash = window.location.hash
+    if (!hash) return null
+    const state = decodeState(hash)
+    if (state) window.history.replaceState(null, '', window.location.pathname)
+    return state
+}
+
+const _cachedUrlState = typeof window !== 'undefined' ? getInitialUrlState() : null
+
 export default function AnimationStudio() {
     // ── Core state ──
-    const [config, setConfig] = useState<AnimationConfig>(presets[2].config)
+    const [config, setConfig] = useState<AnimationConfig>(_cachedUrlState?.config ?? presets[2].config)
     const [previewShape, setPreviewShape] = useState<PreviewShape>('box')
     const [playing, setPlaying] = useState(true)
     const [loop, setLoop] = useState(false)
     const [speed, setSpeed] = useState(1)
-    const [exportFormat, setExportFormat] = useState<ExportFormat>('css')
+    const [exportFormat, setExportFormat] = useState<ExportFormat>((_cachedUrlState?.exportFormat as ExportFormat) ?? 'css')
     const [activeKeyframeIdx, setActiveKeyframeIdx] = useState(0)
     const [activePresetName, setActivePresetName] = useState<string | null>('slideUp')
 
     // ── Easing state ──
-    const [easingMode, setEasingMode] = useState<EasingMode>('named')
+    const [easingMode, setEasingMode] = useState<EasingMode>((_cachedUrlState?.easingMode as EasingMode) ?? 'named')
     const [controlPoints, setControlPoints] = useState<[number, number, number, number]>([0.4, 0, 0.2, 1])
     const [springConfig, setSpringConfig] = useState<SpringConfig>({
         mass: 1, stiffness: 100, damping: 10, velocity: 0,
@@ -99,13 +110,13 @@ export default function AnimationStudio() {
     const [motionPathExpanded, setMotionPathExpanded] = useState(false)
 
     // ── New feature state ──
-    const [chain, setChain] = useState<AnimationChain>(makeDefaultChain(presets[2].config))
+    const [chain, setChain] = useState<AnimationChain>(_cachedUrlState?.chain ?? makeDefaultChain(presets[2].config))
     const [chainExpanded, setChainExpanded] = useState(false)
 
-    const [onionSkin, setOnionSkin] = useState<OnionSkinConfig>({ enabled: false, opacity: 0.15 })
-    const [gridSnap, setGridSnap] = useState<GridSnapConfig>({ enabled: false, size: 24 })
+    const [onionSkin, setOnionSkin] = useState<OnionSkinConfig>(_cachedUrlState?.onionSkin ?? { enabled: false, opacity: 0.15 })
+    const [gridSnap, setGridSnap] = useState<GridSnapConfig>(_cachedUrlState?.gridSnap ?? { enabled: false, size: 24 })
     const [showImportModal, setShowImportModal] = useState(false)
-    const [comparison, setComparison] = useState<ComparisonConfig>({
+    const [comparison, setComparison] = useState<ComparisonConfig>(_cachedUrlState?.comparison ?? {
         enabled: false,
         configB: presets[0].config,
         easingB: 'ease',
@@ -158,26 +169,6 @@ export default function AnimationStudio() {
         }
     }, [exportConfig, exportFormat, sequencer, motionPath, springConfig, easingMode])
 
-    // ── URL state decode on mount ──
-    useEffect(() => {
-        if (typeof window === 'undefined') return
-        const hash = window.location.hash
-        if (!hash) return
-        const state = decodeState(hash)
-        if (!state) return
-
-        if (state.config) setConfig(state.config)
-        if (state.chain) setChain(state.chain)
-        if (state.gridSnap) setGridSnap(state.gridSnap)
-        if (state.onionSkin) setOnionSkin(state.onionSkin)
-
-        if (state.comparison) setComparison(state.comparison)
-        if (state.easingMode) setEasingMode(state.easingMode as EasingMode)
-        if (state.exportFormat) setExportFormat(state.exportFormat as ExportFormat)
-
-        // Clear hash after restore
-        window.history.replaceState(null, '', window.location.pathname)
-    }, [])
 
     // ── Handlers ──
     const setActiveConfig = useCallback((updates: Partial<AnimationConfig>) => {

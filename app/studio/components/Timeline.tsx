@@ -2,7 +2,7 @@
 
 import React, { useRef, useCallback, useEffect, useState } from 'react'
 import { X } from 'lucide-react'
-import { AnimationKeyframe, AnimationChain, makeKeyframe } from '../lib/types'
+import { AnimationKeyframe, AnimationChain } from '../lib/types'
 import { cn } from '@/lib/utils'
 
 const EASING_OPTIONS = [
@@ -29,6 +29,7 @@ export default function Timeline({
     keyframes,
     activeKeyframeIdx,
     progressRef,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     playing,
     onSelectKeyframe,
     onUpdateKeyframeOffset,
@@ -229,7 +230,7 @@ export default function Timeline({
                 })}
 
                 {/* Keyframe diamonds */}
-                {sortedKeyframes.map((kf, sortedIdx) => {
+                {sortedKeyframes.map((kf) => {
                     const realIdx = keyframes.indexOf(kf)
                     const isActive = activeKeyframeIdx === realIdx
                     const isEdge = kf.offset === 0 || kf.offset === 1

@@ -17,6 +17,28 @@ import {
 import Navbar from '@/app/components/Navbar'
 import { cn } from '@/lib/utils'
 
+// ─── Slider ──────────────────────────────────────────────
+
+function Slider({ label, value, min, max, step = 1, unit = '', onChange }: {
+    label: string; value: number; min: number; max: number; step?: number; unit?: string;
+    onChange: (v: number) => void
+}) {
+    return (
+        <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-xs">
+                <span className="text-blush">{label}</span>
+                <span className="text-chalk font-mono">{value}{unit}</span>
+            </div>
+            <input
+                type="range"
+                min={min} max={max} step={step} value={value}
+                onChange={e => onChange(Number(e.target.value))}
+                className="slider-thumb w-full"
+            />
+        </div>
+    )
+}
+
 // ─── Types ───────────────────────────────────────────────
 
 interface GlassConfig {
@@ -254,25 +276,6 @@ export default function GlassGenerator() {
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
     }, [exportOutput])
-
-    // ── Slider component ──
-    const Slider = ({ label, value, min, max, step = 1, unit = '', onChange }: {
-        label: string; value: number; min: number; max: number; step?: number; unit?: string;
-        onChange: (v: number) => void
-    }) => (
-        <div className="space-y-1.5">
-            <div className="flex items-center justify-between text-xs">
-                <span className="text-blush">{label}</span>
-                <span className="text-chalk font-mono">{value}{unit}</span>
-            </div>
-            <input
-                type="range"
-                min={min} max={max} step={step} value={value}
-                onChange={e => onChange(Number(e.target.value))}
-                className="slider-thumb w-full"
-            />
-        </div>
-    )
 
     const formatTabs: { key: ExportFormat; label: string }[] = [
         { key: 'css', label: 'CSS' },
