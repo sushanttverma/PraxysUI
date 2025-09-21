@@ -202,18 +202,31 @@ export function generateTailwind(
     return lines.join('\n')
 }
 
+function slugToPascalCase(slug: string): string {
+    return slug.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('')
+}
+
 export function generateReactComponent(
     config: AnimationConfig,
     easingMode?: string,
     springConfig?: SpringConfig,
+    componentSlug?: string,
 ): string {
     const kfs = config.keyframes
     const lines: string[] = []
     lines.push(`'use client'`)
     lines.push(``)
     lines.push(`import { motion } from 'framer-motion'`)
+
+    if (componentSlug) {
+        const componentName = slugToPascalCase(componentSlug)
+        lines.push(`import ${componentName} from '@/app/components/ui/${componentSlug}'`)
+    }
+
     lines.push(``)
-    lines.push(`export default function PraxysAnimation({ children }: { children?: React.ReactNode }) {`)
+
+    const funcName = componentSlug ? `Animated${slugToPascalCase(componentSlug)}` : 'PraxysAnimation'
+    lines.push(`export default function ${funcName}(${componentSlug ? '' : '{ children }: { children?: React.ReactNode }'}) {`)
 
     // Build animate object
     const keys = ['translateX', 'translateY', 'scale', 'rotate', 'skewX', 'skewY', 'opacity', 'rotateX', 'rotateY'] as const
@@ -263,7 +276,12 @@ export function generateReactComponent(
     lines.push(`      animate={${JSON.stringify(animateProps)}}`)
     lines.push(`      transition={${transitionStr}}`)
     lines.push(`    >`)
-    lines.push(`      {children}`)
+    if (componentSlug) {
+        const componentName = slugToPascalCase(componentSlug)
+        lines.push(`      <${componentName} />`)
+    } else {
+        lines.push(`      {children}`)
+    }
     lines.push(`    </motion.div>`)
     lines.push(`  )`)
     lines.push(`}`)

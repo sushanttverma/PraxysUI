@@ -9,6 +9,7 @@ import {
     Layers,
     Link as LinkIcon,
     Upload,
+    Code,
 } from 'lucide-react'
 import Navbar from '@/app/components/Navbar'
 import { cn } from '@/lib/utils'
@@ -32,7 +33,9 @@ import {
     ChainPhase,
     makeKeyframe,
     makeDefaultChain,
+    getRegistrySlug,
 } from './lib/types'
+import { componentRegistry } from '@/lib/registry'
 import { presets } from './lib/presets'
 import { cubicPointsToString } from './lib/easing'
 import { springToCSSEasing } from './lib/spring'
@@ -60,6 +63,7 @@ import ChainPanel from './components/ChainPanel'
 
 import ComparisonPanel from './components/ComparisonPanel'
 import ImportModal from './components/ImportModal'
+import ComponentPropsPanel from './components/ComponentPropsPanel'
 
 function getInitialUrlState() {
     if (typeof window === 'undefined') return null
@@ -76,6 +80,7 @@ export default function AnimationStudio() {
     // ── Core state ──
     const [config, setConfig] = useState<AnimationConfig>(_cachedUrlState?.config ?? presets[2].config)
     const [previewShape, setPreviewShape] = useState<PreviewShape>('box')
+    const [componentProps, setComponentProps] = useState<Record<string, unknown>>({})
     const [playing, setPlaying] = useState(true)
     const [loop, setLoop] = useState(false)
     const [speed, setSpeed] = useState(1)
@@ -116,6 +121,7 @@ export default function AnimationStudio() {
     const [onionSkin, setOnionSkin] = useState<OnionSkinConfig>(_cachedUrlState?.onionSkin ?? { enabled: false, opacity: 0.15 })
     const [gridSnap, setGridSnap] = useState<GridSnapConfig>(_cachedUrlState?.gridSnap ?? { enabled: false, size: 24 })
     const [showImportModal, setShowImportModal] = useState(false)
+    const [showCodeModal, setShowCodeModal] = useState(false)
     const [comparison, setComparison] = useState<ComparisonConfig>(_cachedUrlState?.comparison ?? {
         enabled: false,
         configB: presets[0].config,
@@ -163,11 +169,11 @@ export default function AnimationStudio() {
             case 'css': return generateCSS(exportConfig, seq, mp, sc)
             case 'framer': return generateFramerMotion(exportConfig, seq, mp, sc, easingMode)
             case 'tailwind': return generateTailwind(exportConfig, seq)
-            case 'react-component': return generateReactComponent(exportConfig, easingMode, sc)
+            case 'react-component': return generateReactComponent(exportConfig, easingMode, sc, getRegistrySlug(previewShape) ?? undefined)
             case 'gsap': return generateGSAP(exportConfig, sc, easingMode)
             case 'lottie': return generateLottie(exportConfig)
         }
-    }, [exportConfig, exportFormat, sequencer, motionPath, springConfig, easingMode])
+    }, [exportConfig, exportFormat, sequencer, motionPath, springConfig, easingMode, previewShape])
 
 
     // ── Handlers ──
@@ -382,6 +388,22 @@ export default function AnimationStudio() {
         setActivePresetName(null)
     }, [])
 
+    const handleShapeChange = useCallback((shape: PreviewShape) => {
+        setPreviewShape(shape)
+        const slug = getRegistrySlug(shape)
+        if (!slug) { setComponentProps({}); return }
+        const entry = componentRegistry[slug]
+        if (!entry?.playground) { setComponentProps({}); return }
+        const defaults: Record<string, unknown> = { ...(entry.playground.defaults ?? {}) }
+        for (const control of entry.playground.controls) {
+            if (!(control.name in defaults)) defaults[control.name] = control.default
+        }
+        if (entry.props.some(p => p.name === 'onChange')) defaults.onChange = () => {}
+        if (entry.props.some(p => p.name === 'onClose')) defaults.onClose = () => {}
+        if (entry.props.some(p => p.name === 'open')) defaults.open = true
+        setComponentProps(defaults)
+    }, [])
+
     const handleComparisonChange = useCallback((cfg: ComparisonConfig) => {
         setComparison(cfg)
     }, [])
@@ -414,6 +436,12 @@ export default function AnimationStudio() {
                             </p>
                         </div>
                         <div className="flex flex-wrap gap-2">
+                            <button
+                                onClick={() => setShowCodeModal(true)}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-ignite/20 bg-ignite/[0.08] text-xs font-medium text-ignite hover:bg-ignite/[0.14] hover:border-ignite/30 backdrop-blur-sm transition-all duration-200"
+                            >
+                                <Code className="h-3.5 w-3.5" /> Get Code
+                            </button>
                             <button
                                 onClick={handleShare}
                                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-xs font-medium text-white/50 hover:text-white/80 hover:bg-white/[0.08] hover:border-white/[0.14] backdrop-blur-sm transition-all duration-200"
@@ -480,7 +508,7 @@ export default function AnimationStudio() {
                                 sequencer={sequencer}
                                 motionPath={motionPath}
                                 progressRef={progressRef}
-                                onShapeChange={setPreviewShape}
+                                onShapeChange={handleShapeChange}
                                 hideShapeSelector={isFullscreen}
                                 onionSkin={onionSkin}
                                 onOnionSkinChange={setOnionSkin}
@@ -489,6 +517,7 @@ export default function AnimationStudio() {
 
                                 comparison={comparison}
                                 activePerspective={activePerspective}
+                                componentProps={componentProps}
                             />
 
                             {/* Timeline */}
@@ -541,7 +570,16 @@ export default function AnimationStudio() {
                                 <PresetsPanel
                                     activePresetName={activePresetName}
                                     onApplyPreset={applyPreset}
+                                    previewShape={previewShape}
                                 />
+
+                                {getRegistrySlug(previewShape) && componentRegistry[getRegistrySlug(previewShape)!]?.playground && (
+                                    <ComponentPropsPanel
+                                        slug={getRegistrySlug(previewShape)!}
+                                        values={componentProps}
+                                        onChange={setComponentProps}
+                                    />
+                                )}
 
                                 <KeyframePanel
                                     keyframes={activeConfig.keyframes}
@@ -606,11 +644,6 @@ export default function AnimationStudio() {
                                     onToggle={() => setComparisonExpanded(e => !e)}
                                 />
 
-                                <ExportPanel
-                                    exportOutput={exportOutput}
-                                    exportFormat={exportFormat}
-                                    onFormatChange={setExportFormat}
-                                />
                             </div>
                         </div>
                     </div>
@@ -621,6 +654,16 @@ export default function AnimationStudio() {
             <FullscreenOverlay
                 isOpen={isFullscreen}
                 onClose={() => setIsFullscreen(false)}
+            />
+
+            {/* Get Code Modal */}
+            <ExportPanel
+                isOpen={showCodeModal}
+                onClose={() => setShowCodeModal(false)}
+                exportOutput={exportOutput}
+                exportFormat={exportFormat}
+                onFormatChange={setExportFormat}
+                previewShape={previewShape}
             />
 
             {/* Import CSS Modal */}

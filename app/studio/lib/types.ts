@@ -24,11 +24,16 @@ export interface AnimationConfig {
     fillMode: 'none' | 'forwards' | 'backwards' | 'both'
 }
 
-export type PreviewShape =
-    | 'box' | 'circle' | 'card' | 'text'
-    | 'button' | 'toggle' | 'badge' | 'tooltip'
-    | 'input' | 'checkbox' | 'toast' | 'dock'
-    | 'modal' | 'stats'
+export type BasicShape = 'box' | 'circle' | 'card' | 'text'
+export type PreviewShape = BasicShape | `registry:${string}`
+
+export function isRegistryShape(shape: PreviewShape): shape is `registry:${string}` {
+    return typeof shape === 'string' && shape.startsWith('registry:')
+}
+
+export function getRegistrySlug(shape: PreviewShape): string | null {
+    return isRegistryShape(shape) ? shape.slice(9) : null
+}
 export type ExportFormat = 'css' | 'framer' | 'tailwind' | 'react-component' | 'gsap' | 'lottie'
 export type EasingMode = 'named' | 'cubic-bezier' | 'spring'
 export type StaggerDirection = 'forward' | 'reverse' | 'center' | 'random'
