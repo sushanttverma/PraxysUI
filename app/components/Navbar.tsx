@@ -68,7 +68,7 @@ interface NavItem {
 
 const pageItems: NavItem[] = [
   {
-    href: "/docs/components-overview",
+    href: "/components",
     label: "Components",
     icon: <Layout className="h-4 w-4" />,
     description: "Browse 70+ components",
