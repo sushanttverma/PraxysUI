@@ -178,7 +178,7 @@ const AnimatedTextarea: React.FC<AnimatedTextareaProps> = ({
             animate={{
               scale: isNearLimit ? [1, 1.05, 1] : 1,
             }}
-            transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+            transition={{ type: 'tween', duration: 0.25, ease: 'easeInOut' }}
           >
             {charCount}/{maxLength}
           </motion.span>

@@ -69,7 +69,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
           animate={{
             scale: checked ? [1, 1.15, 1] : 1,
           }}
-          transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+          transition={{ type: 'tween', duration: 0.25, ease: 'easeInOut' }}
         >
           <AnimatePresence>
             {checked && (

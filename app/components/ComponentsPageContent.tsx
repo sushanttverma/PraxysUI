@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, Suspense } from "react";
+import React, { useState, useMemo, useRef, useEffect, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import {
   Search,
@@ -100,15 +100,44 @@ function DemoSkeleton() {
   );
 }
 
+// ─── Viewport-aware wrapper ───────────────────────────────
+
+function useInView(rootMargin = "200px") {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [rootMargin]);
+
+  return { ref, visible };
+}
+
 // ─── Component card ───────────────────────────────────────
 
 function ComponentCard({ entry }: { entry: ComponentEntry }) {
   const router = useRouter();
   const cat = categoryMap[entry.category];
+  const { ref, visible } = useInView();
   const LazyDemo = getLazyDemo(entry.slug, entry.demo as () => Promise<{ default: React.ComponentType<any> }>);
 
   return (
     <div
+      ref={ref}
       role="button"
       tabIndex={0}
       onClick={() => router.push(`/docs/${entry.slug}`)}
@@ -122,11 +151,15 @@ function ComponentCard({ entry }: { entry: ComponentEntry }) {
     >
       {/* Live demo area */}
       <div className="relative h-44 overflow-hidden rounded-t-2xl border-b border-border/50 bg-void/50 p-4 flex items-center justify-center">
-        <Suspense fallback={<DemoSkeleton />}>
-          <div className="pointer-events-none flex items-center justify-center [&>*]:pointer-events-auto">
-            <LazyDemo />
-          </div>
-        </Suspense>
+        {visible ? (
+          <Suspense fallback={<DemoSkeleton />}>
+            <div className="pointer-events-none flex items-center justify-center">
+              <LazyDemo />
+            </div>
+          </Suspense>
+        ) : (
+          <DemoSkeleton />
+        )}
 
         {/* Hover overlay */}
         <div className="absolute inset-0 flex items-center justify-center bg-void/0 opacity-0 transition-all duration-300 group-hover:bg-void/40 group-hover:opacity-100 pointer-events-none">
