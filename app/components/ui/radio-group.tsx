@@ -147,7 +147,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
               animate={{
                 scale: isSelected ? [1, 1.12, 1] : 1,
               }}
-              transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+              transition={{ type: 'tween', duration: 0.25, ease: 'easeInOut' }}
             >
               <AnimatePresence>
                 {isSelected && (
