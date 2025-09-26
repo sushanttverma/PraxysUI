@@ -164,7 +164,7 @@ export default function ComponentGrid() {
           className="mt-16 text-center"
         >
           <Link
-            href="/docs/components-overview"
+            href="/components"
             className="group inline-flex items-center gap-2 text-sm font-medium text-ignite transition-colors hover:text-blush"
           >
             View all components

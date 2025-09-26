@@ -92,7 +92,7 @@ export default function IntroductionPage() {
             <span>
               Browse{" "}
               <Link
-                href="/docs/components-overview"
+                href="/components"
                 className="text-ignite hover:underline"
               >
                 components
