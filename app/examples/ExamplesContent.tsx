@@ -1070,7 +1070,7 @@ export default function ExamplesContent() {
           </p>
           <div className="flex items-center justify-center gap-4">
             <Link
-              href="/docs/components-overview"
+              href="/components"
               className="rounded-lg bg-ignite px-5 py-2.5 text-sm font-medium text-void transition-opacity hover:opacity-90"
             >
               Browse Components

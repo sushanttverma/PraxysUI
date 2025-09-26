@@ -148,7 +148,7 @@ export default async function DocsSlugPage({
           <Breadcrumbs
             items={[
               { label: "Docs", href: "/docs" },
-              { label: "Components", href: "/docs/components-overview" },
+              { label: "Components", href: "/components" },
               { label: entry.title },
             ]}
           />

@@ -5,7 +5,7 @@ const footerLinks = [
   {
     title: "Product",
     links: [
-      { label: "Components", href: "/docs/components-overview" },
+      { label: "Components", href: "/components" },
       { label: "Templates", href: "/templates" },
       { label: "Customize", href: "/customize" },
       { label: "Examples", href: "/examples" },
