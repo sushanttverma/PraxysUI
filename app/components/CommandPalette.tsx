@@ -20,14 +20,16 @@ const searchItems: SearchItem[] = [
   { slug: 'customize', title: 'Theme Customizer', group: 'Pages', href: '/customize' },
   { slug: 'templates', title: 'Templates', group: 'Pages', href: '/templates' },
   { slug: 'changelog', title: 'Changelog', group: 'Pages', href: '/changelog' },
-  // All docs/component pages
+  // All component pages
   ...sidebarGroups.flatMap((group) =>
-    group.items.map((item) => ({
-      slug: item.slug,
-      title: item.title,
-      group: group.title,
-      href: item.slug === 'introduction' ? '/docs' : `/docs/${item.slug}`,
-    }))
+    group.items
+      .filter((item) => item.slug !== 'introduction')
+      .map((item) => ({
+        slug: item.slug,
+        title: item.title,
+        group: group.title,
+        href: `/components/${item.slug}`,
+      }))
   ),
 ]
 

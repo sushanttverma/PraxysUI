@@ -20,8 +20,10 @@ import Footer from "./Footer";
 
 // ─── Lazy demo cache ──────────────────────────────────────
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const demoCache = new Map<string, React.LazyExoticComponent<React.ComponentType<any>>>();
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getLazyDemo(slug: string, loader: () => Promise<{ default: React.ComponentType<any> }>) {
   if (!demoCache.has(slug)) {
     demoCache.set(slug, React.lazy(loader));
@@ -133,18 +135,19 @@ function ComponentCard({ entry }: { entry: ComponentEntry }) {
   const router = useRouter();
   const cat = categoryMap[entry.category];
   const { ref, visible } = useInView();
-  const LazyDemo = getLazyDemo(entry.slug, entry.demo as () => Promise<{ default: React.ComponentType<any> }>);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [LazyDemo] = useState(() => getLazyDemo(entry.slug, entry.demo as () => Promise<{ default: React.ComponentType<any> }>));
 
   return (
     <div
       ref={ref}
       role="button"
       tabIndex={0}
-      onClick={() => router.push(`/docs/${entry.slug}`)}
+      onClick={() => router.push(`/components/${entry.slug}`)}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          router.push(`/docs/${entry.slug}`);
+          router.push(`/components/${entry.slug}`);
         }
       }}
       className="card-glow group flex flex-col rounded-2xl border border-border bg-obsidian transition-all hover:border-border-light cursor-pointer"

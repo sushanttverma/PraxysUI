@@ -39,10 +39,10 @@ export default function NotFound() {
               Go home
             </Link>
             <Link
-              href="/docs"
+              href="/components"
               className="inline-flex h-10 items-center gap-2 rounded-lg border border-border px-5 text-sm font-medium text-blush transition-colors hover:border-border-light hover:text-chalk"
             >
-              Browse docs
+              Browse components
             </Link>
             <Link
               href="/templates"

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Copy, Check, Code, FileCode2, Package, Terminal, X } from 'lucide-react'
 import { ExportFormat, PreviewShape, getRegistrySlug } from '../lib/types'
@@ -65,11 +65,16 @@ export default function ExportPanel({ isOpen, onClose, exportOutput, exportForma
     const entry = slug ? componentRegistry[slug] : null
 
     // Reset to animation view when opening, or component view if a component is selected
+    const prevIsOpen = useRef(isOpen)
     useEffect(() => {
-        if (isOpen) {
-            setViewMode(entry ? 'component' : 'animation')
-            setActiveCodeTab('source')
+        if (isOpen && !prevIsOpen.current) {
+            // Defer state updates to avoid synchronous setState in effect
+            queueMicrotask(() => {
+                setViewMode(entry ? 'component' : 'animation')
+                setActiveCodeTab('source')
+            })
         }
+        prevIsOpen.current = isOpen
     }, [isOpen, entry])
 
     // Close on Escape

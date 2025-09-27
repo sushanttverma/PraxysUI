@@ -41,10 +41,10 @@ export default function CTA() {
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link
-              href="/docs"
+              href="/components/install"
               className="flex h-12 items-center rounded-xl border border-border px-7 text-sm font-medium text-blush transition-colors hover:border-border-light hover:text-chalk"
             >
-              Read the Docs
+              Installation
             </Link>
           </div>
         </motion.div>

@@ -6,7 +6,7 @@ import {
     PreviewShape, AnimationConfig, SequencerConfig, MotionPathConfig,
     SpringConfig, EasingMode, OnionSkinConfig, GridSnapConfig,
     ComparisonConfig, buildTransformString,
-    isRegistryShape, getRegistrySlug,
+    getRegistrySlug,
 } from '../lib/types'
 import { buildTimeline, buildStaggeredTimelines, buildMotionPathTimeline } from '../lib/gsapEngine'
 import { cubicPointsToString } from '../lib/easing'

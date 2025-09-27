@@ -949,7 +949,7 @@ function RecipeCard({ recipe }: { recipe: Recipe }) {
               {recipe.components.map((c) => (
                 <Link
                   key={c}
-                  href={`/docs/${c}`}
+                  href={`/components/${c}`}
                   className="rounded-md border border-border bg-void px-2 py-0.5 font-mono text-[10px] text-text-faint transition-colors hover:border-ignite/30 hover:text-ignite"
                 >
                   {c}

@@ -9,17 +9,8 @@ const footerLinks = [
       { label: "Templates", href: "/templates" },
       { label: "Customize", href: "/customize" },
       { label: "Examples", href: "/examples" },
-      { label: "Documentation", href: "/docs" },
+      { label: "Installation", href: "/components/install" },
       { label: "Changelog", href: "/changelog" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "Installation", href: "/docs/installation" },
-      { label: "CLI", href: "/docs/cli" },
-      { label: "Tailwind CSS", href: "/docs/install-tailwind" },
-      { label: "Utilities", href: "/docs/add-utilities" },
     ],
   },
   {
