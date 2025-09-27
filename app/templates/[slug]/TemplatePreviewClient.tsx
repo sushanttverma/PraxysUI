@@ -186,7 +186,7 @@ export default function TemplatePreviewClient({
               </button>
             ) : (
               <Link
-                href={`/docs/${template.components[0]}`}
+                href={`/components/${template.components[0]}`}
                 className="flex h-8 items-center gap-1.5 rounded-lg border border-border px-3 text-xs text-blush transition-colors hover:text-chalk"
               >
                 <Code className="h-3.5 w-3.5" />
@@ -259,7 +259,7 @@ export default function TemplatePreviewClient({
                   {template.components.map((comp) => (
                     <Link
                       key={comp}
-                      href={`/docs/${comp}`}
+                      href={`/components/${comp}`}
                       className="rounded-md border border-border bg-obsidian px-2 py-0.5 text-[10px] text-blush transition-colors hover:border-ignite/30 hover:text-ignite whitespace-nowrap"
                     >
                       {comp}
@@ -282,7 +282,7 @@ export default function TemplatePreviewClient({
                   Copy and paste this template into your project. Requires the following components:{' '}
                   {template.components.map((comp, i) => (
                     <span key={comp}>
-                      <Link href={`/docs/${comp}`} className="text-ignite hover:underline">
+                      <Link href={`/components/${comp}`} className="text-ignite hover:underline">
                         {comp}
                       </Link>
                       {i < template.components.length - 1 && ', '}
@@ -339,7 +339,7 @@ export default function TemplatePreviewClient({
                 {template.components.map((comp) => (
                   <Link
                     key={comp}
-                    href={`/docs/${comp}`}
+                    href={`/components/${comp}`}
                     className="rounded-lg border border-border bg-void px-3 py-1.5 text-xs text-blush transition-colors hover:border-ignite/30 hover:text-ignite"
                   >
                     {comp}

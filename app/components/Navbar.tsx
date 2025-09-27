@@ -86,8 +86,8 @@ const pageItems: NavItem[] = [
     description: "Usage examples",
   },
   {
-    href: "/docs",
-    label: "Docs",
+    href: "/components/install",
+    label: "Installation",
     icon: <BookOpen className="h-4 w-4" />,
     description: "Getting started",
   },
@@ -207,7 +207,7 @@ export default function Navbar() {
   const isActive = useCallback(
     (href: string) => {
       if (href === "/") return pathname === "/";
-      if (href === "/docs") return pathname === "/docs";
+      if (href === "/components/install") return pathname === "/components/install";
       return pathname.startsWith(href);
     },
     [pathname]

@@ -253,7 +253,7 @@ export default function TemplatesContent() {
                   {template.components.map((slug) => (
                     <Link
                       key={slug}
-                      href={`/docs/${slug}`}
+                      href={`/components/${slug}`}
                       className="rounded-md border border-border bg-void px-2 py-0.5 text-[11px] text-text-faint transition-colors hover:border-ignite/30 hover:text-ignite"
                     >
                       {slug}

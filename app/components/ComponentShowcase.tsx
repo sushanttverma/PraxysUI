@@ -278,11 +278,11 @@ function ShowcaseCard({
     <div
       role="link"
       tabIndex={0}
-      onClick={() => router.push(`/docs/${item.slug}`)}
+      onClick={() => router.push(`/components/${item.slug}`)}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          router.push(`/docs/${item.slug}`);
+          router.push(`/components/${item.slug}`);
         }
       }}
       className="card-glow group w-[320px] shrink-0 cursor-pointer rounded-2xl border border-border bg-obsidian transition-all hover:border-border-light block"
