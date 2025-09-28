@@ -1,8 +1,7 @@
 import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import ComponentShowcase from "./components/ComponentShowcase";
-import Features from "./components/Features";
-import ComponentGrid from "./components/ComponentGrid";
+import HeroExperimental from "./components/HeroExperimental";
+import BentoShowcase from "./components/BentoShowcase";
+import NumbersBar from "./components/NumbersBar";
 import CTA from "./components/CTA";
 import Footer from "./components/Footer";
 
@@ -11,11 +10,10 @@ export default function Home() {
     <>
       <Navbar />
       <main id="main-content">
-      <Hero />
-      <ComponentShowcase />
-      <Features />
-      <ComponentGrid />
-      <CTA />
+        <HeroExperimental />
+        <BentoShowcase />
+        <NumbersBar />
+        <CTA />
       </main>
       <Footer />
     </>
