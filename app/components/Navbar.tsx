@@ -68,6 +68,12 @@ interface NavItem {
 
 const pageItems: NavItem[] = [
   {
+    href: "/components/install",
+    label: "Installation",
+    icon: <BookOpen className="h-4 w-4" />,
+    description: "Getting started",
+  },
+  {
     href: "/components",
     label: "Components",
     icon: <Layout className="h-4 w-4" />,
@@ -84,12 +90,6 @@ const pageItems: NavItem[] = [
     label: "Examples",
     icon: <Eye className="h-4 w-4" />,
     description: "Usage examples",
-  },
-  {
-    href: "/components/install",
-    label: "Installation",
-    icon: <BookOpen className="h-4 w-4" />,
-    description: "Getting started",
   },
 ];
 
@@ -126,14 +126,6 @@ const toolItems: NavItem[] = [
   },
 ];
 
-const otherItems: NavItem[] = [
-  {
-    href: "/changelog",
-    label: "Changelog",
-    icon: <Clock className="h-4 w-4" />,
-    description: "What's new",
-  },
-];
 
 // ─── Split text into per-character spans ─────────────────
 
@@ -221,7 +213,7 @@ export default function Navbar() {
 
     tl.to(
       shellRef.current,
-      { width: 340, duration: 0.25, ease: "power3.out" },
+      { width: 280, duration: 0.25, ease: "power3.out" },
       0
     );
     tl.to(
@@ -424,10 +416,12 @@ export default function Navbar() {
 
         {/* ── Expanded content ── */}
         <div ref={contentRef} style={{ height: 0, opacity: 0 }}>
-          {/* ── Pages section ── */}
-          <div className="px-6 pt-4 pb-2">
-            <p className="text-[11px] text-text-faint/50 mb-5">Pages</p>
-            <div className="space-y-1">
+          {/* ── Pages ── */}
+          <div className="px-5 pt-3 pb-1">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-text-faint/40 mb-2">
+              Pages
+            </p>
+            <div className="space-y-px">
               {pageItems.map((item) => {
                 const idx = refIdx++;
                 return (
@@ -458,15 +452,25 @@ export default function Navbar() {
                         }
                       }}
                       className={cn(
-                        "block py-1.5 transition-colors duration-150",
+                        "group flex items-center gap-2.5 rounded-lg px-1.5 py-1.5 transition-all duration-150",
                         isActive(item.href)
                           ? "text-ignite"
                           : "text-chalk hover:text-ignite"
                       )}
                     >
+                      <span
+                        className={cn(
+                          "transition-colors duration-150",
+                          isActive(item.href)
+                            ? "text-ignite"
+                            : "text-text-faint group-hover:text-ignite"
+                        )}
+                      >
+                        {item.icon}
+                      </span>
                       <CharSplit
                         text={item.label}
-                        className="text-2xl font-semibold tracking-tight"
+                        className="text-sm font-semibold tracking-tight"
                       />
                     </Link>
                   </div>
@@ -476,12 +480,14 @@ export default function Navbar() {
           </div>
 
           {/* ── Separator ── */}
-          <div className="mx-6 my-3 border-t border-border" />
+          <div className="mx-5 my-1.5 border-t border-border" />
 
-          {/* ── Tools section ── */}
-          <div className="px-6 pb-2">
-            <p className="text-[11px] text-text-faint/50 mb-4">Tools</p>
-            <div className="space-y-1">
+          {/* ── Tools ── */}
+          <div className="px-5 pb-1">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-text-faint/40 mb-2">
+              Tools
+            </p>
+            <div className="space-y-px">
               {toolItems.map((item) => {
                 const idx = refIdx++;
                 return (
@@ -512,15 +518,25 @@ export default function Navbar() {
                         }
                       }}
                       className={cn(
-                        "block py-1.5 transition-colors duration-150",
+                        "group flex items-center gap-2.5 rounded-lg px-1.5 py-1.5 transition-all duration-150",
                         isActive(item.href)
                           ? "text-ignite"
                           : "text-chalk hover:text-ignite"
                       )}
                     >
+                      <span
+                        className={cn(
+                          "transition-colors duration-150",
+                          isActive(item.href)
+                            ? "text-ignite"
+                            : "text-text-faint group-hover:text-ignite"
+                        )}
+                      >
+                        {item.icon}
+                      </span>
                       <CharSplit
                         text={item.label}
-                        className="text-lg font-semibold tracking-tight"
+                        className="text-sm font-semibold tracking-tight"
                       />
                     </Link>
                   </div>
@@ -530,63 +546,58 @@ export default function Navbar() {
           </div>
 
           {/* ── Separator ── */}
-          <div className="mx-6 my-2 border-t border-border" />
+          <div className="mx-5 my-1.5 border-t border-border" />
 
-          {/* ── Other section ── */}
-          <div className="px-6 pb-2">
-            <p className="text-[11px] text-text-faint/50 mb-4">Other</p>
-            <div className="space-y-0.5">
-              {otherItems.map((item) => {
-                const idx = refIdx++;
-                return (
-                  <div
-                    key={item.href}
-                    ref={(el) => {
-                      itemsRef.current[idx] = el;
-                    }}
-                    style={{ opacity: 0 }}
-                  >
-                    <Link
-                      href={item.href}
-                      onClick={closeMenu}
-                      className="flex items-center justify-between py-1.5 text-sm text-text-faint/60 hover:text-blush transition-colors"
-                    >
-                      <span>{item.label}</span>
-                      <span className="text-[10px]">→</span>
-                    </Link>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* ── Separator ── */}
-          <div className="mx-6 my-2 border-t border-border" />
-
-          {/* ── Footer row ── */}
-          {(() => {
-            const idx = refIdx++;
-            return (
-              <div
-                ref={(el) => {
-                  itemsRef.current[idx] = el;
-                }}
-                style={{ opacity: 0 }}
-                className="px-6 pt-1 pb-5 flex items-center gap-4"
-              >
-                <a
-                  href="https://github.com/sushanttverma/Praxys-UI"
-                  className="flex items-center gap-1.5 text-sm text-text-faint/50 hover:text-chalk transition-colors"
-                  target="_blank"
-                  rel="noopener noreferrer"
+          {/* ── Bottom row ── */}
+          <div className="px-5 pb-3 flex items-center justify-between">
+            {(() => {
+              const idx = refIdx++;
+              return (
+                <div
+                  ref={(el) => {
+                    itemsRef.current[idx] = el;
+                  }}
+                  style={{ opacity: 0 }}
                 >
-                  <Github className="h-3.5 w-3.5" />
-                  <span>GitHub</span>
-                  <Star className="h-3 w-3 fill-current text-amber-400" />
-                </a>
-              </div>
-            );
-          })()}
+                  <Link
+                    href="/changelog"
+                    onClick={closeMenu}
+                    className={cn(
+                      "flex items-center gap-1.5 text-xs transition-colors",
+                      isActive("/changelog")
+                        ? "text-ignite"
+                        : "text-text-faint hover:text-blush"
+                    )}
+                  >
+                    <Clock className="h-3 w-3" />
+                    <span>Changelog</span>
+                  </Link>
+                </div>
+              );
+            })()}
+            {(() => {
+              const idx = refIdx++;
+              return (
+                <div
+                  ref={(el) => {
+                    itemsRef.current[idx] = el;
+                  }}
+                  style={{ opacity: 0 }}
+                >
+                  <a
+                    href="https://github.com/sushanttverma/Praxys-UI"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-xs text-text-faint hover:text-chalk transition-colors"
+                  >
+                    <Github className="h-3 w-3" />
+                    <span>GitHub</span>
+                    <Star className="h-2.5 w-2.5 fill-current text-amber-400/70" />
+                  </a>
+                </div>
+              );
+            })()}
+          </div>
         </div>
       </div>
     </div>
