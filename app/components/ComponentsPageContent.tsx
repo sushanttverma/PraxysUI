@@ -17,6 +17,7 @@ import { sidebarGroups, componentRegistry } from "@/lib/registry";
 import type { ComponentEntry } from "@/lib/registry";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import BackToTop from "./BackToTop";
 
 // ─── Lazy demo cache ──────────────────────────────────────
 
@@ -336,6 +337,7 @@ export default function ComponentsPageContent() {
       </main>
 
       <Footer />
+      <BackToTop />
     </div>
   );
 }

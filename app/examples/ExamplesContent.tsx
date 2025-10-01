@@ -18,6 +18,7 @@ import {
   ClipboardList,
   HelpCircle,
 } from 'lucide-react'
+import BackToTop from '../components/BackToTop'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
 
@@ -1068,6 +1069,7 @@ export default function ExamplesContent() {
       </main>
 
       <Footer />
+      <BackToTop />
     </div>
   )
 }
