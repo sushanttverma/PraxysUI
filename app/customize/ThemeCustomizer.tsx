@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Copy, Check, RotateCcw, Download, Palette, FileJson, FileCode, Figma } from 'lucide-react'
+import { Copy, Check, RotateCcw, Download, FileJson, FileCode, Figma } from 'lucide-react'
 import Navbar from '@/app/components/Navbar'
 import Footer from '@/app/components/Footer'
 import {
@@ -370,26 +370,19 @@ export default function ThemeCustomizer() {
   return (
     <>
       <Navbar />
-      <main id="main-content" className="min-h-screen overflow-x-hidden pt-16">
-        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-16">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-12 text-center"
-          >
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-ignite/20 bg-ignite-dim px-4 py-1.5 text-xs font-medium text-ignite">
-              <Palette className="h-3.5 w-3.5" />
-              Theme Customizer
+      <main id="main-content" className="min-h-screen overflow-x-hidden">
+        <div className="mx-auto max-w-7xl px-6 pt-24 pb-20">
+          {/* Editorial header */}
+          <div className="mb-10">
+            <div className="flex items-end justify-between gap-4">
+              <div className="min-w-0">
+                <p className="font-mono text-[10px] text-text-faint tracking-wider mb-1">{"// tools / customize"}</p>
+                <h1 className="font-pixel text-2xl sm:text-3xl md:text-4xl font-bold text-chalk leading-none">Theme Builder</h1>
+              </div>
             </div>
-            <h1 className="font-pixel text-3xl font-bold text-chalk md:text-5xl">
-              Make it yours
-            </h1>
-            <p className="mx-auto mt-4 max-w-lg text-blush">
-              Pick your brand colors, preview components live, then copy the generated
-              CSS into your <code className="rounded bg-obsidian px-1.5 py-0.5 font-mono text-xs text-ignite">globals.css</code>.
-            </p>
-          </motion.div>
+            {/* Accent gradient line */}
+            <div className="mt-4 h-px w-full" style={{ background: 'linear-gradient(90deg, #a855f7, #a855f7 30%, transparent)' }} />
+          </div>
 
           <div className="grid gap-6 lg:grid-cols-[360px_1fr] lg:gap-8">
             {/* ── Left panel: Controls ── */}

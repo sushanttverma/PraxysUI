@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ArrowUpRight, Sparkles, Layout, Monitor, Smartphone, Code } from 'lucide-react'
+import { ArrowUpRight, Layout, Monitor, Smartphone, Code } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
@@ -148,32 +148,16 @@ export default function TemplatesContent() {
     <div className="min-h-screen bg-void">
       <Navbar />
 
-      <main id="main-content" className="mx-auto max-w-6xl px-6 pt-28 pb-20">
-        {/* Header */}
-        <div className="mb-4">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 text-sm text-blush transition-colors hover:text-chalk"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Back home
-          </Link>
-        </div>
-
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-3">
-            <Sparkles className="h-5 w-5 text-ignite" />
-            <span className="font-pixel text-xs uppercase tracking-widest text-ignite">
-              Templates
-            </span>
-          </div>
-          <h1 className="font-pixel text-3xl font-bold text-chalk sm:text-4xl">
+      <main id="main-content" className="mx-auto max-w-7xl px-6 pt-24 pb-20">
+        {/* Editorial header */}
+        <div className="mb-10">
+          <p className="font-mono text-[10px] text-text-faint tracking-wider mb-1">
+            {"// templates"}
+          </p>
+          <h1 className="font-pixel text-2xl sm:text-3xl md:text-4xl font-bold text-chalk leading-none">
             Page Templates
           </h1>
-          <p className="mt-3 max-w-2xl text-base text-blush leading-relaxed">
-            Pre-built page layouts that combine multiple Praxys UI components into
-            production-ready templates. Preview live, then copy the full source code.
-          </p>
+          <div className="mt-4 h-px w-full" style={{ background: 'linear-gradient(90deg, #10b981, #10b981 30%, transparent)' }} />
         </div>
 
         {/* Category filter */}

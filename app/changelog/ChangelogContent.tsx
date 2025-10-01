@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  GitCommit, Sparkles, Wrench, Zap, BookOpen, Palette,
+  GitCommit, Sparkles, Wrench, Zap, Palette,
   Terminal, Search, Shield, Puzzle, ChevronDown, Plus,
   CheckCircle, ArrowUp,
   type LucideIcon,
@@ -172,23 +172,16 @@ export default function ChangelogContent() {
     <div className="min-h-screen bg-void">
       <Navbar />
 
-      <main id="main-content" className="mx-auto max-w-3xl px-6 pt-28 pb-20">
-        {/* Header */}
-        <div className="mb-12">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-ignite/10 border border-ignite/20">
-              <BookOpen className="h-4 w-4 text-ignite" />
-            </div>
-            <span className="font-pixel text-xs uppercase tracking-widest text-ignite">
-              Changelog
-            </span>
-          </div>
-          <h1 className="font-pixel text-3xl font-bold text-chalk sm:text-4xl">
-            What&apos;s New
-          </h1>
-          <p className="mt-3 max-w-2xl text-base text-blush leading-relaxed">
-            A complete history of features, fixes, and improvements to Praxys UI.
+      <main id="main-content" className="mx-auto max-w-7xl px-6 pt-24 pb-20">
+        {/* Editorial header */}
+        <div className="mb-10">
+          <p className="font-mono text-[10px] text-text-faint tracking-wider mb-1">
+            {"// changelog"}
           </p>
+          <h1 className="font-pixel text-2xl sm:text-3xl md:text-4xl font-bold text-chalk leading-none">
+            {"What's New"}
+          </h1>
+          <div className="mt-4 h-px w-full" style={{ background: 'linear-gradient(90deg, #ec4899, #ec4899 30%, transparent)' }} />
 
           {/* Summary stats */}
           <div className="mt-6 flex flex-wrap gap-3">
