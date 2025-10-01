@@ -88,9 +88,9 @@ export default async function ComponentDetailPage({
     <div className="min-h-screen bg-void">
       <Navbar />
 
-      <main className="mx-auto max-w-7xl px-4 pb-24 pt-32 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-7xl px-6 pt-24 pb-20">
         <div className="space-y-10">
-          {/* Breadcrumbs + Header */}
+          {/* Editorial header */}
           <div>
             <Breadcrumbs
               items={[
@@ -98,23 +98,26 @@ export default async function ComponentDetailPage({
                 { label: entry.title },
               ]}
             />
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h1 className="font-pixel text-2xl sm:text-3xl font-bold text-chalk">
+            <div className="flex items-end justify-between gap-4">
+              <div className="min-w-0">
+                <p className="font-mono text-[10px] text-text-faint tracking-wider mb-1">
+                  {`// components / ${slug}`}
+                </p>
+                <h1 className="font-pixel text-2xl sm:text-3xl md:text-4xl font-bold text-chalk leading-none">
                   {entry.title}
                 </h1>
-                <p className="mt-3 text-lg text-blush">{entry.description}</p>
               </div>
               <a
                 href={`https://github.com/sushanttverma/Praxys-UI/blob/main/app/components/ui/${slug}.tsx`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden sm:flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-text-faint transition-colors hover:border-border-light hover:text-blush"
+                className="hidden sm:flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-text-faint transition-colors hover:border-border-light hover:text-blush mb-0.5"
               >
                 Edit on GitHub
                 <ExternalLink className="h-3 w-3" />
               </a>
             </div>
+            <div className="mt-4 h-px w-full" style={{ background: 'linear-gradient(90deg, var(--color-ignite), var(--color-ignite) 30%, transparent)' }} />
           </div>
 
           {/* Preview + Code */}

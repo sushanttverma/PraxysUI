@@ -11,7 +11,6 @@ import {
     Trash2,
     RotateCcw,
     Shuffle,
-    Sparkles,
     Code,
     Image as ImageIcon,
 } from 'lucide-react'
@@ -528,26 +527,19 @@ export default function GradientMaker() {
                 )}
             </AnimatePresence>
 
-            <main id="main-content" className="min-h-screen overflow-x-hidden pt-16">
-                <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-16">
-                    {/* Header */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mb-12 text-center"
-                    >
-                        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-ignite/20 bg-ignite-dim px-4 py-1.5 text-xs font-medium text-ignite">
-                            <Sparkles className="h-3.5 w-3.5" />
-                            Gradient Maker
+            <main id="main-content" className="min-h-screen overflow-x-hidden">
+                <div className="mx-auto max-w-7xl px-6 pt-24 pb-20">
+                    {/* Editorial header */}
+                    <div className="mb-10">
+                        <div className="flex items-end justify-between gap-4">
+                            <div className="min-w-0">
+                                <p className="font-mono text-[10px] text-text-faint tracking-wider mb-1">{"// tools / gradient-maker"}</p>
+                                <h1 className="font-pixel text-2xl sm:text-3xl md:text-4xl font-bold text-chalk leading-none">Gradient Maker</h1>
+                            </div>
                         </div>
-                        <h1 className="font-pixel text-3xl font-bold text-chalk md:text-5xl">
-                            Create mesh gradients
-                        </h1>
-                        <p className="mx-auto mt-4 max-w-lg text-blush">
-                            Design stunning mesh-style gradients with multiple color blobs.
-                            Adjust positions, colors, and sizes, then export the CSS.
-                        </p>
-                    </motion.div>
+                        {/* Accent gradient line */}
+                        <div className="mt-4 h-px w-full" style={{ background: 'linear-gradient(90deg, #f59e0b, #f59e0b 30%, transparent)' }} />
+                    </div>
 
                     <div className="grid gap-6 lg:grid-cols-[1fr_340px] lg:gap-8">
                         {/* ── Left: Preview + Export ── */}

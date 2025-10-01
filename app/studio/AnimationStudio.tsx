@@ -6,7 +6,6 @@ import {
     Play,
     Maximize2,
     Minimize2,
-    Layers,
     Link as LinkIcon,
     Upload,
     Code,
@@ -409,81 +408,76 @@ export default function AnimationStudio() {
     }, [])
 
     return (
-        <div className="relative h-screen overflow-hidden flex flex-col">
+        <div className="relative h-screen flex flex-col overflow-hidden lg:overflow-hidden">
             <Navbar />
-            <div className="relative flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="relative flex flex-col flex-1 min-h-0 overflow-auto lg:overflow-hidden">
                 {/* Ambient background */}
                 <div className="absolute inset-0 -z-10">
                     <div className="absolute inset-0 bg-void" />
                     <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(ellipse 60% 50% at 50% 0%, hsla(30, 60%, 40%, 0.2) 0%, transparent 50%), radial-gradient(ellipse 40% 40% at 80% 100%, hsla(240, 50%, 35%, 0.15) 0%, transparent 100%)' }} />
                 </div>
 
-                {/* Glass header (hidden in fullscreen) */}
+                {/* Editorial header (hidden in fullscreen) */}
                 <div className={cn(
-                    'flex-shrink-0 border-b border-white/[0.06] bg-white/[0.02] backdrop-blur-xl px-4 md:px-6 pt-16 pb-4',
+                    'relative flex-shrink-0 px-4 md:px-6 pt-16 pb-4',
                     isFullscreen && 'hidden'
                 )}>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-xl md:text-2xl font-bold text-chalk flex items-center gap-2">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.06] border border-white/[0.1]">
-                                    <Layers className="h-4 w-4 text-blue-400" />
-                                </div>
-                                Animation Studio
-                            </h1>
-                            <p className="text-xs md:text-sm text-white/35 mt-1 pl-10">
-                                GSAP-powered animation configurator with timeline, spring physics, and motion paths
-                            </p>
+                    <div className="flex items-end justify-between gap-4">
+                        <div className="min-w-0">
+                            <p className="font-mono text-[10px] text-text-faint tracking-wider mb-1">{"// tools / animation-studio"}</p>
+                            <h1 className="font-pixel text-2xl sm:text-3xl md:text-4xl font-bold text-chalk leading-none">Animation Studio</h1>
                         </div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex items-center gap-1.5 pb-1 flex-wrap justify-end">
                             <button
                                 onClick={() => setShowCodeModal(true)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-ignite/20 bg-ignite/[0.08] text-xs font-medium text-ignite hover:bg-ignite/[0.14] hover:border-ignite/30 backdrop-blur-sm transition-all duration-200"
+                                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-ignite/20 bg-ignite/[0.06] text-xs font-medium text-ignite hover:bg-ignite/[0.12] hover:border-ignite/30 transition-all duration-200 cursor-pointer"
                             >
-                                <Code className="h-3.5 w-3.5" /> Get Code
+                                <Code className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Code</span>
                             </button>
                             <button
                                 onClick={handleShare}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-xs font-medium text-white/50 hover:text-white/80 hover:bg-white/[0.08] hover:border-white/[0.14] backdrop-blur-sm transition-all duration-200"
+                                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border text-xs font-medium text-text-faint hover:text-chalk hover:border-border-light transition-all duration-200 cursor-pointer"
                             >
-                                <LinkIcon className="h-3.5 w-3.5" /> Share
+                                <LinkIcon className="h-3.5 w-3.5" /> <span className="hidden md:inline">Share</span>
                             </button>
                             <button
                                 onClick={() => setShowImportModal(true)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-xs font-medium text-white/50 hover:text-white/80 hover:bg-white/[0.08] hover:border-white/[0.14] backdrop-blur-sm transition-all duration-200"
+                                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border text-xs font-medium text-text-faint hover:text-chalk hover:border-border-light transition-all duration-200 cursor-pointer"
                             >
-                                <Upload className="h-3.5 w-3.5" /> Import
+                                <Upload className="h-3.5 w-3.5" /> <span className="hidden md:inline">Import</span>
                             </button>
                             <button
                                 onClick={() => setIsFullscreen(true)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-xs font-medium text-white/50 hover:text-white/80 hover:bg-white/[0.08] hover:border-white/[0.14] backdrop-blur-sm transition-all duration-200"
+                                className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border text-xs font-medium text-text-faint hover:text-chalk hover:border-border-light transition-all duration-200 cursor-pointer"
                             >
                                 <Maximize2 className="h-3.5 w-3.5" /> Fullscreen
                             </button>
                             <button
                                 onClick={handleReplay}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-xs font-medium text-white/50 hover:text-white/80 hover:bg-white/[0.08] hover:border-white/[0.14] backdrop-blur-sm transition-all duration-200"
+                                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border text-xs font-medium text-text-faint hover:text-chalk hover:border-border-light transition-all duration-200 cursor-pointer"
                             >
-                                <Play className="h-3.5 w-3.5" /> Replay
+                                <Play className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Replay</span>
                             </button>
                             <button
                                 onClick={handleReset}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-xs font-medium text-white/50 hover:text-white/80 hover:bg-white/[0.08] hover:border-white/[0.14] backdrop-blur-sm transition-all duration-200"
+                                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border text-xs font-medium text-text-faint hover:text-chalk hover:border-border-light transition-all duration-200 cursor-pointer"
                             >
-                                <RotateCcw className="h-3.5 w-3.5" /> Reset
+                                <RotateCcw className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Reset</span>
                             </button>
                         </div>
                     </div>
+                    {/* Accent gradient line */}
+                    <div className="mt-4 h-px w-full" style={{ background: 'linear-gradient(90deg, var(--color-ignite), var(--color-ignite) 30%, transparent)' }} />
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 overflow-hidden min-h-0">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 h-full">
+                <div className="flex-1 min-h-0 overflow-auto lg:overflow-hidden">
+                    <div className="flex flex-col lg:grid lg:grid-cols-12 gap-0 lg:h-full">
                         {/* ── Left: Preview + Timeline + Graph ── */}
                         <div className={
                             isFullscreen
                                 ? 'fixed inset-0 z-[70] flex flex-col bg-void/95 backdrop-blur-sm p-6'
-                                : 'col-span-1 lg:col-span-8 flex flex-col overflow-hidden min-h-0'
+                                : 'lg:col-span-8 flex flex-col min-h-[60vh] lg:min-h-0 overflow-hidden'
                         }>
                             {/* Fullscreen close button */}
                             {isFullscreen && (
@@ -563,10 +557,10 @@ export default function AnimationStudio() {
 
                         {/* ── Right: Controls (hidden in fullscreen) ── */}
                         <div className={cn(
-                            'col-span-1 lg:col-span-4 border-t lg:border-t-0 lg:border-l border-border overflow-auto',
+                            'lg:col-span-4 border-t lg:border-t-0 lg:border-l border-border overflow-auto',
                             isFullscreen && 'hidden'
                         )}>
-                            <div className="p-4 space-y-5">
+                            <div className="p-3 md:p-4 space-y-4 md:space-y-5">
                                 <PresetsPanel
                                     activePresetName={activePresetName}
                                     onApplyPreset={applyPreset}

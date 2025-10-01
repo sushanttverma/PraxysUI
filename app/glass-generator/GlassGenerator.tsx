@@ -12,7 +12,6 @@ import {
     Image as ImageIcon,
     Palette,
     Droplets,
-    Layers,
 } from 'lucide-react'
 import Navbar from '@/app/components/Navbar'
 import { cn } from '@/lib/utils'
@@ -283,53 +282,49 @@ export default function GlassGenerator() {
     ]
 
     return (
-        <div className="relative h-screen overflow-hidden flex flex-col">
+        <div className="relative h-screen flex flex-col overflow-hidden lg:overflow-hidden">
             <Navbar />
-            <div className="relative flex flex-col flex-1 min-h-0">
+            <div className="relative flex flex-col flex-1 min-h-0 overflow-auto lg:overflow-hidden">
                 {/* Ambient background */}
                 <div className="absolute inset-0 -z-10">
                     <div className="absolute inset-0 bg-void" />
                     <div className="absolute inset-0 opacity-30" style={{ backgroundImage: 'radial-gradient(ellipse 60% 50% at 50% 0%, hsla(180, 50%, 35%, 0.2) 0%, transparent 100%)' }} />
                 </div>
 
-                {/* Glass header */}
-                <div className="flex-shrink-0 border-b border-white/[0.06] bg-white/[0.02] backdrop-blur-xl px-4 md:px-6 pt-4 pb-4">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-xl md:text-2xl font-bold text-chalk flex items-center gap-2">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.06] border border-white/[0.1]">
-                                    <Layers className="h-4 w-4 text-blue-400" />
-                                </div>
-                                Glassmorphism
-                            </h1>
-                            <p className="text-xs md:text-sm text-white/35 mt-1 pl-10">
-                                Frosted-glass effects with live preview
-                            </p>
+                {/* Editorial header */}
+                <div className="relative flex-shrink-0 px-4 md:px-6 pt-16 pb-4">
+                    <div className="flex items-end justify-between gap-4">
+                        <div className="min-w-0">
+                            <p className="font-mono text-[10px] text-text-faint tracking-wider mb-1">{"// tools / glass-generator"}</p>
+                            <h1 className="font-pixel text-2xl sm:text-3xl md:text-4xl font-bold text-chalk leading-none">Glassmorphism</h1>
                         </div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex items-center gap-1.5 pb-1">
                             <button
                                 onClick={randomize}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-xs font-medium text-white/50 hover:text-white/80 hover:bg-white/[0.08] hover:border-white/[0.14] backdrop-blur-sm transition-all duration-200"
+                                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border text-xs font-medium text-text-faint hover:text-chalk hover:border-border-light transition-all duration-200 cursor-pointer"
                             >
-                                <Shuffle className="h-3.5 w-3.5" /> Randomize
+                                <Shuffle className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Randomize</span>
                             </button>
                             <button
                                 onClick={handleReset}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] text-xs font-medium text-white/50 hover:text-white/80 hover:bg-white/[0.08] hover:border-white/[0.14] backdrop-blur-sm transition-all duration-200"
+                                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border text-xs font-medium text-text-faint hover:text-chalk hover:border-border-light transition-all duration-200 cursor-pointer"
                             >
                                 <RotateCcw className="h-3.5 w-3.5" /> Reset
                             </button>
                         </div>
                     </div>
+                    {/* Accent gradient line */}
+                    <div className="mt-4 h-px w-full" style={{ background: 'linear-gradient(90deg, #06b6d4, #06b6d4 30%, transparent)' }} />
                 </div>
 
                 {/* Main Content */}
                 <div className="flex-1 overflow-auto min-h-0">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:h-full">
                         {/* Preview */}
-                        <div className="col-span-1 lg:col-span-8 p-4 md:p-6 flex items-center justify-center min-h-[400px]"
+                        <div className="col-span-1 lg:col-span-7 p-4 md:p-6">
+                          <div className="relative rounded-2xl overflow-hidden flex items-center justify-center min-h-[380px] h-full"
                             style={backgroundPresets[background].style}
-                        >
+                          >
                             {/* Decorative background shapes */}
                             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                                 <div className="absolute top-1/4 left-1/4 w-32 h-32 md:w-48 md:h-48 rounded-full bg-white/20 blur-xl" />
@@ -382,10 +377,11 @@ export default function GlassGenerator() {
                                     <div className="p-6 md:p-8 h-48" />
                                 )}
                             </motion.div>
+                          </div>
                         </div>
 
                         {/* Controls Panel */}
-                        <div className="col-span-1 lg:col-span-4 border-t lg:border-t-0 lg:border-l border-border overflow-auto">
+                        <div className="col-span-1 lg:col-span-5 border-t lg:border-t-0 lg:border-l border-border overflow-auto">
                             <div className="p-4 space-y-5">
                                 {/* Glass Presets */}
                                 <div>

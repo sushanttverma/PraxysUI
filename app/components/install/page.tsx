@@ -50,9 +50,9 @@ export default function InstallPage() {
     <div className="min-h-screen bg-void">
       <Navbar />
 
-      <main className="mx-auto max-w-4xl px-4 pb-24 pt-32 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-7xl px-6 pt-24 pb-20">
         <div className="space-y-16">
-          {/* Breadcrumbs + Header */}
+          {/* Editorial header */}
           <div>
             <Breadcrumbs
               items={[
@@ -60,16 +60,13 @@ export default function InstallPage() {
                 { label: "Installation" },
               ]}
             />
-            <p className="mb-2 font-pixel text-xs uppercase tracking-wider text-ignite">
-              Getting Started
+            <p className="font-mono text-[10px] text-text-faint tracking-wider mb-1">
+              {"// getting-started"}
             </p>
-            <h1 className="font-pixel text-2xl sm:text-3xl font-bold text-chalk">
+            <h1 className="font-pixel text-2xl sm:text-3xl md:text-4xl font-bold text-chalk leading-none">
               Installation
             </h1>
-            <p className="mt-3 text-lg text-blush">
-              Everything you need to start using Praxys UI components in your
-              project. Follow the three steps below.
-            </p>
+            <div className="mt-4 h-px w-full" style={{ background: 'linear-gradient(90deg, var(--color-ignite), var(--color-ignite) 30%, transparent)' }} />
           </div>
 
           {/* ─── Step 1: Install Next.js ─────────────────────── */}

@@ -234,21 +234,21 @@ export default function ComponentsPageContent() {
     <div className="min-h-screen bg-void">
       <Navbar />
 
-      <main className="mx-auto max-w-7xl px-4 pb-24 pt-32 sm:px-6 lg:px-8">
-        {/* Header */}
+      <main className="mx-auto max-w-7xl px-6 pt-24 pb-20">
+        {/* Editorial header */}
         <div className="mb-10">
-          <div className="flex items-center gap-3">
-            <h1 className="font-pixel text-4xl font-bold text-chalk">
+          <p className="font-mono text-[10px] text-text-faint tracking-wider mb-1">
+            {"// components"}
+          </p>
+          <div className="flex items-end gap-3">
+            <h1 className="font-pixel text-2xl sm:text-3xl md:text-4xl font-bold text-chalk leading-none">
               Components
             </h1>
-            <span className="rounded-full bg-ignite/10 border border-ignite/20 px-2.5 py-0.5 text-xs font-medium text-ignite">
+            <span className="rounded-full bg-ignite/10 border border-ignite/20 px-2.5 py-0.5 text-xs font-medium text-ignite mb-0.5">
               {allComponents.length}+
             </span>
           </div>
-          <p className="mt-3 max-w-2xl text-lg text-blush">
-            Explore animated React components with live demos. Click any
-            component to see the full preview, code, and props.
-          </p>
+          <div className="mt-4 h-px w-full" style={{ background: 'linear-gradient(90deg, var(--color-ignite), var(--color-ignite) 30%, transparent)' }} />
         </div>
 
         {/* Search + filter */}

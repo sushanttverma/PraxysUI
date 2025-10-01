@@ -4,8 +4,6 @@ import React, { useState, useCallback } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  ArrowLeft,
-  BookOpen,
   Copy,
   Check,
   ChevronDown,
@@ -1019,34 +1017,16 @@ export default function ExamplesContent() {
     <div className="min-h-screen bg-void">
       <Navbar />
 
-      <main id="main-content" className="mx-auto max-w-4xl px-6 pt-28 pb-20">
-        {/* Header */}
-        <div className="mb-4">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 text-sm text-blush transition-colors hover:text-chalk"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Back home
-          </Link>
-        </div>
-
-        <div className="mb-12">
-          <div className="flex items-center gap-3 mb-3">
-            <BookOpen className="h-5 w-5 text-ignite" />
-            <span className="font-pixel text-xs uppercase tracking-widest text-ignite">
-              Examples & Recipes
-            </span>
-          </div>
-          <h1 className="font-pixel text-3xl font-bold text-chalk sm:text-4xl">
+      <main id="main-content" className="mx-auto max-w-7xl px-6 pt-24 pb-20">
+        {/* Editorial header */}
+        <div className="mb-10">
+          <p className="font-mono text-[10px] text-text-faint tracking-wider mb-1">
+            {"// examples"}
+          </p>
+          <h1 className="font-pixel text-2xl sm:text-3xl md:text-4xl font-bold text-chalk leading-none">
             Real-world Patterns
           </h1>
-          <p className="mt-3 max-w-2xl text-base text-blush leading-relaxed">
-            Complete code recipes combining multiple Praxys UI components into
-            production-ready sections. Copy the full pattern, then customize.
-            Currently featuring <span className="text-ignite font-medium">9 recipes</span> across
-            common UI patterns.
-          </p>
+          <div className="mt-4 h-px w-full" style={{ background: 'linear-gradient(90deg, #f97316, #f97316 30%, transparent)' }} />
         </div>
 
         {/* Recipes grid */}
