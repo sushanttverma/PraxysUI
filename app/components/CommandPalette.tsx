@@ -114,6 +114,15 @@ export default function CommandPalette() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [open, openPalette, closePalette])
 
+  // Listen for custom event from Navbar search button
+  useEffect(() => {
+    function handleOpen() {
+      openPalette()
+    }
+    window.addEventListener('open-command-palette', handleOpen)
+    return () => window.removeEventListener('open-command-palette', handleOpen)
+  }, [openPalette])
+
   // Focus input when opened
   useEffect(() => {
     if (open) {
@@ -149,22 +158,7 @@ export default function CommandPalette() {
   }
 
   return (
-    <>
-      {/* Trigger */}
-      <button
-        onClick={openPalette}
-        aria-haspopup="dialog"
-        className="flex h-9 items-center gap-2 rounded-lg border border-border bg-obsidian px-3 text-sm text-text-faint transition-colors hover:border-border-light hover:text-blush cursor-pointer"
-      >
-        <Search className="h-3.5 w-3.5" />
-        <span>Search...</span>
-        <kbd className="ml-4 rounded border border-border-light bg-void px-1.5 py-0.5 font-mono text-[10px] text-text-faint">
-          Ctrl K
-        </kbd>
-      </button>
-
-      {/* Modal */}
-      <AnimatePresence>
+    <AnimatePresence>
         {open && (
           <>
             {/* Backdrop */}
@@ -282,6 +276,5 @@ export default function CommandPalette() {
           </>
         )}
       </AnimatePresence>
-    </>
   )
 }

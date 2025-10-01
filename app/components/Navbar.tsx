@@ -17,6 +17,7 @@ import {
   Eye,
   FileText,
   Clock,
+  Search,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "./ThemeToggle";
@@ -393,6 +394,18 @@ export default function Navbar() {
               className="min-w-[2.5rem]"
               suppressHydrationWarning
             />
+          </button>
+
+          {/* Search trigger */}
+          <button
+            onClick={() => window.dispatchEvent(new Event('open-command-palette'))}
+            className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-void text-text-faint text-xs hover:text-chalk transition-colors cursor-pointer"
+            aria-label="Search"
+          >
+            <Search className="h-3.5 w-3.5" />
+            <kbd className="hidden sm:inline rounded border border-border-light bg-obsidian px-1 py-0.5 font-mono text-[9px] text-text-faint">
+              ⌘K
+            </kbd>
           </button>
 
           {/* Theme toggle */}

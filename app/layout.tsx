@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "./components/ThemeProvider";
+import CommandPalette from "./components/CommandPalette";
 import "./globals.css";
 
 const geistPixel = localFont({
@@ -98,7 +99,10 @@ export default function RootLayout({
         {/* JetBrains Mono is loaded via next/font/google — no external <link> needed */}
       </head>
       <body className="noise-overlay antialiased" suppressHydrationWarning>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+          <CommandPalette />
+        </ThemeProvider>
       </body>
     </html>
   );

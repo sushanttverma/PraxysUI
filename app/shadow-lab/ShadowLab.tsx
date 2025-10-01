@@ -271,7 +271,7 @@ export default function ShadowLab() {
     ]
 
     return (
-        <div className="relative h-screen flex flex-col overflow-hidden lg:overflow-hidden">
+        <div className="relative min-h-screen lg:h-screen flex flex-col overflow-auto lg:overflow-hidden">
             <Navbar />
             <div className="relative flex flex-col flex-1 min-h-0 overflow-auto lg:overflow-hidden">
                 {/* Ambient background */}
@@ -303,7 +303,7 @@ export default function ShadowLab() {
                 {/* Scrollable content */}
                 <div className="flex-1 overflow-auto min-h-0">
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
-                        <div className="grid gap-6 lg:grid-cols-[1fr_380px] lg:gap-8">
+                        <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[1fr_380px] lg:gap-8">
                             {/* ── Left: Preview + Export ── */}
                             <motion.div
                                 initial={{ opacity: 0, x: -20 }}
@@ -339,7 +339,7 @@ export default function ShadowLab() {
 
                                     {/* Preview area */}
                                     <div
-                                        className="flex items-center justify-center p-12 sm:p-20 transition-colors duration-300"
+                                        className="flex items-center justify-center p-8 sm:p-12 md:p-20 min-h-[40vh] lg:min-h-0 transition-colors duration-300"
                                         style={{ backgroundColor: previewBg }}
                                     >
                                         {/* Grid pattern */}
