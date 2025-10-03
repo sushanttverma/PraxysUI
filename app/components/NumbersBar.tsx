@@ -2,11 +2,12 @@
 
 import { motion } from "framer-motion";
 import AnimatedNumber from "@/app/components/ui/animated-number";
+import { COMPONENT_COUNT, TEMPLATE_COUNT, CATEGORY_COUNT } from "@/lib/site-stats";
 
 const stats = [
-  { value: 70, label: "Components", suffix: "+" },
-  { value: 14, label: "Templates", suffix: "" },
-  { value: 6, label: "Categories", suffix: "" },
+  { value: COMPONENT_COUNT, label: "Components", suffix: "+" },
+  { value: TEMPLATE_COUNT, label: "Templates", suffix: "" },
+  { value: CATEGORY_COUNT, label: "Categories", suffix: "" },
   { value: 0, label: "Open Source", suffix: "", isText: true },
 ];
 

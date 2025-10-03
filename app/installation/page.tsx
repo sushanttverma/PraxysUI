@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { CodeBlock } from "@/app/components/shared/CodeBlock";
-import Navbar from "../Navbar";
-import Footer from "../Footer";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 // ─── Metadata ────────────────────────────────────────────
 
@@ -56,7 +56,7 @@ export default function InstallPage() {
           <div>
             <Breadcrumbs
               items={[
-                { label: "Components", href: "/components" },
+                { label: "Home", href: "/" },
                 { label: "Installation" },
               ]}
             />

@@ -6,6 +6,7 @@ import SpotlightCard from "@/app/components/ui/spotlight-card";
 import MorphingText from "@/app/components/ui/morphing-text";
 import CreepyButton from "@/app/components/ui/creepy-button";
 import AnimatedNumber from "@/app/components/ui/animated-number";
+import { COMPONENT_COUNT, TEMPLATE_COUNT, CATEGORY_COUNT } from "@/lib/site-stats";
 
 const cellVariants = {
   hidden: { opacity: 0, y: 30 },
@@ -138,21 +139,21 @@ export default function BentoShowcase() {
             <div className="flex items-center gap-8">
               <div className="text-center">
                 <AnimatedNumber
-                  value={70}
+                  value={COMPONENT_COUNT}
                   className="text-3xl font-bold text-chalk font-pixel"
                 />
                 <p className="text-xs text-blush mt-1">Components</p>
               </div>
               <div className="text-center">
                 <AnimatedNumber
-                  value={14}
+                  value={TEMPLATE_COUNT}
                   className="text-3xl font-bold text-chalk font-pixel"
                 />
                 <p className="text-xs text-blush mt-1">Templates</p>
               </div>
               <div className="text-center">
                 <AnimatedNumber
-                  value={6}
+                  value={CATEGORY_COUNT}
                   className="text-3xl font-bold text-chalk font-pixel"
                 />
                 <p className="text-xs text-blush mt-1">Categories</p>
