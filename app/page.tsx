@@ -1,5 +1,5 @@
 import Navbar from "./components/Navbar";
-import HeroExperimental from "./components/HeroExperimental";
+import Hero from "./components/Hero";
 import BentoShowcase from "./components/BentoShowcase";
 import NumbersBar from "./components/NumbersBar";
 import CTA from "./components/CTA";
@@ -10,7 +10,7 @@ export default function Home() {
     <>
       <Navbar />
       <main id="main-content">
-        <HeroExperimental />
+        <Hero />
         <BentoShowcase />
         <NumbersBar />
         <CTA />

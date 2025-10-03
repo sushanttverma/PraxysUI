@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "./components/ThemeProvider";
 import CommandPalette from "./components/CommandPalette";
+import { SITE_DESCRIPTION } from "@/lib/site-stats";
 import "./globals.css";
 
 const geistPixel = localFont({
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
     template: "%s | Praxys UI",
   },
   description:
-    "A curated collection of 70 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+    SITE_DESCRIPTION,
   keywords: [
     "React",
     "components",
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
     siteName: "Praxys UI",
     title: "Praxys UI - Animated React Components",
     description:
-      "A curated collection of 70 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+      SITE_DESCRIPTION,
     images: [
       {
         url: `${SITE_URL}/opengraph-image`,
@@ -63,7 +64,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Praxys UI - Animated React Components",
     description:
-      "A curated collection of 70 beautifully crafted, animated React components. Browse, copy, paste, and ship.",
+      SITE_DESCRIPTION,
     images: [`${SITE_URL}/opengraph-image`],
   },
   robots: {

@@ -9,7 +9,7 @@ const productLinks = [
   { label: "Components", href: "/components" },
   { label: "Templates", href: "/templates" },
   { label: "Examples", href: "/examples" },
-  { label: "Installation", href: "/components/install" },
+  { label: "Installation", href: "/installation" },
   { label: "Customize", href: "/customize" },
   { label: "Changelog", href: "/changelog" },
 ];

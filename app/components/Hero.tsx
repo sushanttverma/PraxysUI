@@ -9,6 +9,7 @@ import FlipText from "@/app/components/ui/flip-text";
 import GlowBorderCard from "@/app/components/ui/glow-border-card";
 import TypewriterText from "@/app/components/ui/typewriter-text";
 import MorphingText from "@/app/components/ui/morphing-text";
+import { COMPONENT_COUNT } from "@/lib/site-stats";
 
 const DEMO_COMPONENTS = [
   {
@@ -84,7 +85,7 @@ const DEMO_COMPONENTS = [
 
 const CYCLE_INTERVAL = 4000;
 
-export default function HeroExperimental() {
+export default function Hero() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [copied, setCopied] = useState(false);
 
@@ -128,7 +129,7 @@ export default function HeroExperimental() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              {"// open source • 70+ components"}
+              {`// open source • ${COMPONENT_COUNT}+ components`}
             </motion.p>
 
             {/* Headline */}

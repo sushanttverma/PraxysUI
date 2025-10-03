@@ -20,6 +20,7 @@ import {
   Search,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { COMPONENT_COUNT_LABEL } from "@/lib/site-stats";
 import ThemeToggle from "./ThemeToggle";
 
 // ─── Re-export HamburgerButton for docs sidebar ─────────
@@ -69,7 +70,7 @@ interface NavItem {
 
 const pageItems: NavItem[] = [
   {
-    href: "/components/install",
+    href: "/installation",
     label: "Installation",
     icon: <BookOpen className="h-4 w-4" />,
     description: "Getting started",
@@ -78,7 +79,7 @@ const pageItems: NavItem[] = [
     href: "/components",
     label: "Components",
     icon: <Layout className="h-4 w-4" />,
-    description: "Browse 70+ components",
+    description: `Browse ${COMPONENT_COUNT_LABEL} components`,
   },
   {
     href: "/templates",
@@ -200,7 +201,7 @@ export default function Navbar() {
   const isActive = useCallback(
     (href: string) => {
       if (href === "/") return pathname === "/";
-      if (href === "/components/install") return pathname === "/components/install";
+      if (href === "/installation") return pathname === "/installation";
       return pathname.startsWith(href);
     },
     [pathname]
@@ -396,18 +397,6 @@ export default function Navbar() {
             />
           </button>
 
-          {/* Search trigger */}
-          <button
-            onClick={() => window.dispatchEvent(new Event('open-command-palette'))}
-            className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-void text-text-faint text-xs hover:text-chalk transition-colors cursor-pointer"
-            aria-label="Search"
-          >
-            <Search className="h-3.5 w-3.5" />
-            <kbd className="hidden sm:inline rounded border border-border-light bg-obsidian px-1 py-0.5 font-mono text-[9px] text-text-faint">
-              ⌘K
-            </kbd>
-          </button>
-
           {/* Theme toggle */}
           <ThemeToggle />
 
@@ -416,11 +405,6 @@ export default function Navbar() {
             href="/"
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-void text-text-faint text-xs font-medium select-none hover:text-chalk transition-colors"
           >
-            <div className="flex h-5 w-5 items-center justify-center rounded bg-ignite">
-              <span className="font-pixel text-[9px] font-bold text-void">
-                P
-              </span>
-            </div>
             <span className="hidden sm:inline text-chalk/70 font-pixel">
               Praxys UI
             </span>
@@ -557,6 +541,35 @@ export default function Navbar() {
               })}
             </div>
           </div>
+
+          {/* ── Search ── */}
+          <div className="mx-5 my-1.5 border-t border-border" />
+          {(() => {
+            const idx = refIdx++;
+            return (
+              <div
+                ref={(el) => {
+                  itemsRef.current[idx] = el;
+                }}
+                style={{ opacity: 0 }}
+                className="px-5"
+              >
+                <button
+                  onClick={() => {
+                    closeMenu();
+                    window.dispatchEvent(new Event('open-command-palette'));
+                  }}
+                  className="flex w-full items-center gap-2.5 rounded-lg border border-border bg-void/50 px-3 py-2 text-xs text-text-faint transition-colors hover:border-border-light hover:text-blush cursor-pointer"
+                >
+                  <Search className="h-3.5 w-3.5" />
+                  <span>Search...</span>
+                  <kbd className="ml-auto rounded border border-border-light bg-obsidian px-1.5 py-0.5 font-mono text-[9px] text-text-faint">
+                    ⌘K
+                  </kbd>
+                </button>
+              </div>
+            );
+          })()}
 
           {/* ── Separator ── */}
           <div className="mx-5 my-1.5 border-t border-border" />

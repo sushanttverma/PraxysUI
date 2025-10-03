@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { COMPONENT_COUNT } from "@/lib/site-stats";
 
 export const runtime = "edge";
 export const alt = "Praxys UI - Animated React Components";
@@ -78,7 +79,7 @@ export default async function Image() {
             margin: 0,
           }}
         >
-          70 beautifully crafted, animated React components.
+          {COMPONENT_COUNT} beautifully crafted, animated React components.
         </p>
         <p
           style={{
