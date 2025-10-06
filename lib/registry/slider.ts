@@ -6,6 +6,7 @@ title: "Slider",
 description:
   "An accessible animated slider with drag interaction, keyboard navigation, tooltip value display, and spring animations.",
 category: "buttons",
+isNew: true,
 dependencies: ["framer-motion", "clsx", "tailwind-merge", "lucide-react"],
 code: `'use client'
 

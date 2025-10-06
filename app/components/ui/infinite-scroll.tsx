@@ -45,7 +45,7 @@ const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   loadMoreRef.current = loadMore
 
   const triggerLoad = useCallback(async () => {
-    if (isLoading) return
+    if (isLoading || !loadMoreRef.current) return
     setIsLoading(true)
     try {
       await loadMoreRef.current()

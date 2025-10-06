@@ -6,6 +6,7 @@ title: "File Upload",
 description:
   "An accessible drag-and-drop file upload component with validation, progress animation, file list preview, and keyboard interaction.",
 category: "buttons",
+isNew: true,
 dependencies: ["framer-motion", "clsx", "tailwind-merge", "lucide-react"],
 code: `'use client'
 

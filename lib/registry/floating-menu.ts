@@ -6,6 +6,7 @@ title: "Floating Menu",
 description:
   "A floating pill menu that expands into a card with GSAP-animated hamburger-to-X, text scramble effect, and staggered item reveals.",
 category: "navigation",
+isNew: true,
 dependencies: ["gsap", "clsx", "tailwind-merge"],
 code: `'use client'
 

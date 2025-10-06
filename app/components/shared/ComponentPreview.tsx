@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useCallback, useMemo, Suspense } from "react";
-import { MotionConfig } from "framer-motion";
-import { RotateCcw, Gauge } from "lucide-react";
+import { MotionConfig, motion } from "framer-motion";
+import { RotateCcw, Gauge, Monitor, Tablet, Smartphone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buildThemeVars, type ThemeColors } from "@/lib/theme-presets";
 import ThemePreviewSelector from "./ThemePreviewSelector";
@@ -28,6 +28,7 @@ export default function ComponentPreview({
   const [replayKey, setReplayKey] = useState(0);
   const [showSpeed, setShowSpeed] = useState(false);
   const [themeColors, setThemeColors] = useState<ThemeColors | null>(null);
+  const [viewportSize, setViewportSize] = useState<"desktop" | "tablet" | "mobile">("desktop");
 
   const handleReplay = useCallback(() => {
     setReplayKey((k) => k + 1);
@@ -87,6 +88,27 @@ export default function ComponentPreview({
         {/* Animation + Theme controls — only show on preview tab */}
         {activeTab === "preview" && (
           <div className="flex items-center gap-1 pr-3">
+            {/* Viewport toggle */}
+            {([
+              { key: "desktop" as const, icon: Monitor, label: "Desktop" },
+              { key: "tablet" as const, icon: Tablet, label: "Tablet" },
+              { key: "mobile" as const, icon: Smartphone, label: "Mobile" },
+            ]).map(({ key, icon: Icon, label }) => (
+              <button
+                key={key}
+                onClick={() => setViewportSize(key)}
+                aria-label={label}
+                className={cn(
+                  "hidden sm:flex h-7 w-7 items-center justify-center rounded-md transition-colors cursor-pointer",
+                  viewportSize === key
+                    ? "text-ignite bg-ignite/10"
+                    : "text-text-faint hover:text-blush"
+                )}
+              >
+                <Icon className="h-3.5 w-3.5" />
+              </button>
+            ))}
+
             {/* Theme selector */}
             <ThemePreviewSelector onThemeChange={handleThemeChange} />
 
@@ -157,31 +179,44 @@ export default function ComponentPreview({
       >
         {activeTab === "preview" && (
           <div
-            className="bg-void/50 p-4 sm:p-6 overflow-hidden transition-colors duration-200"
+            className="flex justify-center bg-void/50 overflow-hidden transition-colors duration-200"
             style={themeStyle}
           >
-            <MotionConfig
-              transition={{
-                duration: 0.5 * durationScale,
+            <motion.div
+              className="w-full p-4 sm:p-6"
+              animate={{
+                maxWidth:
+                  viewportSize === "tablet"
+                    ? 768
+                    : viewportSize === "mobile"
+                      ? 375
+                      : "100%",
               }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <Suspense
-                fallback={
-                  <div className="flex h-32 items-center justify-center text-text-faint">
-                    Loading preview...
-                  </div>
-                }
+              <MotionConfig
+                transition={{
+                  duration: 0.5 * durationScale,
+                }}
               >
-                <div
-                  key={replayKey}
-                  style={{
-                    ["--motion-duration-scale" as string]: durationScale,
-                  }}
+                <Suspense
+                  fallback={
+                    <div className="flex h-32 items-center justify-center text-text-faint">
+                      Loading preview...
+                    </div>
+                  }
                 >
-                  {preview}
-                </div>
-              </Suspense>
-            </MotionConfig>
+                  <div
+                    key={replayKey}
+                    style={{
+                      ["--motion-duration-scale" as string]: durationScale,
+                    }}
+                  >
+                    {preview}
+                  </div>
+                </Suspense>
+              </MotionConfig>
+            </motion.div>
           </div>
         )}
       </div>

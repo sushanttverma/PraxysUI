@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils";
 import { COMPONENT_COUNT_LABEL } from "@/lib/site-stats";
 import ThemeToggle from "./ThemeToggle";
 
-// ─── Re-export HamburgerButton for docs sidebar ─────────
+// ─── Re-export HamburgerButton ──────────────────────────
 
 export function HamburgerButton({
   open,

@@ -20,6 +20,7 @@ const searchItems: SearchItem[] = [
   { slug: 'customize', title: 'Theme Customizer', group: 'Pages', href: '/customize' },
   { slug: 'templates', title: 'Templates', group: 'Pages', href: '/templates' },
   { slug: 'changelog', title: 'Changelog', group: 'Pages', href: '/changelog' },
+  { slug: 'shortcuts', title: 'Keyboard Shortcuts', group: 'Pages', href: '/shortcuts' },
   // All component pages
   ...sidebarGroups.flatMap((group) =>
     group.items

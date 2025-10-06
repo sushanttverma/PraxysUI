@@ -184,6 +184,11 @@ function ComponentCard({ entry }: { entry: ComponentEntry }) {
               {cat.label}
             </span>
           )}
+          {entry.isNew && (
+            <span className="rounded-full bg-ignite px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider text-void">
+              NEW
+            </span>
+          )}
         </div>
         <p className="mt-1.5 text-xs text-text-faint line-clamp-2">
           {entry.description}
