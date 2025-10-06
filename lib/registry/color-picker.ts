@@ -6,6 +6,7 @@ title: "Color Picker",
 description:
   "A comprehensive color picker with HSL sliders, preset swatches, hex/RGB/HSL format toggling, and copy-to-clipboard functionality. Features animated popover and real-time color preview.",
 category: "buttons",
+isNew: true,
 dependencies: ["framer-motion", "clsx", "tailwind-merge", "lucide-react"],
 code: `'use client'
 

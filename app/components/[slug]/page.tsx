@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronRight, ExternalLink } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import {
   componentRegistry,
   isComponentSlug,
+  getPrevNext,
+  getTitle,
 } from "@/lib/registry";
 import { CodeBlock } from "@/app/components/shared/CodeBlock";
 import { PropsTable } from "@/app/components/shared/PropsTable";
@@ -83,6 +85,7 @@ export default async function ComponentDetailPage({
   }
 
   const entry = componentRegistry[slug];
+  const { prev, next } = getPrevNext(slug);
 
   return (
     <div className="min-h-screen bg-void">
@@ -191,6 +194,34 @@ export default async function ComponentDetailPage({
               Props
             </h2>
             <PropsTable props={entry.props} />
+          </div>
+
+          {/* Prev / Next navigation */}
+          <div className="border-t border-border pt-8">
+            <div className="flex items-center justify-between">
+              {prev ? (
+                <Link
+                  href={`/components/${prev}`}
+                  className="group flex items-center gap-2 text-text-faint transition-colors hover:text-ignite"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  <span className="font-mono text-sm">{getTitle(prev)}</span>
+                </Link>
+              ) : (
+                <span />
+              )}
+              {next ? (
+                <Link
+                  href={`/components/${next}`}
+                  className="group flex items-center gap-2 text-text-faint transition-colors hover:text-ignite"
+                >
+                  <span className="font-mono text-sm">{getTitle(next)}</span>
+                  <ChevronRight className="h-4 w-4" />
+                </Link>
+              ) : (
+                <span />
+              )}
+            </div>
           </div>
         </div>
       </main>

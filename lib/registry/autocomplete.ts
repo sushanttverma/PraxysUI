@@ -6,6 +6,7 @@ title: "Autocomplete",
 description:
   "An accessible autocomplete input with async search, debouncing, keyboard navigation, loading states, and animated dropdown with highlighted matches.",
 category: "navigation",
+isNew: true,
 dependencies: ["framer-motion", "clsx", "tailwind-merge", "lucide-react"],
 code: `'use client'
 

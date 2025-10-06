@@ -6,6 +6,7 @@ title: "OTP Input",
 description:
   "An accessible OTP/PIN input component with auto-focus, paste support, keyboard navigation, and animated focus states.",
 category: "buttons",
+isNew: true,
 dependencies: ["framer-motion", "clsx", "tailwind-merge", "lucide-react"],
 code: `'use client'
 
