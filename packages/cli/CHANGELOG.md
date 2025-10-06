@@ -2,18 +2,52 @@
 
 All notable changes to Praxys UI are documented here.
 
-## [1.2.7] — Feb 24, 2026
+## [1.2.6] — Feb 15, 2026
 
-**Flip Text — Hover Replay & 3D Fix**
+**Color Customization & Enhanced Studio**
 
-Fixed Flip Text component with proper 3D per-character flip animation and hover-to-replay support.
+Added comprehensive color customization to Animation Studio and Theme Customizer with random palette generation and per-color editing.
+
+### Added
+
+- Color Scheme Customization — 10 pre-made color schemes (Ocean, Forest, Sunset, Purple, Rose Gold, Mint, Fire, Cyberpunk, Monochrome)
+- Theme Customizer Panel — "Make it yours" section with individual color editing (Primary, Secondary, Accent, Background, Text)
+- Random Palette Generator — 🎲 Generate harmonious color palettes with one click in both Studio and /customize
+- Per-Color Randomization — Random button (🎲) for each individual color property
+- Color Pickers — Visual color selection with hex/HSL text input support
 
 ### Fixed
 
-- Flip Text — added per-character 3D rotation with perspective, backface-visibility, and preserve-3d
-- Flip Text — animation now replays on hover via key remount
-- Flip Text — reduced default stagger delay for near-simultaneous character flips
-- Flip Text registry updated with new code and adjusted playground controls
+- React Style Warning — Changed background to backgroundImage to avoid conflicts with backgroundClip
+- HSL to Hex Conversion — All colors properly converted for CSS compatibility
+
+### Improved
+
+- Random Color Algorithm — Uses color theory (analogous + complementary hues) for harmonious palettes
+- Color Contrast — Fixed lightness/saturation values ensure readable, professional themes
+- Live Preview Updates — All component previews dynamically use selected color scheme
+
+## [1.2.5] — Feb 15, 2026
+
+**Animation Studio — Visual Animation Builder**
+
+Introducing the Animation Studio, a killer feature that sets PraxysUI apart. Visually design animations for any component with live preview, presets, and instant code generation.
+
+### Added
+
+- Animation Studio (/studio) — Interactive visual playground for designing component animations
+- Live Preview Canvas — See animations play in real-time as you adjust parameters
+- Animation Controls — Fine-tune initial state, animate state, and transitions with intuitive sliders
+- 30+ Animation Presets — Pre-built entrance, attention, exit, and loop animations (fade, slide, bounce, scale, flip, rotate, etc.)
+- Component Selector — Search and filter through all 69 components with category filters
+- Code Generator — Instantly copy Framer Motion or CSS @keyframes code for your custom animations
+- Auto-Play Mode — Automatically replay animations when changing parameters or components
+- Category-Specific Previews — Realistic mockups for buttons, cards, text, navigation, and visual components
+
+### Improved
+
+- Mobile Responsive — Compact dropdown component selector on mobile, full experience preserved
+- Navbar — Added "Studio" link for easy access
 
 ## [1.2.2] — Feb 15, 2026
 
