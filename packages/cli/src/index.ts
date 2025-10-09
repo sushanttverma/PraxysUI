@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { execSync } from "child_process";
 
-const VERSION = "1.2.9";
+const VERSION = "1.3.0";
 
 // ─── Utility file contents ──────────────────────────────
 
@@ -245,16 +245,63 @@ program
 
 // ── add <component> ──────────────────────────────────────
 
+async function addSingleComponent(
+  component: string,
+  dir: string,
+  skipExisting: boolean
+): Promise<boolean> {
+  const spinner = ora(`Fetching ${component}...`).start();
+
+  try {
+    const source = await fetchComponent(component);
+
+    const compDir = join(process.cwd(), dir);
+    ensureDir(compDir);
+
+    const filePath = join(compDir, `${component}.tsx`);
+    if (existsSync(filePath)) {
+      if (skipExisting) {
+        spinner.info(`Skipped ${component} (already exists)`);
+        return true;
+      }
+      spinner.stop();
+      const { overwrite } = await prompts({
+        type: "confirm",
+        name: "overwrite",
+        message: `${component}.tsx already exists. Overwrite?`,
+        initial: false,
+      });
+      if (!overwrite) {
+        console.log(chalk.yellow("  Skipped."));
+        return true;
+      }
+    }
+
+    writeFileSync(filePath, source, "utf-8");
+    spinner.succeed(`Added ${dir}/${component}.tsx`);
+    return true;
+  } catch (err) {
+    spinner.fail(`Failed to fetch ${component}`);
+    console.log(
+      chalk.dim(
+        `  ${err instanceof Error ? err.message : "Unknown error"}`
+      )
+    );
+    return false;
+  }
+}
+
 program
   .command("add")
-  .description("Add a component to your project")
-  .argument("<component>", "Component slug (e.g. animated-button)")
+  .description("Add a component (or all components) to your project")
+  .argument("<component>", 'Component slug (e.g. animated-button) or "all"')
   .option(
     "-d, --dir <directory>",
     "Component directory",
     "components/ui"
   )
-  .action(async (component: string, opts: { dir: string }) => {
+  .option("-y, --yes", "Skip overwrite prompts (skip existing files)", false)
+  .action(async (component: string, opts: { dir: string; yes: boolean }) => {
     console.log("");
     console.log(
       chalk.bold(
@@ -265,7 +312,39 @@ program
     );
     console.log("");
 
-    // Validate component name
+    // ── add all ──────────────────────────────────────────
+    if (component === "all") {
+      const { confirm } = await prompts({
+        type: "confirm",
+        name: "confirm",
+        message: `Add all ${COMPONENT_LIST.length} components to ${opts.dir}?`,
+        initial: true,
+      });
+
+      if (!confirm) {
+        console.log(chalk.yellow("  Cancelled."));
+        return;
+      }
+
+      let added = 0;
+      let failed = 0;
+
+      for (const slug of COMPONENT_LIST) {
+        const ok = await addSingleComponent(slug, opts.dir, opts.yes);
+        if (ok) added++;
+        else failed++;
+      }
+
+      console.log("");
+      console.log(
+        chalk.green(`  ✓ ${added} components added`) +
+          (failed > 0 ? chalk.red(`, ${failed} failed`) : "")
+      );
+      console.log("");
+      return;
+    }
+
+    // ── add single ───────────────────────────────────────
     if (!COMPONENT_LIST.includes(component)) {
       console.log(chalk.red(`  Component "${component}" not found.`));
       console.log("");
@@ -273,56 +352,22 @@ program
       COMPONENT_LIST.forEach((c) =>
         console.log(chalk.dim(`    - ${c}`))
       );
+      console.log(chalk.dim(`    - ${chalk.bold("all")}  (adds every component)`));
       console.log("");
       return;
     }
 
-    const spinner = ora(`Fetching ${component}...`).start();
+    await addSingleComponent(component, opts.dir, false);
 
-    try {
-      const source = await fetchComponent(component);
-
-      // Keep source as-is; import path @/lib/utils works with standard Next.js alias
-      const rewritten = source;
-
-      const compDir = join(process.cwd(), opts.dir);
-      ensureDir(compDir);
-
-      const filePath = join(compDir, `${component}.tsx`);
-      if (existsSync(filePath)) {
-        spinner.stop();
-        const { overwrite } = await prompts({
-          type: "confirm",
-          name: "overwrite",
-          message: `${component}.tsx already exists. Overwrite?`,
-          initial: false,
-        });
-        if (!overwrite) {
-          console.log(chalk.yellow("  Skipped."));
-          return;
-        }
-      }
-
-      writeFileSync(filePath, rewritten, "utf-8");
-      spinner.succeed(`Added ${opts.dir}/${component}.tsx`);
-
-      console.log("");
-      console.log(
-        chalk.dim(
-          `  Import: ${chalk.bold(
-            `import ${toPascalCase(component)} from '@/${opts.dir}/${component}'`
-          )}`
-        )
-      );
-      console.log("");
-    } catch (err) {
-      spinner.fail(`Failed to fetch ${component}`);
-      console.log(
-        chalk.dim(
-          `  ${err instanceof Error ? err.message : "Unknown error"}`
-        )
-      );
-    }
+    console.log("");
+    console.log(
+      chalk.dim(
+        `  Import: ${chalk.bold(
+          `import ${toPascalCase(component)} from '@/${opts.dir}/${component}'`
+        )}`
+      )
+    );
+    console.log("");
   });
 
 // ── list ─────────────────────────────────────────────────
