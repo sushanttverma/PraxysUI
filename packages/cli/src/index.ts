@@ -435,12 +435,91 @@ async function installDepsForComponents(slugs: string[]) {
 program
   .command("add")
   .description("Add a component (or all components) to your project")
-  .argument("<component>", 'Component slug (e.g. animated-button) or "all"')
+  .argument("[component]", 'Component slug (e.g. animated-button) or "all". Omit for interactive picker.')
   .option("-d, --dir <directory>", "Component directory")
   .option("-y, --yes", "Skip overwrite prompts (skip existing files)", false)
   .option("--install-deps", "Install component dependencies after adding", false)
-  .action(async (component: string, opts: { dir?: string; yes: boolean; installDeps: boolean }) => {
+  .action(async (component: string | undefined, opts: { dir?: string; yes: boolean; installDeps: boolean }) => {
     const dir = getComponentsDir(opts.dir);
+
+    // ── interactive picker when no arg ───────────────────
+    if (!component) {
+      console.log("");
+      console.log(
+        chalk.bold(`  ${chalk.hex("#E84E2D")("Praxys UI")} — add components`)
+      );
+      console.log("");
+
+      const categoryOrder = ["buttons", "cards", "text", "navigation", "visual", "media"];
+      const choices: { title: string; value: string; description?: string }[] = [];
+
+      for (const cat of categoryOrder) {
+        const color = CATEGORY_COLORS[cat] || "#FFFFFF";
+        // Category separator
+        choices.push({
+          title: chalk.hex(color).bold(`── ${cat.toUpperCase()} ──`),
+          value: `__sep_${cat}`,
+          description: "",
+        });
+        for (const [slug, meta] of Object.entries(COMPONENT_REGISTRY)) {
+          if (meta.category !== cat) continue;
+          const newBadge = meta.isNew ? chalk.green(" NEW") : "";
+          choices.push({
+            title: `${meta.title}${newBadge}`,
+            value: slug,
+            description: truncate(meta.description, 50),
+          });
+        }
+      }
+
+      const { selected } = await prompts({
+        type: "multiselect",
+        name: "selected",
+        message: "Pick components to add (space to select, enter to confirm)",
+        choices: choices.map((c) => ({
+          title: c.title,
+          value: c.value,
+          description: c.description,
+          disabled: c.value.startsWith("__sep_"),
+        })),
+        hint: "- Space to select. Return to submit",
+      });
+
+      if (!selected || selected.length === 0) {
+        console.log(chalk.yellow("  No components selected."));
+        console.log("");
+        return;
+      }
+
+      const slugs = (selected as string[]).filter((s) => !s.startsWith("__sep_"));
+      if (slugs.length === 0) {
+        console.log(chalk.yellow("  No components selected."));
+        console.log("");
+        return;
+      }
+
+      let added = 0;
+      let failed = 0;
+      for (const slug of slugs) {
+        const ok = await addSingleComponent(slug, dir, opts.yes);
+        if (ok) added++;
+        else failed++;
+      }
+
+      console.log("");
+      console.log(
+        chalk.green(`  ✓ ${added} components added`) +
+          (failed > 0 ? chalk.red(`, ${failed} failed`) : "")
+      );
+
+      if (opts.installDeps) {
+        await installDepsForComponents(slugs);
+      }
+
+      console.log("");
+      return;
+    }
+
     console.log("");
     console.log(
       chalk.bold(
@@ -903,6 +982,162 @@ program
           (failedCount > 0 ? chalk.red(`, ${failedCount} failed`) : "")
       );
     }
+    console.log("");
+  });
+
+// ── doctor ───────────────────────────────────────────────
+
+program
+  .command("doctor")
+  .description("Check your Praxys UI project setup for issues")
+  .action(() => {
+    console.log("");
+    console.log(
+      chalk.bold(`  ${chalk.hex("#E84E2D")("Praxys UI")} — doctor`)
+    );
+    console.log("");
+
+    let issues = 0;
+
+    // 1. Config file
+    const config = loadConfig();
+    if (config) {
+      console.log(chalk.green("  ✓ praxys.config.json found"));
+    } else {
+      console.log(chalk.yellow("  ✗ praxys.config.json not found"));
+      console.log(chalk.dim("    Run `praxys-ui init` to create it."));
+      issues++;
+    }
+
+    // 2. Components directory
+    const compDir = config?.componentsDir ?? "components/ui";
+    const compPath = join(process.cwd(), compDir);
+    if (existsSync(compPath)) {
+      console.log(chalk.green(`  ✓ Components directory exists (${compDir})`));
+    } else {
+      console.log(chalk.yellow(`  ✗ Components directory missing (${compDir})`));
+      issues++;
+    }
+
+    // 3. Utils file
+    const utilsDir = config?.utilsDir ?? "lib";
+    const utilsPath = join(process.cwd(), utilsDir, "utils.ts");
+    if (existsSync(utilsPath)) {
+      console.log(chalk.green(`  ✓ Utils file exists (${utilsDir}/utils.ts)`));
+    } else {
+      console.log(chalk.yellow(`  ✗ Utils file missing (${utilsDir}/utils.ts)`));
+      issues++;
+    }
+
+    // 4. Package manager
+    const pm = detectPackageManager();
+    console.log(chalk.green(`  ✓ Package manager: ${pm}`));
+
+    // 5. Core dependencies
+    const pkgJsonPath = join(process.cwd(), "package.json");
+    if (existsSync(pkgJsonPath)) {
+      try {
+        const pkgJson = JSON.parse(readFileSync(pkgJsonPath, "utf-8"));
+        const allDeps = { ...pkgJson.dependencies, ...pkgJson.devDependencies };
+        const coreDeps = ["clsx", "tailwind-merge", "framer-motion"];
+        for (const dep of coreDeps) {
+          if (allDeps[dep]) {
+            console.log(chalk.green(`  ✓ ${dep} installed (${allDeps[dep]})`));
+          } else {
+            console.log(chalk.yellow(`  ✗ ${dep} not found in package.json`));
+            issues++;
+          }
+        }
+      } catch {
+        console.log(chalk.yellow("  ✗ Could not parse package.json"));
+        issues++;
+      }
+    } else {
+      console.log(chalk.yellow("  ✗ No package.json found"));
+      issues++;
+    }
+
+    // 6. Installed components count
+    if (existsSync(compPath)) {
+      const installed = COMPONENT_LIST.filter((slug) =>
+        existsSync(join(compPath, `${slug}.tsx`))
+      );
+      console.log(chalk.green(`  ✓ ${installed.length}/${COMPONENT_LIST.length} components installed`));
+    }
+
+    console.log("");
+    if (issues === 0) {
+      console.log(chalk.green.bold("  All checks passed!"));
+    } else {
+      console.log(chalk.yellow(`  ${issues} issue${issues > 1 ? "s" : ""} found.`));
+    }
+    console.log("");
+  });
+
+// ── stats ────────────────────────────────────────────────
+
+program
+  .command("stats")
+  .description("Show statistics about installed and available components")
+  .option("-d, --dir <directory>", "Component directory")
+  .action((opts: { dir?: string }) => {
+    const dir = getComponentsDir(opts.dir);
+    const compPath = join(process.cwd(), dir);
+
+    console.log("");
+    console.log(
+      chalk.bold(`  ${chalk.hex("#E84E2D")("Praxys UI")} — stats`)
+    );
+    console.log("");
+
+    const categoryOrder = ["buttons", "cards", "text", "navigation", "visual", "media"];
+
+    // Count per category
+    const catStats: Record<string, { total: number; installed: number }> = {};
+    for (const cat of categoryOrder) {
+      catStats[cat] = { total: 0, installed: 0 };
+    }
+
+    let totalInstalled = 0;
+
+    for (const [slug, meta] of Object.entries(COMPONENT_REGISTRY)) {
+      catStats[meta.category].total++;
+      if (existsSync(join(compPath, `${slug}.tsx`))) {
+        catStats[meta.category].installed++;
+        totalInstalled++;
+      }
+    }
+
+    // Header
+    console.log(
+      chalk.dim("  Category        Installed   Available")
+    );
+    console.log(chalk.dim("  " + "─".repeat(40)));
+
+    for (const cat of categoryOrder) {
+      const { total, installed } = catStats[cat];
+      const color = CATEGORY_COLORS[cat] || "#FFFFFF";
+      const bar = installed > 0
+        ? chalk.hex(color)("█".repeat(installed)) + chalk.dim("░".repeat(total - installed))
+        : chalk.dim("░".repeat(total));
+      const catLabel = cat.padEnd(16);
+      console.log(
+        `  ${chalk.hex(color)(catLabel)} ${String(installed).padStart(3)}/${String(total).padEnd(5)}  ${bar}`
+      );
+    }
+
+    console.log(chalk.dim("  " + "─".repeat(40)));
+    console.log(
+      chalk.bold(`  ${"Total".padEnd(16)} ${String(totalInstalled).padStart(3)}/${String(COMPONENT_LIST.length).padEnd(5)}`)
+    );
+
+    // Coverage percentage
+    const pct = COMPONENT_LIST.length > 0
+      ? Math.round((totalInstalled / COMPONENT_LIST.length) * 100)
+      : 0;
+    console.log("");
+    console.log(chalk.dim(`  Coverage: ${pct}% of components installed`));
+    console.log(chalk.dim(`  Directory: ${dir}`));
     console.log("");
   });
 
