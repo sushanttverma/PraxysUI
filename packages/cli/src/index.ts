@@ -192,13 +192,72 @@ function getComponentsDir(optDir?: string): string {
 function fuzzyMatch(query: string, text: string): boolean {
   const lower = text.toLowerCase();
   const q = query.toLowerCase();
-  // simple substring match on slug, title, or description
   return lower.includes(q);
 }
 
 function truncate(str: string, max: number): string {
   if (str.length <= max) return str;
   return str.slice(0, max - 1) + "…";
+}
+
+function levenshtein(a: string, b: string): number {
+  const m = a.length, n = b.length;
+  const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = a[i - 1] === b[j - 1]
+        ? dp[i - 1][j - 1]
+        : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+    }
+  }
+  return dp[m][n];
+}
+
+function didYouMean(input: string): string | null {
+  let best = "";
+  let bestDist = Infinity;
+  for (const slug of COMPONENT_LIST) {
+    const dist = levenshtein(input.toLowerCase(), slug.toLowerCase());
+    if (dist < bestDist) {
+      bestDist = dist;
+      best = slug;
+    }
+  }
+  // Only suggest if distance is reasonable (less than ~40% of input length)
+  if (bestDist <= Math.max(2, Math.floor(input.length * 0.4))) {
+    return best;
+  }
+  return null;
+}
+
+function printNotFound(slug: string) {
+  const suggestion = didYouMean(slug);
+  if (suggestion) {
+    console.log(chalk.red(`  Component "${slug}" not found.`) + chalk.dim(` Did you mean ${chalk.bold(suggestion)}?`));
+  } else {
+    console.log(chalk.red(`  Component "${slug}" not found.`));
+  }
+}
+
+async function checkForUpdates() {
+  try {
+    const res = await fetch("https://registry.npmjs.org/praxys-ui/latest", {
+      signal: AbortSignal.timeout(3000),
+    });
+    if (!res.ok) return;
+    const data = await res.json() as { version?: string };
+    const latest = data.version;
+    if (latest && latest !== VERSION) {
+      console.log(
+        chalk.dim(`  Update available: ${VERSION} → ${chalk.bold(latest)}  Run ${chalk.cyan("npm i -g praxys-ui")} to update.`)
+      );
+      console.log("");
+    }
+  } catch {
+    // Silently ignore — no network, timeout, etc.
+  }
 }
 
 function colorizeSource(source: string): string {
@@ -260,6 +319,7 @@ program
 
 program
   .command("init")
+  .alias("i")
   .description("Initialize Praxys UI in your project")
   .action(async () => {
     console.log("");
@@ -434,16 +494,16 @@ async function installDepsForComponents(slugs: string[]) {
 
 program
   .command("add")
-  .description("Add a component (or all components) to your project")
-  .argument("[component]", 'Component slug (e.g. animated-button) or "all". Omit for interactive picker.')
+  .description("Add one or more components to your project")
+  .argument("[components...]", 'Component slugs (e.g. animated-button alert) or "all". Omit for interactive picker.')
   .option("-d, --dir <directory>", "Component directory")
   .option("-y, --yes", "Skip overwrite prompts (skip existing files)", false)
   .option("--install-deps", "Install component dependencies after adding", false)
-  .action(async (component: string | undefined, opts: { dir?: string; yes: boolean; installDeps: boolean }) => {
+  .action(async (components: string[], opts: { dir?: string; yes: boolean; installDeps: boolean }) => {
     const dir = getComponentsDir(opts.dir);
 
-    // ── interactive picker when no arg ───────────────────
-    if (!component) {
+    // ── interactive picker when no args ──────────────────
+    if (!components || components.length === 0) {
       console.log("");
       console.log(
         chalk.bold(`  ${chalk.hex("#E84E2D")("Praxys UI")} — add components`)
@@ -520,18 +580,17 @@ program
       return;
     }
 
+    const label = components.length === 1 ? chalk.cyan(components[0]) : chalk.cyan(`${components.length} components`);
     console.log("");
     console.log(
       chalk.bold(
-        `  ${chalk.hex("#E84E2D")("Praxys UI")} — add ${chalk.cyan(
-          component
-        )}`
+        `  ${chalk.hex("#E84E2D")("Praxys UI")} — add ${label}`
       )
     );
     console.log("");
 
     // ── add all ──────────────────────────────────────────
-    if (component === "all") {
+    if (components.includes("all")) {
       const { confirm } = await prompts({
         type: "confirm",
         name: "confirm",
@@ -544,13 +603,19 @@ program
         return;
       }
 
+      // Parallel fetch in batches of 6
       let added = 0;
       let failed = 0;
-
-      for (const slug of COMPONENT_LIST) {
-        const ok = await addSingleComponent(slug, dir, opts.yes);
-        if (ok) added++;
-        else failed++;
+      const batchSize = 6;
+      for (let i = 0; i < COMPONENT_LIST.length; i += batchSize) {
+        const batch = COMPONENT_LIST.slice(i, i + batchSize);
+        const results = await Promise.allSettled(
+          batch.map((slug) => addSingleComponent(slug, dir, opts.yes))
+        );
+        for (const r of results) {
+          if (r.status === "fulfilled" && r.value) added++;
+          else failed++;
+        }
       }
 
       console.log("");
@@ -567,45 +632,82 @@ program
       return;
     }
 
-    // ── add single ───────────────────────────────────────
-    if (!COMPONENT_LIST.includes(component)) {
-      console.log(chalk.red(`  Component "${component}" not found.`));
-      console.log("");
-      console.log(chalk.dim("  Available components:"));
-      COMPONENT_LIST.forEach((c) =>
-        console.log(chalk.dim(`    - ${c}`))
-      );
-      console.log(chalk.dim(`    - ${chalk.bold("all")}  (adds every component)`));
+    // ── validate all slugs first ─────────────────────────
+    const invalidSlugs = components.filter((c) => !COMPONENT_LIST.includes(c));
+    if (invalidSlugs.length > 0) {
+      for (const bad of invalidSlugs) {
+        const suggestion = didYouMean(bad);
+        if (suggestion) {
+          console.log(chalk.red(`  Component "${bad}" not found.`) + chalk.dim(` Did you mean ${chalk.bold(suggestion)}?`));
+        } else {
+          console.log(chalk.red(`  Component "${bad}" not found.`));
+        }
+      }
+      console.log(chalk.dim(`\n  Run ${chalk.bold("praxys-ui list")} to see available components.`));
       console.log("");
       return;
     }
 
-    const ok = await addSingleComponent(component, dir, false);
+    // ── add single or multiple ───────────────────────────
+    if (components.length === 1) {
+      const slug = components[0];
+      const ok = await addSingleComponent(slug, dir, false);
 
-    if (ok && opts.installDeps) {
-      await installDepsForComponents([component]);
+      if (ok && opts.installDeps) {
+        await installDepsForComponents([slug]);
+      }
+
+      console.log("");
+      console.log(
+        chalk.dim(
+          `  Import: ${chalk.bold(
+            `import ${toPascalCase(slug)} from '@/${dir}/${slug}'`
+          )}`
+        )
+      );
+      console.log("");
+    } else {
+      // Parallel fetch in batches of 6
+      let added = 0;
+      let failed = 0;
+      const batchSize = 6;
+      for (let i = 0; i < components.length; i += batchSize) {
+        const batch = components.slice(i, i + batchSize);
+        const results = await Promise.allSettled(
+          batch.map((slug) => addSingleComponent(slug, dir, opts.yes))
+        );
+        for (const r of results) {
+          if (r.status === "fulfilled" && r.value) added++;
+          else failed++;
+        }
+      }
+
+      console.log("");
+      console.log(
+        chalk.green(`  ✓ ${added} components added`) +
+          (failed > 0 ? chalk.red(`, ${failed} failed`) : "")
+      );
+
+      if (opts.installDeps) {
+        await installDepsForComponents(components);
+      }
+
+      console.log("");
     }
-
-    console.log("");
-    console.log(
-      chalk.dim(
-        `  Import: ${chalk.bold(
-          `import ${toPascalCase(component)} from '@/${dir}/${component}'`
-        )}`
-      )
-    );
-    console.log("");
   });
 
 // ── list ─────────────────────────────────────────────────
 
 program
   .command("list")
+  .alias("ls")
   .description("List all available components")
   .option("-c, --category <category>", "Filter by category (buttons, cards, text, navigation, visual, media)")
   .option("-n, --new", "Show only new components", false)
   .option("-s, --search <query>", "Search components by name or description")
-  .action((opts: { category?: string; new: boolean; search?: string }) => {
+  .option("--installed", "Show only locally installed components", false)
+  .option("-d, --dir <directory>", "Component directory (used with --installed)")
+  .action((opts: { category?: string; new: boolean; search?: string; installed: boolean; dir?: string }) => {
     console.log("");
     console.log(
       chalk.bold(`  ${chalk.hex("#E84E2D")("Praxys UI")} — components`)
@@ -621,6 +723,19 @@ program
       if (entries.length === 0) {
         console.log(chalk.yellow(`  No components found in category "${opts.category}".`));
         console.log(chalk.dim(`  Categories: buttons, cards, text, navigation, visual, media`));
+        console.log("");
+        return;
+      }
+    }
+
+    // Filter by installed
+    if (opts.installed) {
+      const compPath = join(process.cwd(), getComponentsDir(opts.dir));
+      entries = entries.filter(([slug]) =>
+        existsSync(join(compPath, `${slug}.tsx`))
+      );
+      if (entries.length === 0) {
+        console.log(chalk.yellow(`  No installed components found.`));
         console.log("");
         return;
       }
@@ -688,7 +803,7 @@ program
     const meta = COMPONENT_REGISTRY[component];
     if (!meta) {
       console.log("");
-      console.log(chalk.red(`  Component "${component}" not found.`));
+      printNotFound(component);
       console.log(chalk.dim(`  Run ${chalk.bold("praxys-ui list")} to see available components.`));
       console.log("");
       return;
@@ -714,7 +829,7 @@ program
   .action(async (component: string) => {
     if (!COMPONENT_REGISTRY[component]) {
       console.log("");
-      console.log(chalk.red(`  Component "${component}" not found.`));
+      printNotFound(component);
       console.log(chalk.dim(`  Run ${chalk.bold("praxys-ui list")} to see available components.`));
       console.log("");
       return;
@@ -750,7 +865,7 @@ program
 
     if (!COMPONENT_REGISTRY[component]) {
       console.log("");
-      console.log(chalk.red(`  Component "${component}" not found.`));
+      printNotFound(component);
       console.log("");
       return;
     }
@@ -812,6 +927,7 @@ program
 
 program
   .command("remove")
+  .alias("rm")
   .description("Remove a component from your project")
   .argument("<component>", "Component slug")
   .option("-d, --dir <directory>", "Component directory")
@@ -821,7 +937,7 @@ program
 
     if (!COMPONENT_REGISTRY[component]) {
       console.log("");
-      console.log(chalk.red(`  Component "${component}" not found.`));
+      printNotFound(component);
       console.log("");
       return;
     }
@@ -884,7 +1000,7 @@ program
     let slugsToCheck: string[];
     if (component) {
       if (!COMPONENT_REGISTRY[component]) {
-        console.log(chalk.red(`  Component "${component}" not found.`));
+        printNotFound(component);
         console.log("");
         return;
       }
@@ -1143,4 +1259,4 @@ program
 
 // ── run ──────────────────────────────────────────────────
 
-program.parse();
+program.parseAsync().then(() => checkForUpdates());
