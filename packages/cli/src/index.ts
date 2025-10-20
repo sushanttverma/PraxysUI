@@ -321,41 +321,24 @@ program
   .command("init")
   .alias("i")
   .description("Initialize Praxys UI in your project")
-  .action(async () => {
+  .option("-d, --dir <directory>", "Component directory", "components/ui")
+  .option("--utils-dir <directory>", "Utils directory", "lib")
+  .action(async (opts: { dir: string; utilsDir: string }) => {
+    const componentDir = opts.dir;
+    const utilsDir = opts.utilsDir;
+    const pm = detectPackageManager();
+
     console.log("");
     console.log(
       chalk.bold(`  ${chalk.hex("#E84E2D")("Praxys UI")} — init`)
     );
     console.log("");
+    console.log(chalk.dim(`  Package manager  ${pm}`));
+    console.log(chalk.dim(`  Components       ${componentDir}/`));
+    console.log(chalk.dim(`  Utils            ${utilsDir}/utils.ts`));
+    console.log("");
 
-    const pm = detectPackageManager();
-    console.log(chalk.dim(`  Package manager: ${pm}`));
-
-    const { componentDir } = await prompts({
-      type: "text",
-      name: "componentDir",
-      message: "Where should components be installed?",
-      initial: "components/ui",
-    });
-
-    if (!componentDir) {
-      console.log(chalk.yellow("  Cancelled."));
-      return;
-    }
-
-    const { utilsDir } = await prompts({
-      type: "text",
-      name: "utilsDir",
-      message: "Where should the utils file be created?",
-      initial: "lib",
-    });
-
-    if (!utilsDir) {
-      console.log(chalk.yellow("  Cancelled."));
-      return;
-    }
-
-    // Install dependencies
+    // 1. Install dependencies
     const spinner = ora("Installing dependencies...").start();
     try {
       const deps = ["clsx", "tailwind-merge", "framer-motion"];
@@ -371,27 +354,23 @@ program
       );
     }
 
-    // Create utils file
-    const utilsSpinner = ora("Creating utility files...").start();
-    try {
-      const utilsPath = join(process.cwd(), utilsDir);
-      ensureDir(utilsPath);
-      const utilsFile = join(utilsPath, "utils.ts");
-      if (existsSync(utilsFile)) {
-        utilsSpinner.warn("utils.ts already exists, skipping");
-      } else {
-        writeFileSync(utilsFile, UTILS_CONTENT, "utf-8");
-        utilsSpinner.succeed(`Created ${utilsDir}/utils.ts`);
-      }
-    } catch {
-      utilsSpinner.fail("Failed to create utils file");
+    // 2. Create utils file
+    const utilsPath = join(process.cwd(), utilsDir);
+    ensureDir(utilsPath);
+    const utilsFile = join(utilsPath, "utils.ts");
+    if (existsSync(utilsFile)) {
+      console.log(chalk.dim("  ○ utils.ts already exists, skipping"));
+    } else {
+      writeFileSync(utilsFile, UTILS_CONTENT, "utf-8");
+      console.log(chalk.green(`  ✓ Created ${utilsDir}/utils.ts`));
     }
 
-    // Create component directory
+    // 3. Create component directory
     const compPath = join(process.cwd(), componentDir);
     ensureDir(compPath);
+    console.log(chalk.green(`  ✓ Created ${componentDir}/`));
 
-    // Write config file
+    // 4. Write config file
     const configPath = join(process.cwd(), "praxys.config.json");
     const config: PraxysConfig = {
       componentsDir: componentDir,
@@ -401,19 +380,16 @@ program
     console.log(chalk.green("  ✓ Created praxys.config.json"));
 
     console.log("");
-    console.log(chalk.green("  ✓ Praxys UI initialized!"));
+    console.log(chalk.green("  Done!"));
     console.log("");
     console.log(
-      chalk.dim(
-        `  Add components with: ${chalk.bold("npx praxys-ui add <component>")}`
-      )
+      chalk.dim(`  npx praxys-ui add animated-button   Add a component`)
     );
     console.log(
-      chalk.dim(
-        `  Browse components:   ${chalk.bold(
-          "https://github.com/sushanttverma/Praxys-UI"
-        )}`
-      )
+      chalk.dim(`  npx praxys-ui add                   Browse & pick`)
+    );
+    console.log(
+      chalk.dim(`  npx praxys-ui list                  See all 71 components`)
     );
     console.log("");
   });
