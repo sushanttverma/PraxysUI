@@ -2,6 +2,107 @@
 
 All notable changes to Praxys UI are documented here.
 
+## [1.3.3] — Feb 24, 2026
+
+**CLI Overhaul — Full Component Management**
+
+Major CLI upgrade with a rich metadata registry, 10 new commands, interactive picker, parallel fetching, did-you-mean suggestions, and project diagnostics.
+
+### Added
+
+- Component Registry — replaced flat array with typed registry containing title, description, category, dependencies, and isNew for all 71 components
+- `info` command — show component metadata (title, category, dependencies, docs link) without installing
+- `view` command — fetch and display source code with syntax highlighting (keywords, strings, comments)
+- `diff` command — compare local file with latest remote version, colorized line-by-line diff
+- `remove` command — delete a component file with confirmation prompt. Alias: `rm`
+- `update` command — update one or all installed components with diff summary and confirmation. `--check` flag for dry-run
+- `doctor` command — check project health: config file, directories, utils, core dependencies, installed count
+- `stats` command — visual dashboard with installed vs available counts per category and bar chart
+- Interactive add picker — run `add` with no arguments for a categorized multi-select component browser
+- Multi-component add — `add accordion alert badge` adds multiple components in one command
+- `--install-deps` flag on `add` — auto-detect package manager and install component dependencies
+- `--installed` flag on `list` — filter to only locally installed components
+- `--category`, `--new`, `--search` flags on `list` — filter and search components
+- Config file — `init` writes `praxys.config.json` with component and utils directories
+- Did-you-mean suggestions — typo `animted-button` suggests `animated-button` (Levenshtein distance)
+- Command aliases — `i` for init, `ls` for list, `rm` for remove
+- Parallel fetching — multi-component adds fetch in batches of 6 concurrently
+- CLI update notice — checks npm registry after each command and notifies if a newer version exists
+
+### Improved
+
+- `list` output — grouped by category with colored headers, NEW badges, and truncated descriptions
+- `add` — reads component directory from config if no `--dir` flag provided
+- All commands — consistent error messages with did-you-mean suggestions for unknown slugs
+
+## [1.2.9] — Feb 22, 2026
+
+**Site Redesign & New Tools**
+
+Complete landing page redesign with experimental hero, bento showcase, and numbers bar. New standalone components page with search and live demos. Page transitions, responsive preview modes, and editorial-style page headers.
+
+### Added
+
+- New Landing Page — experimental hero section, bento component showcase, numbers bar, and redesigned footer
+- Components Page — standalone /components with search, category filters, and lazy-loaded live demos
+- Page Transitions — smooth transitions between pages
+- Responsive Preview Modes — preview components at different viewport sizes
+- "New" Component Labels — badge on recently added components
+- Back-to-Top Button — added to content pages
+- Global Command Palette — integrated across the redesigned site
+
+### Improved
+
+- Page Headers — redesigned to editorial style with updated button aesthetics
+- Navbar — reorganized items with icons, refined expanded menu layout
+- Routing — moved from /docs/[slug] to standalone /components/[slug] and /components/install
+- Component Demos — lazy loading with useInView for better performance
+- Hero Component — centralized site metadata
+
+## [1.2.8] — Feb 19, 2026
+
+**Animation Studio Rebuild & Design Tools**
+
+Rebuilt Animation Studio from scratch with GSAP engine and timeline editor. Added Shadow Lab for layered box-shadow design and Glassmorphism tool for frosted glass effects. Replaced fixed navbar with GSAP-animated floating menu.
+
+### Added
+
+- Animation Studio Rebuild — complete rewrite with GSAP engine, timeline editor, and advanced animation features
+- Shadow Lab — interactive tool for designing layered box-shadow effects
+- Glassmorphism Tool — design frosted glass UI effects with live preview
+- Gradient Maker — interactive gradient builder with CSS/Tailwind/SVG export
+- GSAP Floating Menu — replaced fixed navbar with animated expanding pill navigation
+- Floating Menu integrated into component grid
+
+### Fixed
+
+- ESLint errors and warnings resolved across studio and glass-generator
+- 404 page layout fixed
+- Component count updated to 70
+
+### Improved
+
+- Animation Studio integrated with Praxys UI component registry
+- Theme toggle hydration handling improved
+- Gradient Maker — responsive layout with flex-wrap and code wrapping
+
+## [1.2.7] — Feb 16, 2026
+
+**Floating Menu & Flip Text Improvements**
+
+New Floating Menu component with GSAP-animated hamburger-to-X transition and text scramble effect. Flip Text upgraded with proper 3D rotation and hover-to-replay.
+
+### Added
+
+- Floating Menu — GSAP-animated expanding pill nav with hamburger-to-X transition, text scramble effect, and staggered item reveals
+- Floating Menu added to CLI component list
+
+### Improved
+
+- Flip Text — proper 3D rotation with perspective and improved visual properties
+- Flip Text — hover-to-replay functionality for interactive text animations
+- Flip Text — adjusted default stagger delay for smoother effect
+
 ## [1.2.6] — Feb 15, 2026
 
 **Color Customization & Enhanced Studio**
