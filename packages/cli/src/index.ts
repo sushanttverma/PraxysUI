@@ -112,6 +112,35 @@ const COMPONENT_REGISTRY: Record<string, ComponentMeta> = {
   "toast-notification": { title: "Toast Notification", description: "Stackable animated toast notifications with variants (success, error, warning, info), auto-dismiss, and manual dismiss.", category: "visual", dependencies: ["framer-motion", "clsx", "tailwind-merge"] },
   "tooltip": { title: "Tooltip", description: "A tooltip with 4 positions, configurable delay, direction-aware motion animation, and arrow pointer.", category: "navigation", dependencies: ["framer-motion", "clsx", "tailwind-merge"] },
   "typewriter-text": { title: "Typewriter Text", description: "An animated typing effect that cycles through strings, typing and deleting characters with a blinking cursor.", category: "text", dependencies: ["framer-motion", "clsx", "tailwind-merge"] },
+  "toggle-group": { title: "Toggle Group", description: "Segmented control with layoutId spring animation on the selection indicator, three sizes.", category: "buttons", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "number-input": { title: "Number Input", description: "Numeric stepper with animated increment/decrement buttons, min/max/step support, three sizes.", category: "buttons", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "search-input": { title: "Search Input", description: "Search bar with animated search icon, spinning loading indicator, and AnimatePresence clear button.", category: "buttons", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "password-input": { title: "Password Input", description: "Password input with animated show/hide toggle using SVG eye icons and AnimatePresence transitions.", category: "buttons", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "range-slider": { title: "Range Slider", description: "Dual-thumb range slider with framer-motion drag interaction, step snapping, and hover/tap animations.", category: "buttons", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "copy-button": { title: "Copy Button", description: "Click-to-copy button with animated transition between copy icon and checkmark feedback.", category: "buttons", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "mention-input": { title: "Mention Input", description: "Text input with @ mention detection, animated dropdown user list, and keyboard navigation.", category: "buttons", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "pricing-card": { title: "Pricing Card", description: "Animated pricing card with feature list, CTA button, popular badge, and hover scale effect.", category: "cards", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "profile-card": { title: "Profile Card", description: "Profile card with avatar, online indicator, social links, and staggered entrance animation.", category: "cards", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "feature-card": { title: "Feature Card", description: "Feature card with icon, title, description, and 3D tilt effect that follows the cursor.", category: "cards", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "comparison-table": { title: "Comparison Table", description: "Side-by-side comparison table with plan columns, check/cross icons, and staggered row animations.", category: "cards", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "stat-bar": { title: "Stat Bar", description: "Horizontal progress bar with label, percentage, and scroll-triggered spring fill animation.", category: "cards", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "gradient-text": { title: "Gradient Text", description: "Animated gradient text using background-clip with configurable colors and speed.", category: "text", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "scramble-text": { title: "Scramble Text", description: "Text decode effect that reveals characters one by one with random character scrambling.", category: "text", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "text-reveal": { title: "Text Reveal", description: "Splits text into words and animates each from below with staggered scroll-triggered entrance.", category: "text", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "glitch-text": { title: "Glitch Text", description: "RGB split glitch effect with clip-path slicing animation and configurable intensity levels.", category: "text", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "sidebar": { title: "Sidebar", description: "Collapsible sidebar navigation with animated width transition, staggered items, and expandable sub-items.", category: "navigation", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "bottom-sheet": { title: "Bottom Sheet", description: "Mobile bottom sheet drawer with drag-to-dismiss, snap points, spring animation, and backdrop blur.", category: "navigation", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "popover": { title: "Popover", description: "Floating popover with 4 sides, 3 alignments, arrow indicator, click-outside close, and directional animation.", category: "navigation", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "context-menu": { title: "Context Menu", description: "Right-click context menu with keyboard navigation, divider support, disabled items, and ARIA roles.", category: "navigation", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "mega-menu": { title: "Mega Menu", description: "Large dropdown navigation with hover trigger, multi-column grid sections, and delayed close.", category: "navigation", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "confetti": { title: "Confetti", description: "Celebration burst effect with randomized particles, colors, rotation, and physics-based falling animation.", category: "visual", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "particles": { title: "Particles", description: "Floating particle background with randomized drift paths, looping animations, and configurable density.", category: "visual", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "noise-texture": { title: "Noise Texture", description: "Animated grain overlay using SVG feTurbulence filter for a film-grain effect.", category: "visual", dependencies: ["clsx", "tailwind-merge"], isNew: true },
+  "aurora": { title: "Aurora", description: "Aurora borealis gradient background with blurred animated blobs in smooth keyframe paths.", category: "visual", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "blur-fade": { title: "Blur Fade", description: "Blur + fade entrance wrapper with configurable direction, delay, and duration.", category: "visual", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "carousel": { title: "Carousel", description: "Image carousel with directional slide animation, auto-play, arrow and dot navigation.", category: "media", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "avatar": { title: "Avatar", description: "Avatar component with four sizes, status indicators, fallback initials, and animated status dot.", category: "media", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "lightbox": { title: "Lightbox", description: "Fullscreen image viewer with zoom, arrow key navigation, thumbnail strip, and backdrop blur.", category: "media", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
 };
 
 const COMPONENT_LIST = Object.keys(COMPONENT_REGISTRY);
@@ -389,7 +418,7 @@ program
       chalk.dim(`  npx praxys-ui add                   Browse & pick`)
     );
     console.log(
-      chalk.dim(`  npx praxys-ui list                  See all 71 components`)
+      chalk.dim(`  npx praxys-ui list                  See all 100 components`)
     );
     console.log("");
   });
