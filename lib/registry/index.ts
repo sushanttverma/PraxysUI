@@ -81,6 +81,35 @@ import otpInput from "./otp-input";
 import rating from "./rating";
 import autocomplete from "./autocomplete";
 import floatingMenu from "./floating-menu";
+import gradientText from "./gradient-text";
+import scrambleText from "./scramble-text";
+import textReveal from "./text-reveal";
+import glitchText from "./glitch-text";
+import pricingCard from "./pricing-card";
+import profileCard from "./profile-card";
+import featureCard from "./feature-card";
+import comparisonTable from "./comparison-table";
+import statBar from "./stat-bar";
+import confetti from "./confetti";
+import particles from "./particles";
+import noiseTexture from "./noise-texture";
+import aurora from "./aurora";
+import blurFade from "./blur-fade";
+import carousel from "./carousel";
+import avatar from "./avatar";
+import lightbox from "./lightbox";
+import sidebar from "./sidebar";
+import bottomSheet from "./bottom-sheet";
+import popover from "./popover";
+import contextMenu from "./context-menu";
+import megaMenu from "./mega-menu";
+import toggleGroup from "./toggle-group";
+import numberInput from "./number-input";
+import searchInput from "./search-input";
+import passwordInput from "./password-input";
+import rangeSlider from "./range-slider";
+import copyButton from "./copy-button";
+import mentionInput from "./mention-input";
 
 // ─── Sidebar structure ───────────────────────────────────
 
@@ -170,6 +199,35 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "rating", title: "Rating" },
       { slug: "autocomplete", title: "Autocomplete" },
       { slug: "floating-menu", title: "Floating Menu" },
+      { slug: "gradient-text", title: "Gradient Text" },
+      { slug: "scramble-text", title: "Scramble Text" },
+      { slug: "text-reveal", title: "Text Reveal" },
+      { slug: "glitch-text", title: "Glitch Text" },
+      { slug: "pricing-card", title: "Pricing Card" },
+      { slug: "profile-card", title: "Profile Card" },
+      { slug: "feature-card", title: "Feature Card" },
+      { slug: "comparison-table", title: "Comparison Table" },
+      { slug: "stat-bar", title: "Stat Bar" },
+      { slug: "confetti", title: "Confetti" },
+      { slug: "particles", title: "Particles" },
+      { slug: "noise-texture", title: "Noise Texture" },
+      { slug: "aurora", title: "Aurora" },
+      { slug: "blur-fade", title: "Blur Fade" },
+      { slug: "carousel", title: "Carousel" },
+      { slug: "avatar", title: "Avatar" },
+      { slug: "lightbox", title: "Lightbox" },
+      { slug: "sidebar", title: "Sidebar" },
+      { slug: "bottom-sheet", title: "Bottom Sheet" },
+      { slug: "popover", title: "Popover" },
+      { slug: "context-menu", title: "Context Menu" },
+      { slug: "mega-menu", title: "Mega Menu" },
+      { slug: "toggle-group", title: "Toggle Group" },
+      { slug: "number-input", title: "Number Input" },
+      { slug: "search-input", title: "Search Input" },
+      { slug: "password-input", title: "Password Input" },
+      { slug: "range-slider", title: "Range Slider" },
+      { slug: "copy-button", title: "Copy Button" },
+      { slug: "mention-input", title: "Mention Input" },
     ],
   },
 ];
@@ -270,6 +328,35 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "rating": rating,
   "autocomplete": autocomplete,
   "floating-menu": floatingMenu,
+  "gradient-text": gradientText,
+  "scramble-text": scrambleText,
+  "text-reveal": textReveal,
+  "glitch-text": glitchText,
+  "pricing-card": pricingCard,
+  "profile-card": profileCard,
+  "feature-card": featureCard,
+  "comparison-table": comparisonTable,
+  "stat-bar": statBar,
+  "confetti": confetti,
+  "particles": particles,
+  "noise-texture": noiseTexture,
+  "aurora": aurora,
+  "blur-fade": blurFade,
+  "carousel": carousel,
+  "avatar": avatar,
+  "lightbox": lightbox,
+  "sidebar": sidebar,
+  "bottom-sheet": bottomSheet,
+  "popover": popover,
+  "context-menu": contextMenu,
+  "mega-menu": megaMenu,
+  "toggle-group": toggleGroup,
+  "number-input": numberInput,
+  "search-input": searchInput,
+  "password-input": passwordInput,
+  "range-slider": rangeSlider,
+  "copy-button": copyButton,
+  "mention-input": mentionInput,
 };
 
 // Helper: check if a slug is a component page
