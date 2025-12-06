@@ -83,7 +83,7 @@ praxys-ui init              # Initialize project (alias: i)
 praxys-ui add               # Interactive multi-select picker
 praxys-ui add accordion     # Add a single component
 praxys-ui add alert badge   # Add multiple at once
-praxys-ui add all           # Add all 71 components
+praxys-ui add all           # Add all 100 components
 praxys-ui add alert --install-deps  # Add + install dependencies
 
 # Browsing
@@ -121,7 +121,7 @@ praxys-ui stats              # Installed vs available breakdown by category
 
 ## Components
 
-71 production-ready components across 6 categories:
+100 production-ready components across 6 categories:
 
 | Category | Count | Highlights |
 |----------|-------|-----------|
@@ -156,7 +156,7 @@ Open [http://localhost:3000](http://localhost:3000) for the landing page, or [ht
 
 ## Features
 
-- **71 Animated Components** — Buttons, cards, text effects, navigation, visual effects, and media
+- **100 Animated Components** — Buttons, cards, text effects, navigation, visual effects, and media
 - **Animation Studio** — Visual animation builder with live preview and code export
 - **Interactive Props Playground** — Tweak every prop and see changes live
 - **Light / Dark Mode** — Theme toggle with CSS custom properties, persisted to localStorage
@@ -176,7 +176,7 @@ praxys-ui/
 │   ├── layout.tsx               # Root layout — fonts, ThemeProvider
 │   ├── page.tsx                 # Landing page
 │   ├── components/
-│   │   ├── ui/                  # 71 reusable animated components
+│   │   ├── ui/                  # 100 reusable animated components
 │   │   ├── demos/               # Demo wrappers for docs previews
 │   │   └── shared/              # Navbar, Footer, ThemeProvider, CommandPalette
 │   ├── studio/                  # Animation Studio
@@ -187,7 +187,7 @@ praxys-ui/
 │   └── templates/               # Templates gallery
 ├── lib/
 │   ├── utils.ts                 # cn() utility
-│   └── registry/                # Component metadata (71 entries)
+│   └── registry/                # Component metadata (100 entries)
 ├── packages/
 │   └── cli/                     # npx praxys-ui (v1.3.1)
 │       ├── package.json
@@ -220,7 +220,7 @@ Praxys UI uses a warm palette with full light/dark mode support:
 | **Obsidian** | `#0B0A08` | `#F0EDE8` | Surface / card background |
 | **Ignite** | `#E84E2D` | `#D4432A` | Brand accent |
 | **Blush** | `#C9958A` | `#8B6B62` | Secondary text, hover states |
-| **Chalk** | `#F2ECE2` | `#1A1714` | Primary text |
+| **Chalk** | `#F2ECE2` | `#1A11004` | Primary text |
 
 All colors are available as CSS custom properties and Tailwind utilities. Use the [Theme Customizer](https://ui.praxys.xyz/customize) to create your own palette.
 

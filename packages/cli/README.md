@@ -51,7 +51,7 @@ npx praxys-ui add animated-button
 # Add multiple at once
 npx praxys-ui add accordion alert badge tooltip
 
-# Add all 71 components
+# Add all 100 components
 npx praxys-ui add all
 
 # Add and install dependencies
@@ -132,7 +132,7 @@ npx praxys-ui doctor
   ✓ clsx installed (^2.1.1)
   ✓ tailwind-merge installed (^2.6.0)
   ✓ framer-motion installed (^12.0.0)
-  ✓ 12/71 components installed
+  ✓ 12/100 components installed
 
   All checks passed!
 ```
@@ -152,7 +152,7 @@ npx praxys-ui stats
   visual             0/12     ░░░░░░░░░░░░
   media              0/6      ░░░░░░
   ────────────────────────────────────────
-  Total             12/71
+  Total             12/100
 
   Coverage: 17% of components installed
 ```
@@ -200,7 +200,7 @@ All commands read this file for directory defaults. You can override per-command
 
 ## Components
 
-71 components across 6 categories:
+100 components across 6 categories:
 
 - **Buttons** (17) — Animated Button, Checkbox, Color Picker, Date Picker, File Upload, OTP Input, Rating, Slider, Switch, and more
 - **Cards** (10) — Data Table, Glow Border Card, Spotlight Card, Stats Card, Timeline, and more
