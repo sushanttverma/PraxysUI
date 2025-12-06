@@ -36,7 +36,7 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
           setText(currentString.slice(0, text.length + 1))
         }, typingSpeed)
       } else {
-        timeout = setTimeout(() => setPhase('pausing'), 0)
+        timeout = setTimeout(() => setPhase('pausing'), typingSpeed)
       }
     } else if (phase === 'pausing') {
       timeout = setTimeout(() => {
@@ -51,7 +51,7 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({
         timeout = setTimeout(() => {
           setStringIndex((prev) => (prev + 1) % strings.length)
           setPhase('typing')
-        }, 0)
+        }, deletingSpeed)
       }
     }
 
