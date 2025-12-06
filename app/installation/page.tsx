@@ -175,7 +175,7 @@ export default function Page() {
               More CLI Commands
             </h2>
             <CodeBlock
-              code={`npx praxys-ui list                    # Browse all 71 components
+              code={`npx praxys-ui list                    # Browse all 100 components
 npx praxys-ui list --category buttons  # Filter by category
 npx praxys-ui list --search modal      # Search components
 npx praxys-ui info animated-button     # Component details
