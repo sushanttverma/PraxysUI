@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
@@ -12,6 +12,12 @@ interface ParticlesProps {
   className?: string
 }
 
+// Deterministic pseudo-random from seed — pure function, no Math.random()
+function seeded(seed: number) {
+  const x = Math.sin(seed * 9301 + 49297) * 49297
+  return x - Math.floor(x)
+}
+
 const Particles: React.FC<ParticlesProps> = ({
   count = 30,
   color = '#E84E2D',
@@ -19,19 +25,15 @@ const Particles: React.FC<ParticlesProps> = ({
   size = 4,
   className = '',
 }) => {
-  const dots = useMemo(
-    () =>
-      Array.from({ length: count }, (_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        delay: Math.random() * speed,
-        driftX: (Math.random() - 0.5) * 60,
-        driftY: (Math.random() - 0.5) * 60,
-        scale: 0.5 + Math.random() * 1,
-      })),
-    [count, speed]
-  )
+  const dots = Array.from({ length: count }, (_, i) => ({
+    id: i,
+    x: seeded(i * 7 + 1) * 100,
+    y: seeded(i * 7 + 2) * 100,
+    delay: seeded(i * 7 + 3) * speed,
+    driftX: (seeded(i * 7 + 4) - 0.5) * 60,
+    driftY: (seeded(i * 7 + 5) - 0.5) * 60,
+    scale: 0.5 + seeded(i * 7 + 6) * 1,
+  }))
 
   return (
     <div
