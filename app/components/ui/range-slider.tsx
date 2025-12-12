@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef, useCallback } from 'react'
-import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion'
+import { motion, PanInfo } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 interface RangeSliderProps {
