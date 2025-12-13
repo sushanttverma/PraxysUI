@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Lightbox from '@/app/components/ui/lightbox'
 
 const images = [
@@ -31,10 +32,13 @@ export default function LightboxDemo() {
               }}
               className="overflow-hidden rounded-lg border border-border transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-ignite"
             >
-              <img
+              <Image
                 src={img.src}
                 alt={img.alt}
+                width={400}
+                height={225}
                 className="aspect-video w-full object-cover"
+                unoptimized
               />
             </button>
           ))}
