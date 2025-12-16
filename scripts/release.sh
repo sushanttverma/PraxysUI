@@ -75,7 +75,7 @@ rm -f packages/cli/src/index.ts.bak
 # 3. Regenerate CHANGELOG.md from data/changelog.ts
 if command -v npx &> /dev/null; then
   npx tsx scripts/generate-changelog.ts
-  git add CHANGELOG.md packages/cli/CHANGELOG.md
+  git add CHANGELOG.md
 fi
 
 # 4. Commit
