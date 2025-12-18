@@ -2,6 +2,55 @@
 
 All notable changes to Praxys UI are documented here.
 
+## [1.3.4] — Feb 24, 2026
+
+**100 Components Milestone**
+
+29 new components across all 6 categories — buttons/forms, cards, text effects, navigation, visual effects, and media — bringing the total to 100.
+
+### Added
+
+- Toggle Group — segmented control with layoutId spring animation, three sizes
+- Number Input — numeric stepper with animated increment/decrement buttons, min/max/step
+- Search Input — search bar with animated icon, loading spinner, and clear button
+- Password Input — show/hide toggle with AnimatePresence eye icon transitions
+- Range Slider — dual-thumb range slider with drag interaction and step snapping
+- Copy Button — click-to-copy with animated icon transition and clipboard API
+- Mention Input — text input with @ detection, dropdown user list, keyboard navigation
+- Pricing Card — animated card with feature list, CTA, popular badge, hover scale
+- Profile Card — avatar, online indicator, social links, staggered entrance
+- Feature Card — icon card with 3D cursor-following tilt effect
+- Comparison Table — side-by-side plans with check/cross icons and staggered rows
+- Stat Bar — horizontal bar with scroll-triggered spring fill animation
+- Gradient Text — animated gradient using background-clip with configurable colors
+- Scramble Text — decode effect revealing characters with random scrambling
+- Text Reveal — word-by-word entrance with staggered scroll-triggered animation
+- Glitch Text — RGB split effect with clip-path slicing and intensity levels
+- Sidebar — collapsible navigation with animated width, staggered items, sub-items
+- Bottom Sheet — mobile drawer with drag-to-dismiss, snap points, spring animation
+- Popover — floating popover with 4 sides, 3 alignments, arrow, click-outside close
+- Context Menu — right-click menu with keyboard navigation, dividers, ARIA roles
+- Mega Menu — large dropdown with hover trigger, multi-column grid sections
+- Confetti — celebration burst with deterministic particle physics animation
+- Particles — floating particle background with seeded drift paths
+- Noise Texture — animated SVG grain overlay with feTurbulence filter
+- Aurora — aurora borealis gradient blobs with smooth keyframe paths
+- Blur Fade — entrance wrapper with blur + fade from configurable direction
+- Carousel — image carousel with directional slides, auto-play, dot navigation
+- Avatar — four sizes, status indicators, fallback initials, animated dot
+- Lightbox — fullscreen viewer with zoom, arrow keys, thumbnails, backdrop blur
+
+### Fixed
+
+- TypewriterText — resolved max update depth error from setTimeout(0) loops
+- Confetti/Particles — replaced Math.random() with deterministic seeded PRNG for React 19 purity
+- Lightbox — refactored to avoid ref access and setState during render
+
+### Improved
+
+- CLI registry expanded from 71 to 100 components
+- Component count updated across README, CLI README, and installation page
+
 ## [1.3.3] — Feb 24, 2026
 
 **CLI Overhaul — Full Component Management**
