@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Github, ArrowUpRight, Copy, Check } from "lucide-react";
+import MagneticCursor from "@/app/components/ui/magnetic-cursor";
 
 const productLinks = [
   { label: "Components", href: "/components" },
@@ -165,16 +166,18 @@ export default function Footer() {
           </p>
 
           <div className="flex items-center gap-5">
-            <motion.a
-              href="https://github.com/sushanttverma/Praxys-UI"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ y: -2 }}
-              className="flex items-center gap-2 text-xs text-text-faint hover:text-chalk transition-colors"
-            >
-              <Github className="h-4 w-4" />
-              <span>Star on GitHub</span>
-            </motion.a>
+            <MagneticCursor strength={0.3} radius={150}>
+              <motion.a
+                href="https://github.com/sushanttverma/Praxys-UI"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ y: -2 }}
+                className="flex items-center gap-2 text-xs text-text-faint hover:text-chalk transition-colors"
+              >
+                <Github className="h-4 w-4" />
+                <span>Star on GitHub</span>
+              </motion.a>
+            </MagneticCursor>
             <span className="text-border-light">•</span>
             <p className="text-xs text-text-faint">
               Made with craft in India
