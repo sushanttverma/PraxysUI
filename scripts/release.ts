@@ -86,7 +86,8 @@ const local = runCapture('git rev-parse HEAD')
 let remote = local
 try { remote = runCapture('git rev-parse origin/main') } catch { /* no remote — OK */ }
 
-if (local !== remote) {
+const behind = runCapture('git rev-list HEAD..origin/main --count')
+if (parseInt(behind, 10) > 0) {
   console.error('Error: Local main is behind remote. Pull first:')
   console.error('  git pull origin main')
   process.exit(1)
