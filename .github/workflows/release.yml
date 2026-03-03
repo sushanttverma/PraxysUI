@@ -40,7 +40,7 @@ jobs:
             
             ## Quick Start
             ```bash
-            npx praxys-ui@latest init
+            npx @praxys/ui@latest init
             ```
             
             ## Documentation

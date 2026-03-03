@@ -404,7 +404,7 @@ Added a CLI for scaffolding components and a templates gallery page.
 
 ### Added
 
-- npx praxys-ui CLI with init, add, and list commands
+- npx @praxys/ui CLI with init, add, and list commands
 - Templates gallery page with 6 template previews
 - CLI docs page at /docs/cli
 

@@ -12,8 +12,8 @@ Browse. Add. Ship.
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
 [![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-FF0050?style=flat-square&logo=framer)](https://www.framer.com/motion)
 [![License](https://img.shields.io/badge/License-MIT-E84E2D?style=flat-square)](LICENSE)
-[![npm version](https://img.shields.io/npm/v/praxys-ui?style=flat-square&color=E84E2D&logo=npm)](https://www.npmjs.com/package/praxys-ui)
-[![npm downloads](https://img.shields.io/npm/dm/praxys-ui?style=flat-square&color=C9958A)](https://www.npmjs.com/package/praxys-ui)
+[![npm version](https://img.shields.io/npm/v/%40praxys%2Fui?style=flat-square&color=E84E2D&logo=npm)](https://www.npmjs.com/package/@praxys/ui)
+[![npm downloads](https://img.shields.io/npm/dm/%40praxys%2Fui?style=flat-square&color=C9958A)](https://www.npmjs.com/package/@praxys/ui)
 [![GitHub stars](https://img.shields.io/github/stars/sushanttverma/Praxys-UI?style=flat-square&color=F2ECE2&logo=github)](https://github.com/sushanttverma/Praxys-UI)
 [![CI](https://img.shields.io/github/actions/workflow/status/sushanttverma/Praxys-UI/ci.yml?style=flat-square&label=CI&logo=githubactions)](https://github.com/sushanttverma/Praxys-UI/actions)
 
@@ -40,13 +40,13 @@ Praxys UI is an open-source component library for animated React components. No 
 
 ```bash
 # Initialize your project
-npx praxys-ui init
+npx @praxys/ui init
 
 # Add components by name
-npx praxys-ui add animated-button accordion toast-notification
+npx @praxys/ui add animated-button accordion toast-notification
 
 # Or pick interactively
-npx praxys-ui add
+npx @praxys/ui add
 ```
 
 The `init` command installs shared dependencies, creates `cn()`, and writes a `praxys.config.json`. Then use `add` to pull any component directly into your project.
@@ -71,43 +71,43 @@ Copy any component from `app/components/ui/` into your project and import it.
 
 ## CLI
 
-The CLI (`npx praxys-ui`) is the fastest way to work with Praxys UI components.
+The CLI (`npx @praxys/ui`) is the fastest way to work with Praxys UI components.
 
 ### Commands
 
 ```bash
 # Setup
-praxys-ui init              # Initialize project (alias: i)
+@praxys/ui init              # Initialize project (alias: i)
 
 # Adding components
-praxys-ui add               # Interactive multi-select picker
-praxys-ui add accordion     # Add a single component
-praxys-ui add alert badge   # Add multiple at once
-praxys-ui add all           # Add all 100 components
-praxys-ui add alert --install-deps  # Add + install dependencies
+@praxys/ui add               # Interactive multi-select picker
+@praxys/ui add accordion     # Add a single component
+@praxys/ui add alert badge   # Add multiple at once
+@praxys/ui add all           # Add all 100 components
+@praxys/ui add alert --install-deps  # Add + install dependencies
 
 # Browsing
-praxys-ui list                      # List all components (alias: ls)
-praxys-ui list --category buttons   # Filter by category
-praxys-ui list --new                # Show only new components
-praxys-ui list --search modal       # Search by name/description
-praxys-ui list --installed          # Show only installed components
-praxys-ui info animated-button      # Component details + docs link
+@praxys/ui list                      # List all components (alias: ls)
+@praxys/ui list --category buttons   # Filter by category
+@praxys/ui list --new                # Show only new components
+@praxys/ui list --search modal       # Search by name/description
+@praxys/ui list --installed          # Show only installed components
+@praxys/ui info animated-button      # Component details + docs link
 
 # Inspecting
-praxys-ui view switch        # View source with syntax highlighting
-praxys-ui diff accordion     # Compare local file with latest version
+@praxys/ui view switch        # View source with syntax highlighting
+@praxys/ui diff accordion     # Compare local file with latest version
 
 # Managing
-praxys-ui remove alert              # Remove with confirmation (alias: rm)
-praxys-ui remove alert --yes        # Remove without confirmation
-praxys-ui update                    # Update all installed components
-praxys-ui update accordion          # Update a specific component
-praxys-ui update --check            # Check for updates without writing
+@praxys/ui remove alert              # Remove with confirmation (alias: rm)
+@praxys/ui remove alert --yes        # Remove without confirmation
+@praxys/ui update                    # Update all installed components
+@praxys/ui update accordion          # Update a specific component
+@praxys/ui update --check            # Check for updates without writing
 
 # Diagnostics
-praxys-ui doctor             # Check project setup for issues
-praxys-ui stats              # Installed vs available breakdown by category
+@praxys/ui doctor             # Check project setup for issues
+@praxys/ui stats              # Installed vs available breakdown by category
 ```
 
 ### Features
@@ -195,7 +195,7 @@ praxys-ui/
 ├── tests/                       # Vitest unit & component tests
 ├── e2e/                         # Playwright end-to-end tests
 ├── packages/
-│   └── cli/                     # npx praxys-ui (v1.3.4)
+│   └── cli/                     # npx @praxys/ui (v1.0.0)
 │       ├── package.json
 │       ├── tsconfig.json
 │       └── src/index.ts

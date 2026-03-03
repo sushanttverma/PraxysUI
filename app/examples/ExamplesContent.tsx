@@ -520,7 +520,7 @@ const generalFaqs = [
   {
     id: 'g1',
     title: 'How do I install components?',
-    content: 'Use the CLI: npx praxys-ui add <component-name>. Each component is copied directly into your project.',
+    content: 'Use the CLI: npx @praxys/ui add <component-name>. Each component is copied directly into your project.',
   },
   {
     id: 'g2',

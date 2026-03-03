@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 const TERMINAL_LINES = [
-  { text: "$ npx praxys-ui init", delay: 0 },
+  { text: "$ npx @praxys/ui init", delay: 0 },
   { text: "✓ Installing dependencies...", delay: 1200 },
   { text: "✓ Components added to your project", delay: 2400 },
   { text: "→ Open localhost:3000", delay: 3400 },
