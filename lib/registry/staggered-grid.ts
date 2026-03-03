@@ -96,6 +96,7 @@ playground: {
     { name: "columns", label: "Columns", type: "number", default: 3, min: 1, max: 6, step: 1 },
     { name: "staggerDelay", label: "Stagger Delay", type: "number", default: 0.08, min: 0.01, max: 0.5, step: 0.01 },
   ],
+  specialChildrenPreset: "grid-items",
 },
 component: () => import("@/app/components/ui/staggered-grid"),
 demo: () => import("@/app/components/demos/staggered-grid-demo"),

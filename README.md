@@ -178,18 +178,24 @@ praxys-ui/
 │   ├── components/
 │   │   ├── ui/                  # 100 reusable animated components
 │   │   ├── demos/               # Demo wrappers for docs previews
-│   │   └── shared/              # Navbar, Footer, ThemeProvider, CommandPalette
+│   │   ├── shared/              # CodeBlock, PropsPlayground, InstallSteps
+│   │   ├── [slug]/              # Dynamic component + doc pages
+│   │   └── (layout components)  # Navbar, Footer, ThemeProvider, CommandPalette
 │   ├── studio/                  # Animation Studio
 │   ├── customize/               # Theme customizer
-│   ├── docs/
-│   │   ├── components/          # Sidebar, CodeBlock, PropsPlayground
-│   │   └── [slug]/              # Dynamic component + doc pages
-│   └── templates/               # Templates gallery
+│   ├── templates/               # Templates gallery
+│   ├── gradient-maker/          # Mesh gradient tool
+│   ├── shadow-lab/              # Shadow designer tool
+│   └── glass-generator/         # Glassmorphism tool
 ├── lib/
 │   ├── utils.ts                 # cn() utility
+│   ├── site-stats.ts            # Auto-derived counts
+│   ├── templates.ts             # Template registry
 │   └── registry/                # Component metadata (100 entries)
+├── tests/                       # Vitest unit & component tests
+├── e2e/                         # Playwright end-to-end tests
 ├── packages/
-│   └── cli/                     # npx praxys-ui (v1.3.1)
+│   └── cli/                     # npx praxys-ui (v1.3.4)
 │       ├── package.json
 │       ├── tsconfig.json
 │       └── src/index.ts
@@ -220,7 +226,7 @@ Praxys UI uses a warm palette with full light/dark mode support:
 | **Obsidian** | `#0B0A08` | `#F0EDE8` | Surface / card background |
 | **Ignite** | `#E84E2D` | `#D4432A` | Brand accent |
 | **Blush** | `#C9958A` | `#8B6B62` | Secondary text, hover states |
-| **Chalk** | `#F2ECE2` | `#1A11004` | Primary text |
+| **Chalk** | `#F2ECE2` | `#1A1714` | Primary text |
 
 All colors are available as CSS custom properties and Tailwind utilities. Use the [Theme Customizer](https://ui.praxys.xyz/customize) to create your own palette.
 

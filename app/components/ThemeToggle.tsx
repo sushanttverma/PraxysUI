@@ -1,22 +1,26 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 import { Sun, Moon } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { motion, AnimatePresence } from "framer-motion";
 
+// useSyncExternalStore is the React-recommended way to detect client mount
+// without calling setState inside useEffect. Returns false on the server
+// (and during hydration) so the placeholder is rendered, then true on the client.
+function subscribe() {
+  return () => {};
+}
+function useIsClient() {
+  return useSyncExternalStore(subscribe, () => true, () => false);
+}
+
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    // Defer mount state to avoid substitution warning and ensure client-side only rendering
-    const timer = setTimeout(() => setMounted(true), 0);
-    return () => clearTimeout(timer);
-  }, []);
+  const isClient = useIsClient();
 
   // Render a static placeholder until mounted to avoid hydration mismatch
-  if (!mounted) {
+  if (!isClient) {
     return (
       <button
         className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-blush transition-colors hover:border-border-light hover:text-chalk"
@@ -59,3 +63,4 @@ export default function ThemeToggle() {
     </button>
   );
 }
+

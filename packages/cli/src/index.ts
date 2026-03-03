@@ -821,7 +821,7 @@ program
     console.log(chalk.hex(catColor)(`  Category: ${meta.category}`));
     console.log(`  Dependencies: ${chalk.cyan(meta.dependencies.join(", "))}`);
     console.log(`  ${chalk.dim(meta.description)}`);
-    console.log(chalk.dim(`  Docs: https://praxysui.vercel.app/components/${component}`));
+    console.log(chalk.dim(`  Docs: https://ui.praxys.xyz/components/${component}`));
     console.log("");
   });
 

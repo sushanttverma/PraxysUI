@@ -28,8 +28,8 @@ const OtpInput: React.FC<OtpInputProps> = ({
   const isControlled = controlledValue !== undefined && onChange !== undefined
   const value = isControlled ? controlledValue : internalValue
 
-  // Ensure value is padded to length
-  const digits = (value + ''.repeat(length)).slice(0, length).split('')
+  // Ensure we always have exactly `length` slots (empty string for unfilled ones)
+  const digits = Array.from({ length }, (_, i) => value[i] ?? '')
 
   const updateValue = useCallback(
     (newValue: string) => {

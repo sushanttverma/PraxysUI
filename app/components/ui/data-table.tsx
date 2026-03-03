@@ -67,6 +67,16 @@ function DataTable<T extends Record<string, unknown>>({
               {columns.map((col) => (
                 <th
                   key={col.key}
+                  scope="col"
+                  aria-sort={
+                    col.sortable
+                      ? sortKey === col.key
+                        ? sortDir === 'asc'
+                          ? 'ascending'
+                          : 'descending'
+                        : 'none'
+                      : undefined
+                  }
                   className={cn(
                     'px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-text-faint',
                     col.sortable && 'cursor-pointer select-none hover:text-blush transition-colors'
@@ -104,7 +114,7 @@ function DataTable<T extends Record<string, unknown>>({
             <AnimatePresence mode="popLayout">
               {sorted.map((row, i) => (
                 <motion.tr
-                  key={JSON.stringify(row)}
+                  key={i}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}

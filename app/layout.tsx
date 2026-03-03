@@ -92,7 +92,7 @@ export default function RootLayout({
           }}
         />
         {/* Satoshi — body font (Fontshare CDN) */}
-        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
         <link
           href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap"
           rel="stylesheet"

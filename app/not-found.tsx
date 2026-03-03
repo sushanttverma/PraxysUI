@@ -31,7 +31,7 @@ export default function NotFound() {
           </p>
 
           {/* Giant 404 */}
-          <h1 className="font-pixel text-[100px] sm:text-[140px] md:text-[180px] font-bold leading-none text-chalk/[0.04] select-none">
+          <h1 aria-hidden="true" className="font-pixel text-[100px] sm:text-[140px] md:text-[180px] font-bold leading-none text-chalk/[0.04] select-none">
             404
           </h1>
 

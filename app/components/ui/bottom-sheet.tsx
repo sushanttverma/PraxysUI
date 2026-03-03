@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { AnimatePresence, motion, useMotionValue, useTransform, PanInfo } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
@@ -21,6 +21,24 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
 }) => {
   const y = useMotionValue(0)
   const backdropOpacity = useTransform(y, [0, 300], [1, 0])
+  const sheetRef = useRef<HTMLDivElement>(null)
+
+  // Escape key closes the sheet
+  useEffect(() => {
+    if (!open) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [open, onClose])
+
+  // Move focus into the sheet when it opens
+  useEffect(() => {
+    if (open) {
+      sheetRef.current?.focus()
+    }
+  }, [open])
 
   const handleDragEnd = useCallback(
     (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
@@ -68,6 +86,10 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
           />
 
           <motion.div
+            ref={sheetRef}
+            role="dialog"
+            aria-modal="true"
+            tabIndex={-1}
             className={cn(
               'absolute bottom-0 left-0 right-0 rounded-t-2xl border-t border-border bg-obsidian shadow-2xl',
               className
