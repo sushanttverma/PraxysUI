@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
@@ -13,6 +13,8 @@ interface ModalDialogProps {
   className?: string
 }
 
+const FOCUSABLE = 'a[href],button:not([disabled]),textarea:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])'
+
 const ModalDialog: React.FC<ModalDialogProps> = ({
   open,
   onClose,
@@ -21,23 +23,58 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
   children,
   className,
 }) => {
-  const handleEscape = useCallback(
+  const panelRef = useRef<HTMLDivElement>(null)
+  const previousFocusRef = useRef<HTMLElement | null>(null)
+
+  const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') {
+        onClose()
+        return
+      }
+      if (e.key === 'Tab' && panelRef.current) {
+        const focusable = Array.from(panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE))
+        if (focusable.length === 0) return
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault()
+            last.focus()
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault()
+            first.focus()
+          }
+        }
+      }
     },
     [onClose]
   )
 
   useEffect(() => {
     if (open) {
-      document.addEventListener('keydown', handleEscape)
+      previousFocusRef.current = document.activeElement as HTMLElement
+      document.addEventListener('keydown', handleKeyDown)
       document.body.style.overflow = 'hidden'
+      // Auto-focus first focusable element
+      requestAnimationFrame(() => {
+        if (panelRef.current) {
+          const first = panelRef.current.querySelector<HTMLElement>(FOCUSABLE)
+          first?.focus()
+        }
+      })
     }
     return () => {
-      document.removeEventListener('keydown', handleEscape)
+      document.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = ''
+      if (!open && previousFocusRef.current) {
+        previousFocusRef.current.focus()
+        previousFocusRef.current = null
+      }
     }
-  }, [open, handleEscape])
+  }, [open, handleKeyDown])
 
   return (
     <AnimatePresence>
@@ -55,6 +92,7 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
 
           {/* Dialog */}
           <motion.div
+            ref={panelRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby={title ? 'modal-title' : undefined}

@@ -101,7 +101,7 @@ return () => clearTimeout(timer)
 
 export const ToastContainer: React.FC<ToastProps> = ({ toasts, onDismiss, position = 'top-right', className = '' }) => {
   return (
-<div className={cn('fixed z-50 flex flex-col gap-2 pointer-events-none', positionStyles[position], className)}>
+<div role="status" aria-live="polite" aria-atomic="false" className={cn('fixed z-50 flex flex-col gap-2 pointer-events-none', positionStyles[position], className)}>
   <AnimatePresence mode="popLayout">
     {toasts.map((toast) => (
       <ToastItem key={toast.id} toast={toast} onDismiss={onDismiss} />

@@ -4,12 +4,12 @@ const entry: ComponentEntry = {
 slug: "sheet",
 title: "Sheet",
 description:
-  "A slide-in panel overlay (drawer) with four sides (left, right, top, bottom), backdrop blur, scroll lock, Escape-to-close, and spring transition.",
+  "A slide-in panel overlay (drawer) with four sides (left, right, top, bottom), backdrop blur, focus trap, scroll lock, Escape-to-close, and spring transition.",
 category: "navigation",
 dependencies: ["framer-motion", "clsx", "tailwind-merge"],
 code: `'use client'
 
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
@@ -54,6 +54,8 @@ const positionClasses: Record<SheetSide, string> = {
   bottom: 'inset-x-0 bottom-0 h-auto max-h-[80vh] border-t',
 }
 
+const FOCUSABLE = 'a[href],button:not([disabled]),textarea:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])'
+
 const Sheet: React.FC<SheetProps> = ({
   open,
   onClose,
@@ -62,26 +64,58 @@ const Sheet: React.FC<SheetProps> = ({
   children,
   className,
 }) => {
-  // Close on Escape key
+  const panelRef = useRef<HTMLDivElement>(null)
+  const previousFocusRef = useRef<HTMLElement | null>(null)
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') {
+        onClose()
+        return
+      }
+      if (e.key === 'Tab' && panelRef.current) {
+        const focusable = Array.from(panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE))
+        if (focusable.length === 0) return
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault()
+            last.focus()
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault()
+            first.focus()
+          }
+        }
+      }
     },
     [onClose]
   )
 
-  // Scroll lock & Escape listener
   useEffect(() => {
     if (open) {
+      previousFocusRef.current = document.activeElement as HTMLElement
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
       document.body.style.overflow = 'hidden'
       document.body.style.paddingRight = \`\${scrollbarWidth}px\`
       document.addEventListener('keydown', handleKeyDown)
+      requestAnimationFrame(() => {
+        if (panelRef.current) {
+          const first = panelRef.current.querySelector<HTMLElement>(FOCUSABLE)
+          first?.focus()
+        }
+      })
     }
     return () => {
       document.body.style.overflow = ''
       document.body.style.paddingRight = ''
       document.removeEventListener('keydown', handleKeyDown)
+      if (!open && previousFocusRef.current) {
+        previousFocusRef.current.focus()
+        previousFocusRef.current = null
+      }
     }
   }, [open, handleKeyDown])
 
@@ -104,6 +138,7 @@ const Sheet: React.FC<SheetProps> = ({
 
           {/* Sheet panel */}
           <motion.div
+            ref={panelRef}
             className={cn(
               'absolute flex flex-col bg-obsidian border-border shadow-2xl',
               positionClasses[side],

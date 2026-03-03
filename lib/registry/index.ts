@@ -110,6 +110,7 @@ import passwordInput from "./password-input";
 import rangeSlider from "./range-slider";
 import copyButton from "./copy-button";
 import mentionInput from "./mention-input";
+import alertDialog from "./alert-dialog";
 
 // ─── Sidebar structure ───────────────────────────────────
 
@@ -228,6 +229,7 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "range-slider", title: "Range Slider" },
       { slug: "copy-button", title: "Copy Button" },
       { slug: "mention-input", title: "Mention Input" },
+      { slug: "alert-dialog", title: "Alert Dialog" },
     ],
   },
 ];
@@ -357,6 +359,7 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "range-slider": rangeSlider,
   "copy-button": copyButton,
   "mention-input": mentionInput,
+  "alert-dialog": alertDialog,
 };
 
 // Helper: check if a slug is a component page

@@ -153,6 +153,9 @@ const ToastContainer: React.FC<ToastProps> = ({
 
   return (
     <div
+      role="status"
+      aria-live="polite"
+      aria-atomic="false"
       className={cn(
         'fixed z-50 flex flex-col gap-2 pointer-events-none',
         positionStyles[position],

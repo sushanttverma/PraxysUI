@@ -28,6 +28,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   const [open, setOpen] = useState(false)
   const [focusIndex, setFocusIndex] = useState(-1)
   const containerRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
 
   // Close on click outside
@@ -41,6 +42,13 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
       document.addEventListener('mousedown', handleClickOutside)
     }
     return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [open])
+
+  // Restore focus to trigger on close
+  useEffect(() => {
+    if (!open) {
+      triggerRef.current?.focus()
+    }
   }, [open])
 
   // Get actionable (non-divider, non-disabled) item indices
@@ -106,18 +114,19 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   }
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div ref={containerRef} className="relative inline-block" onKeyDown={handleKeyDown}>
       {/* Trigger */}
-      <div
-        role="button"
-        tabIndex={0}
+      <button
+        ref={triggerRef}
+        type="button"
         aria-haspopup="true"
         aria-expanded={open}
         onClick={toggleOpen}
         className="cursor-pointer"
       >
         {trigger}
-      </div>
+      </button>
 
       {/* Menu */}
       <AnimatePresence>
