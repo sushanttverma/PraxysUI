@@ -2,6 +2,16 @@
 
 All notable changes to Praxys UI are documented here.
 
+## [1.0.1] — Mar 4, 2026
+
+**Scroll Progress**
+
+New Scroll Progress component — animated reading indicator with spring physics, top bar and right-side section dots navigator.
+
+### Added
+
+- Scroll Progress — spring-animated reading progress bar and section dots navigator, scopeable to any scroll container
+
 ## [1.3.4] — Feb 24, 2026
 
 **100 Components Milestone**
