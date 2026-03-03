@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, writeFileSync, readFileSync, unlinkSync } from "
 import { join } from "path";
 import { execSync } from "child_process";
 
-const VERSION = "1.3.6";
+const VERSION = "1.0.0";
 
 // ─── Types ──────────────────────────────────────────────
 
@@ -272,7 +272,7 @@ function printNotFound(slug: string) {
 
 async function checkForUpdates() {
   try {
-    const res = await fetch("https://registry.npmjs.org/praxys-ui/latest", {
+    const res = await fetch("https://registry.npmjs.org/@praxys/ui/latest", {
       signal: AbortSignal.timeout(3000),
     });
     if (!res.ok) return;
@@ -280,7 +280,7 @@ async function checkForUpdates() {
     const latest = data.version;
     if (latest && latest !== VERSION) {
       console.log(
-        chalk.dim(`  Update available: ${VERSION} → ${chalk.bold(latest)}  Run ${chalk.cyan("npm i -g praxys-ui")} to update.`)
+        chalk.dim(`  Update available: ${VERSION} → ${chalk.bold(latest)}  Run ${chalk.cyan("npm i -g @praxys/ui")} to update.`)
       );
       console.log("");
     }
@@ -340,7 +340,7 @@ function colorizeSource(source: string): string {
 const program = new Command();
 
 program
-  .name("praxys-ui")
+  .name("@praxys/ui")
   .description("CLI for scaffolding Praxys UI components")
   .version(VERSION);
 
@@ -412,13 +412,13 @@ program
     console.log(chalk.green("  Done!"));
     console.log("");
     console.log(
-      chalk.dim(`  npx praxys-ui add animated-button   Add a component`)
+      chalk.dim(`  npx @praxys/ui add animated-button   Add a component`)
     );
     console.log(
-      chalk.dim(`  npx praxys-ui add                   Browse & pick`)
+      chalk.dim(`  npx @praxys/ui add                   Browse & pick`)
     );
     console.log(
-      chalk.dim(`  npx praxys-ui list                  See all 100 components`)
+      chalk.dim(`  npx @praxys/ui list                  See all 100 components`)
     );
     console.log("");
   });
@@ -648,7 +648,7 @@ program
           console.log(chalk.red(`  Component "${bad}" not found.`));
         }
       }
-      console.log(chalk.dim(`\n  Run ${chalk.bold("praxys-ui list")} to see available components.`));
+      console.log(chalk.dim(`\n  Run ${chalk.bold("@praxys/ui list")} to see available components.`));
       console.log("");
       return;
     }
@@ -809,7 +809,7 @@ program
     if (!meta) {
       console.log("");
       printNotFound(component);
-      console.log(chalk.dim(`  Run ${chalk.bold("praxys-ui list")} to see available components.`));
+      console.log(chalk.dim(`  Run ${chalk.bold("@praxys/ui list")} to see available components.`));
       console.log("");
       return;
     }
@@ -835,7 +835,7 @@ program
     if (!COMPONENT_REGISTRY[component]) {
       console.log("");
       printNotFound(component);
-      console.log(chalk.dim(`  Run ${chalk.bold("praxys-ui list")} to see available components.`));
+      console.log(chalk.dim(`  Run ${chalk.bold("@praxys/ui list")} to see available components.`));
       console.log("");
       return;
     }
@@ -1126,7 +1126,7 @@ program
       console.log(chalk.green("  ✓ praxys.config.json found"));
     } else {
       console.log(chalk.yellow("  ✗ praxys.config.json not found"));
-      console.log(chalk.dim("    Run `praxys-ui init` to create it."));
+      console.log(chalk.dim("    Run `@praxys/ui init` to create it."));
       issues++;
     }
 

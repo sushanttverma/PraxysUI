@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("Installation page", () => {
   test("loads and contains CLI instructions", async ({ page }) => {
     await page.goto("/installation");
-    await expect(page.getByText(/npx praxys-ui/i).first()).toBeVisible();
+    await expect(page.getByText(/npx @praxys\/ui/i).first()).toBeVisible();
   });
 });
 

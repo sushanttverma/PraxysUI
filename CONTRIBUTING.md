@@ -46,7 +46,7 @@ lib/
   registry.ts    # Component registry (metadata, code, props, playground)
   utils.ts       # Utility functions (cn)
 packages/
-  cli/           # npm CLI tool (praxys-ui)
+  cli/           # npm CLI tool (@praxys/ui)
 ```
 
 ## Adding a New Component

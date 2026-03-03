@@ -17,7 +17,7 @@ export default function AccordionDemo() {
             id: '2',
             title: 'How do I install components?',
             content:
-              'You can use the CLI tool (npx praxys-ui add component-name) or simply copy the component source code from the docs.',
+              'You can use the CLI tool (npx @praxys/ui add component-name) or simply copy the component source code from the docs.',
           },
           {
             id: '3',

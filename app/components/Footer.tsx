@@ -88,7 +88,7 @@ export default function Footer() {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText("npx praxys-ui init");
+    navigator.clipboard.writeText("npx @praxys/ui init");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, []);
@@ -128,7 +128,7 @@ export default function Footer() {
           >
             <span className="text-ignite/60">$</span>
             <span className="text-blush group-hover:text-chalk transition-colors">
-              npx praxys-ui init
+              npx @praxys/ui init
             </span>
             {copied ? (
               <Check className="h-3.5 w-3.5 text-green-500" />

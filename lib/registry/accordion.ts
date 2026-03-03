@@ -143,7 +143,7 @@ playground: {
   defaults: {
     items: [
       { id: "1", title: "What is Praxys UI?", content: "An open-source collection of animated React components you can copy-paste into your projects." },
-      { id: "2", title: "How do I install?", content: "Use the CLI: npx praxys-ui add accordion — or copy the source code." },
+      { id: "2", title: "How do I install?", content: "Use the CLI: npx @praxys/ui add accordion — or copy the source code." },
       { id: "3", title: "Is it free?", content: "Yes! Completely free and open-source under the MIT license." },
     ],
     defaultOpen: ["1"],

@@ -20,8 +20,8 @@ export default function CopyButtonDemo() {
             With code snippet
           </p>
           <div className="flex items-center gap-2 rounded-lg bg-void px-3 py-2 border border-border">
-            <code className="flex-1 text-xs text-blush font-mono">npx praxys-ui add button</code>
-            <CopyButton text="npx praxys-ui add button" className="border-0 bg-transparent px-1.5 py-1 hover:bg-obsidian" />
+            <code className="flex-1 text-xs text-blush font-mono">npx @praxys/ui add button</code>
+            <CopyButton text="npx @praxys/ui add button" className="border-0 bg-transparent px-1.5 py-1 hover:bg-obsidian" />
           </div>
         </div>
 

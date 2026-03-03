@@ -373,7 +373,7 @@ export const changelog: ChangelogEntry[] = [
       'Added a CLI for scaffolding components and a templates gallery page.',
     iconName: 'terminal',
     changes: [
-      { type: 'added', text: 'npx praxys-ui CLI with init, add, and list commands' },
+      { type: 'added', text: 'npx @praxys/ui CLI with init, add, and list commands' },
       { type: 'added', text: 'Templates gallery page with 6 template previews' },
       { type: 'added', text: 'CLI docs page at /docs/cli' },
     ],

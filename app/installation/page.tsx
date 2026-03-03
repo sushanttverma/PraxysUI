@@ -108,7 +108,7 @@ cd my-app`}
               <code className="rounded bg-obsidian px-1.5 py-0.5 font-mono text-xs text-ignite">cn()</code>{" "}
               utility, and writes a config file.
             </p>
-            <CodeBlock code="npx praxys-ui init" language="bash" />
+            <CodeBlock code="npx @praxys/ui init" language="bash" />
             <p className="text-sm text-text-faint">
               This auto-detects your package manager (npm, pnpm, yarn, bun) and installs{" "}
               <code className="rounded bg-obsidian px-1.5 py-0.5 font-mono text-xs text-ignite">framer-motion</code>,{" "}
@@ -134,13 +134,13 @@ cd my-app`}
             </p>
             <CodeBlock
               code={`# Add by name
-npx praxys-ui add animated-button
+npx @praxys/ui add animated-button
 
 # Add multiple at once
-npx praxys-ui add accordion alert tooltip
+npx @praxys/ui add accordion alert tooltip
 
 # Interactive picker
-npx praxys-ui add`}
+npx @praxys/ui add`}
               language="bash"
             />
           </section>
@@ -175,16 +175,16 @@ export default function Page() {
               More CLI Commands
             </h2>
             <CodeBlock
-              code={`npx praxys-ui list                    # Browse all 100 components
-npx praxys-ui list --category buttons  # Filter by category
-npx praxys-ui list --search modal      # Search components
-npx praxys-ui info animated-button     # Component details
-npx praxys-ui view switch              # View source code
-npx praxys-ui diff accordion           # Compare with latest
-npx praxys-ui update                   # Update all components
-npx praxys-ui remove alert             # Remove a component
-npx praxys-ui doctor                   # Check project health
-npx praxys-ui stats                    # Coverage dashboard`}
+              code={`npx @praxys/ui list                    # Browse all 100 components
+npx @praxys/ui list --category buttons  # Filter by category
+npx @praxys/ui list --search modal      # Search components
+npx @praxys/ui info animated-button     # Component details
+npx @praxys/ui view switch              # View source code
+npx @praxys/ui diff accordion           # Compare with latest
+npx @praxys/ui update                   # Update all components
+npx @praxys/ui remove alert             # Remove a component
+npx @praxys/ui doctor                   # Check project health
+npx @praxys/ui stats                    # Coverage dashboard`}
               language="bash"
             />
           </section>

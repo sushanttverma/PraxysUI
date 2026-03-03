@@ -13,7 +13,7 @@ export default function TypewriterTextDemo() {
         />
       </div>
       <TypewriterText
-        strings={['npx praxys-ui init', 'npx praxys-ui add typewriter-text']}
+        strings={['npx @praxys/ui init', 'npx @praxys/ui add typewriter-text']}
         className="font-mono text-sm text-blush"
         typingSpeed={60}
         cursorColor="#C9958A"

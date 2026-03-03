@@ -97,7 +97,7 @@ export default function Hero() {
   }, []);
 
   const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText("npx praxys-ui init");
+    navigator.clipboard.writeText("npx @praxys/ui init");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, []);
@@ -182,7 +182,7 @@ export default function Hero() {
                 className="group inline-flex items-center gap-3 rounded-lg border border-border bg-obsidian/60 px-4 py-2.5 font-mono text-sm text-blush transition-colors hover:border-border-light hover:text-chalk cursor-pointer"
               >
                 <span className="text-ignite/60">$</span>
-                <span>npx praxys-ui init</span>
+                <span>npx @praxys/ui init</span>
                 {copied ? (
                   <Check className="h-3.5 w-3.5 text-green-500" />
                 ) : (

@@ -1,11 +1,11 @@
 <div align="center">
 
-# praxys-ui
+# @praxys/ui
 
 **CLI for scaffolding [Praxys UI](https://ui.praxys.xyz) components into your React project.**
 
-[![npm version](https://img.shields.io/npm/v/praxys-ui?style=flat-square&color=E84E2D&logo=npm)](https://www.npmjs.com/package/praxys-ui)
-[![npm downloads](https://img.shields.io/npm/dm/praxys-ui?style=flat-square&color=C9958A)](https://www.npmjs.com/package/praxys-ui)
+[![npm version](https://img.shields.io/npm/v/%40praxys%2Fui?style=flat-square&color=E84E2D&logo=npm)](https://www.npmjs.com/package/@praxys/ui)
+[![npm downloads](https://img.shields.io/npm/dm/%40praxys%2Fui?style=flat-square&color=C9958A)](https://www.npmjs.com/package/@praxys/ui)
 [![License](https://img.shields.io/badge/License-MIT-E84E2D?style=flat-square)](LICENSE)
 
 </div>
@@ -17,19 +17,19 @@
 No global install needed — use `npx`:
 
 ```bash
-npx praxys-ui init
+npx @praxys/ui init
 ```
 
 Or install globally:
 
 ```bash
-npm i -g praxys-ui
+npm i -g @praxys/ui
 ```
 
 ## Setup
 
 ```bash
-npx praxys-ui init
+npx @praxys/ui init
 ```
 
 This will:
@@ -43,41 +43,41 @@ This will:
 
 ```bash
 # Interactive picker — browse and select from categories
-npx praxys-ui add
+npx @praxys/ui add
 
 # Add by name
-npx praxys-ui add animated-button
+npx @praxys/ui add animated-button
 
 # Add multiple at once
-npx praxys-ui add accordion alert badge tooltip
+npx @praxys/ui add accordion alert badge tooltip
 
 # Add all 100 components
-npx praxys-ui add all
+npx @praxys/ui add all
 
 # Add and install dependencies
-npx praxys-ui add floating-menu --install-deps
+npx @praxys/ui add floating-menu --install-deps
 ```
 
 ## Browsing Components
 
 ```bash
 # List all components (grouped by category)
-npx praxys-ui list
+npx @praxys/ui list
 
 # Filter by category
-npx praxys-ui list --category buttons
+npx @praxys/ui list --category buttons
 
 # Show only new components
-npx praxys-ui list --new
+npx @praxys/ui list --new
 
 # Search by name or description
-npx praxys-ui list --search modal
+npx @praxys/ui list --search modal
 
 # Show only installed components
-npx praxys-ui list --installed
+npx @praxys/ui list --installed
 
 # Component details
-npx praxys-ui info animated-button
+npx @praxys/ui info animated-button
 ```
 
 **Output:**
@@ -94,34 +94,34 @@ npx praxys-ui info animated-button
 
 ```bash
 # View source with syntax highlighting
-npx praxys-ui view switch
+npx @praxys/ui view switch
 
 # Compare local file with latest version
-npx praxys-ui diff accordion
+npx @praxys/ui diff accordion
 ```
 
 ## Managing Components
 
 ```bash
 # Remove a component
-npx praxys-ui remove alert
-npx praxys-ui rm alert --yes    # skip confirmation
+npx @praxys/ui remove alert
+npx @praxys/ui rm alert --yes    # skip confirmation
 
 # Update all installed components
-npx praxys-ui update
+npx @praxys/ui update
 
 # Update a specific component
-npx praxys-ui update accordion
+npx @praxys/ui update accordion
 
 # Check for updates without writing
-npx praxys-ui update --check
+npx @praxys/ui update --check
 ```
 
 ## Diagnostics
 
 ```bash
 # Check project setup
-npx praxys-ui doctor
+npx @praxys/ui doctor
 ```
 
 ```
@@ -139,7 +139,7 @@ npx praxys-ui doctor
 
 ```bash
 # Installed vs available breakdown
-npx praxys-ui stats
+npx @praxys/ui stats
 ```
 
 ```
