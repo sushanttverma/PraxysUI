@@ -14,7 +14,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "changelog": "npx tsx scripts/generate-changelog.ts",
-    "release": "./scripts/release.sh"
+    "release": "npx tsx scripts/release.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",
