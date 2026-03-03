@@ -12,15 +12,15 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "framer-motion": "^12.34.0",
+    "framer-motion": "^12.34.5",
     "geist": "^1.7.0",
     "gsap": "^3.14.2",
-    "lucide-react": "^0.564.0",
+    "lucide-react": "^0.576.0",
     "next": "16.1.6",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "shiki": "^3.22.0",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -32,7 +32,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsx-a11y": "^6.10.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
+    "lint-staged": "^16.3.2",
     "tailwindcss": "^4",
     "typescript": "5.9.3"
   }
