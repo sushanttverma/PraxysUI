@@ -105,6 +105,8 @@ export default function PropsPlayground({
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+    }).catch(() => {
+      // Clipboard write failed — silently ignore
     });
   }, [values, controls]);
 
@@ -120,8 +122,8 @@ export default function PropsPlayground({
     delete passProps.children;
   }
 
-  // Special handling: glow-border-card needs children content
-  if (slug === "glow-border-card" && passProps.children === null) {
+  // Components that declare a null children default should not receive it
+  if (playground.specialChildrenPreset && passProps.children === null) {
     delete passProps.children;
   }
 
@@ -188,7 +190,7 @@ export default function PropsPlayground({
                 Component={Component}
                 props={passProps}
                 childrenValue={childrenControl ? childrenValue : undefined}
-                slug={slug}
+                specialChildrenPreset={playground.specialChildrenPreset}
               />
             )}
           </div>
@@ -223,16 +225,16 @@ function PlaygroundPreview({
   Component,
   props,
   childrenValue,
-  slug,
+  specialChildrenPreset,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Component: ComponentType<any>;
   props: PropValues;
   childrenValue?: ReactNode;
-  slug: string;
+  specialChildrenPreset?: string;
 }) {
-  // Special wrapper content for certain components
-  const specialChildren = getSpecialChildren(slug);
+  // Special wrapper content for certain components (configured in registry)
+  const specialChildren = getSpecialChildren(specialChildrenPreset);
 
   if (specialChildren !== undefined) {
     return <Component {...props}>{specialChildren}</Component>;
@@ -245,12 +247,12 @@ function PlaygroundPreview({
   return <Component {...props} />;
 }
 
-// ─── Special children for components that need it ───────
+// ─── Special children presets ────────────────────────────
 
 function getSpecialChildren(
-  slug: string
+  preset: string | undefined
 ): ReactNode | undefined {
-  if (slug === "glow-border-card") {
+  if (preset === "glow-card") {
     return (
       <>
         <h3 className="text-lg font-semibold text-chalk">Card Title</h3>
@@ -261,13 +263,13 @@ function getSpecialChildren(
     );
   }
 
-  if (slug === "liquid-metal") {
+  if (preset === "liquid-metal") {
     return (
       <span className="font-pixel text-2xl text-chalk">Move your cursor</span>
     );
   }
 
-  if (slug === "staggered-grid" || slug === "perspective-grid") {
+  if (preset === "grid-items") {
     return [1, 2, 3, 4, 5, 6].map((n) => (
       <div
         key={n}
@@ -350,6 +352,8 @@ function ControlField({
             <span className="ml-1 text-text-faint">({control.name})</span>
           </span>
           <button
+            role="switch"
+            aria-checked={!!value}
             onClick={() => onChange(!value)}
             className={cn(
               "relative h-5 w-9 rounded-full transition-colors cursor-pointer",

@@ -25,6 +25,12 @@ export type PlaygroundConfig = {
   /** Fixed props required by the component but not editable (e.g. complex arrays/objects) */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   defaults?: Record<string, any>;
+  /**
+   * Preset children to inject into the component in the playground.
+   * Moves per-component special-casing out of PropsPlayground and into
+   * the registry entry where it belongs.
+   */
+  specialChildrenPreset?: "glow-card" | "liquid-metal" | "grid-items";
 };
 
 export type ComponentEntry = {

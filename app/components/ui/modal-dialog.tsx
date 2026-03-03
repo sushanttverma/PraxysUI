@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useId } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
@@ -21,6 +21,7 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
   children,
   className,
 }) => {
+  const id = useId()
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -57,8 +58,8 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
           <motion.div
             role="dialog"
             aria-modal="true"
-            aria-labelledby={title ? 'modal-title' : undefined}
-            aria-describedby={description ? 'modal-description' : undefined}
+            aria-labelledby={title ? `${id}-title` : undefined}
+            aria-describedby={description ? `${id}-description` : undefined}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -96,7 +97,7 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
               <div className="mb-4 pr-6">
                 {title && (
                   <h2
-                    id="modal-title"
+                    id={`${id}-title`}
                     className="text-lg font-medium text-chalk"
                   >
                     {title}
@@ -104,7 +105,7 @@ const ModalDialog: React.FC<ModalDialogProps> = ({
                 )}
                 {description && (
                   <p
-                    id="modal-description"
+                    id={`${id}-description`}
                     className="mt-1 text-sm text-blush"
                   >
                     {description}

@@ -18,6 +18,7 @@ import type { ComponentEntry } from "@/lib/registry";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import BackToTop from "./BackToTop";
+import DemoErrorBoundary from "./shared/DemoErrorBoundary";
 
 // ─── Lazy demo cache ──────────────────────────────────────
 
@@ -157,9 +158,11 @@ function ComponentCard({ entry }: { entry: ComponentEntry }) {
       <div className="relative h-44 overflow-hidden rounded-t-2xl border-b border-border/50 bg-void/50 p-4 flex items-center justify-center">
         {visible ? (
           <Suspense fallback={<DemoSkeleton />}>
-            <div className="pointer-events-none flex items-center justify-center">
-              <LazyDemo />
-            </div>
+            <DemoErrorBoundary>
+              <div className="pointer-events-none flex items-center justify-center">
+                <LazyDemo />
+              </div>
+            </DemoErrorBoundary>
           </Suspense>
         ) : (
           <DemoSkeleton />

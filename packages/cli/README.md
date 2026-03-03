@@ -87,7 +87,7 @@ npx praxys-ui info animated-button
   Category: buttons
   Dependencies: framer-motion, clsx, tailwind-merge
   A button with a shiny border sweep and text reveal effect.
-  Docs: https://praxysui.vercel.app/components/animated-button
+  Docs: https://ui.praxys.xyz/components/animated-button
 ```
 
 ## Inspecting & Comparing

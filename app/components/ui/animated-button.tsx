@@ -16,6 +16,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
 }) => {
   return (
     <motion.button
+      type="button"
       {...rest}
       whileTap={{ scale: 0.97 }}
       transition={{

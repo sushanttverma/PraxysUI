@@ -181,7 +181,7 @@ export default function ChangelogContent() {
           <h1 className="font-pixel text-2xl sm:text-3xl md:text-4xl font-bold text-chalk leading-none">
             {"What's New"}
           </h1>
-          <div className="mt-4 h-px w-full" style={{ background: 'linear-gradient(90deg, #ec4899, #ec4899 30%, transparent)' }} />
+          <div className="mt-4 h-px w-full" style={{ background: 'linear-gradient(90deg, var(--color-ignite), var(--color-ignite) 30%, transparent)' }} />
 
           {/* Summary stats */}
           <div className="mt-6 flex flex-wrap gap-3">

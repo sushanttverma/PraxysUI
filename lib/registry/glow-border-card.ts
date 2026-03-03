@@ -101,6 +101,7 @@ playground: {
   defaults: {
     children: null,
   },
+  specialChildrenPreset: "glow-card",
 },
 component: () => import("@/app/components/ui/glow-border-card"),
 demo: () => import("@/app/components/demos/glow-border-card-demo"),

@@ -129,6 +129,14 @@ const toolItems: NavItem[] = [
 ];
 
 
+// ─── Static ref-array indices for GSAP stagger ──────────
+// Pre-computed so we avoid a mutable counter in the render body.
+const PAGE_START = 0;
+const TOOL_START = pageItems.length;
+const SEARCH_IDX = pageItems.length + toolItems.length;
+const CHANGELOG_IDX = SEARCH_IDX + 1;
+const GITHUB_IDX = CHANGELOG_IDX + 1;
+
 // ─── Split text into per-character spans ─────────────────
 
 function CharSplit({
@@ -348,9 +356,6 @@ export default function Navbar() {
     return () => document.removeEventListener("keydown", handleKey);
   }, [closeMenu]);
 
-  // ref index tracker
-  let refIdx = 0;
-
   return (
     <div
       className="fixed top-5 left-1/2 -translate-x-1/2 z-50"
@@ -419,8 +424,8 @@ export default function Navbar() {
               Pages
             </p>
             <div className="space-y-px">
-              {pageItems.map((item) => {
-                const idx = refIdx++;
+              {pageItems.map((item, index) => {
+                const idx = PAGE_START + index;
                 return (
                   <div
                     key={item.href}
@@ -485,8 +490,8 @@ export default function Navbar() {
               Tools
             </p>
             <div className="space-y-px">
-              {toolItems.map((item) => {
-                const idx = refIdx++;
+              {toolItems.map((item, index) => {
+                const idx = TOOL_START + index;
                 return (
                   <div
                     key={item.href}
@@ -544,85 +549,70 @@ export default function Navbar() {
 
           {/* ── Search ── */}
           <div className="mx-5 my-1.5 border-t border-border" />
-          {(() => {
-            const idx = refIdx++;
-            return (
-              <div
-                ref={(el) => {
-                  itemsRef.current[idx] = el;
-                }}
-                style={{ opacity: 0 }}
-                className="px-5"
-              >
-                <button
-                  onClick={() => {
-                    closeMenu();
-                    window.dispatchEvent(new Event('open-command-palette'));
-                  }}
-                  className="flex w-full items-center gap-2.5 rounded-lg border border-border bg-void/50 px-3 py-2 text-xs text-text-faint transition-colors hover:border-border-light hover:text-blush cursor-pointer"
-                >
-                  <Search className="h-3.5 w-3.5" />
-                  <span>Search...</span>
-                  <kbd className="ml-auto rounded border border-border-light bg-obsidian px-1.5 py-0.5 font-mono text-[9px] text-text-faint">
-                    ⌘K
-                  </kbd>
-                </button>
-              </div>
-            );
-          })()}
+          <div
+            ref={(el) => {
+              itemsRef.current[SEARCH_IDX] = el;
+            }}
+            style={{ opacity: 0 }}
+            className="px-5"
+          >
+            <button
+              onClick={() => {
+                closeMenu();
+                window.dispatchEvent(new Event('open-command-palette'));
+              }}
+              className="flex w-full items-center gap-2.5 rounded-lg border border-border bg-void/50 px-3 py-2 text-xs text-text-faint transition-colors hover:border-border-light hover:text-blush cursor-pointer"
+            >
+              <Search className="h-3.5 w-3.5" />
+              <span>Search...</span>
+              <kbd className="ml-auto rounded border border-border-light bg-obsidian px-1.5 py-0.5 font-mono text-[9px] text-text-faint">
+                ⌘K
+              </kbd>
+            </button>
+          </div>
 
           {/* ── Separator ── */}
           <div className="mx-5 my-1.5 border-t border-border" />
 
           {/* ── Bottom row ── */}
           <div className="px-5 pb-3 flex items-center justify-between">
-            {(() => {
-              const idx = refIdx++;
-              return (
-                <div
-                  ref={(el) => {
-                    itemsRef.current[idx] = el;
-                  }}
-                  style={{ opacity: 0 }}
-                >
-                  <Link
-                    href="/changelog"
-                    onClick={closeMenu}
-                    className={cn(
-                      "flex items-center gap-1.5 text-xs transition-colors",
-                      isActive("/changelog")
-                        ? "text-ignite"
-                        : "text-text-faint hover:text-blush"
-                    )}
-                  >
-                    <Clock className="h-3 w-3" />
-                    <span>Changelog</span>
-                  </Link>
-                </div>
-              );
-            })()}
-            {(() => {
-              const idx = refIdx++;
-              return (
-                <div
-                  ref={(el) => {
-                    itemsRef.current[idx] = el;
-                  }}
-                  style={{ opacity: 0 }}
-                >
-                  <a
-                    href="https://github.com/sushanttverma/Praxys-UI"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-xs text-text-faint hover:text-chalk transition-colors"
-                  >
-                    <Github className="h-3 w-3" />
-                    <span>GitHub</span>
-                    <Star className="h-2.5 w-2.5 fill-current text-amber-400/70" />
-                  </a>
-                </div>
-              );
-            })()}
+            <div
+              ref={(el) => {
+                itemsRef.current[CHANGELOG_IDX] = el;
+              }}
+              style={{ opacity: 0 }}
+            >
+              <Link
+                href="/changelog"
+                onClick={closeMenu}
+                className={cn(
+                  "flex items-center gap-1.5 text-xs transition-colors",
+                  isActive("/changelog")
+                    ? "text-ignite"
+                    : "text-text-faint hover:text-blush"
+                )}
+              >
+                <Clock className="h-3 w-3" />
+                <span>Changelog</span>
+              </Link>
+            </div>
+            <div
+              ref={(el) => {
+                itemsRef.current[GITHUB_IDX] = el;
+              }}
+              style={{ opacity: 0 }}
+            >
+              <a
+                href="https://github.com/sushanttverma/Praxys-UI"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-xs text-text-faint hover:text-chalk transition-colors"
+              >
+                <Github className="h-3 w-3" />
+                <span>GitHub</span>
+                <Star className="h-2.5 w-2.5 fill-current text-amber-400/70" />
+              </a>
+            </div>
           </div>
         </div>
       </div>

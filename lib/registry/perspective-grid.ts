@@ -120,6 +120,7 @@ playground: {
     { name: "columns", label: "Columns", type: "number", default: 3, min: 1, max: 6, step: 1 },
     { name: "tiltAmount", label: "Tilt (deg)", type: "number", default: 8, min: 0, max: 25, step: 1 },
   ],
+  specialChildrenPreset: "grid-items",
 },
 component: () => import("@/app/components/ui/perspective-grid"),
 demo: () => import("@/app/components/demos/perspective-grid-demo"),

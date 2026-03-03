@@ -8,6 +8,8 @@ import {
   getPrevNext,
   getTitle,
 } from "@/lib/registry";
+
+const GITHUB_REPO_URL = "https://github.com/sushanttverma/Praxys-UI";
 import { CodeBlock } from "@/app/components/shared/CodeBlock";
 import { PropsTable } from "@/app/components/shared/PropsTable";
 import { InstallSteps } from "@/app/components/shared/InstallSteps";
@@ -85,7 +87,11 @@ export default async function ComponentDetailPage({
   }
 
   const entry = componentRegistry[slug];
-  const { prev, next } = getPrevNext(slug);
+  const { prev: rawPrev, next: rawNext } = getPrevNext(slug);
+  // Filter out non-component slugs (e.g. "introduction", "installation") so
+  // prev/next never links to a route that doesn't exist under /components/[slug]
+  const prev = rawPrev && isComponentSlug(rawPrev) ? rawPrev : null;
+  const next = rawNext && isComponentSlug(rawNext) ? rawNext : null;
 
   return (
     <div className="min-h-screen bg-void">
@@ -111,7 +117,7 @@ export default async function ComponentDetailPage({
                 </h1>
               </div>
               <a
-                href={`https://github.com/sushanttverma/Praxys-UI/blob/main/app/components/ui/${slug}.tsx`}
+                href={`${GITHUB_REPO_URL}/blob/main/app/components/ui/${slug}.tsx`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hidden sm:flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-text-faint transition-colors hover:border-border-light hover:text-blush mb-0.5"

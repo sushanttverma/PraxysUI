@@ -46,3 +46,9 @@ packages/cli/dist
 
 # personal notes
 RELEASE.md
+
+# Windows reserved device names that tools occasionally create
+nul
+con
+prn
+aux

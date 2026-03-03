@@ -129,6 +129,7 @@ playground: {
     { name: "baseColor", label: "Base Color", type: "color", default: "#1c1a17" },
     { name: "highlightColor", label: "Highlight Color", type: "color", default: "#E84E2D" },
   ],
+  specialChildrenPreset: "liquid-metal",
 },
 component: () => import("@/app/components/ui/liquid-metal"),
 demo: () => import("@/app/components/demos/liquid-metal-demo"),
