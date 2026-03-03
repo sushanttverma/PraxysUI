@@ -14,44 +14,43 @@ export default function ScrollProgressDemo() {
   const containerRef = useRef<HTMLDivElement>(null)
 
   return (
-    <div className="relative w-full">
-      {/* Scoped scroll container */}
+    <div className="relative w-full rounded-xl border border-border overflow-hidden">
+      {/* Bar sits above the scroll container — never scrolls, always visible */}
+      <ScrollProgress
+        position="top"
+        color="#6366f1"
+        thickness={3}
+        containerRef={containerRef}
+      />
+
+      {/* Scrollable container */}
       <div
         ref={containerRef}
-        className="relative h-[420px] overflow-y-auto rounded-xl border border-border bg-obsidian px-8 py-6 scroll-smooth"
+        className="relative h-[420px] overflow-y-auto bg-obsidian scroll-smooth overscroll-contain"
       >
-        {/* Top bar scoped to this container */}
-        <ScrollProgress
-          position="top"
-          color="#6366f1"
-          thickness={3}
-          containerRef={containerRef}
-        />
-
-        {/* Section dots on the right */}
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex flex-col items-end gap-3">
+        {/* Section dot navigator */}
+        <div className="sticky top-4 float-right mr-4 z-10 flex flex-col items-end gap-3">
           {sections.map((s) => (
-            <a
+            <button
               key={s.id}
-              href={`#${s.id}`}
+              type="button"
               className="group flex items-center gap-2"
-              onClick={(e) => {
-                e.preventDefault()
+              onClick={() =>
                 containerRef.current
                   ?.querySelector(`#${s.id}`)
                   ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-              }}
+              }
             >
-              <span className="text-xs text-blush group-hover:text-chalk transition-colors hidden group-hover:inline">
+              <span className="text-xs text-blush group-hover:text-chalk transition-colors opacity-0 group-hover:opacity-100">
                 {s.label}
               </span>
               <div className="w-2 h-2 rounded-full bg-white/20 group-hover:bg-indigo-400 transition-colors" />
-            </a>
+            </button>
           ))}
         </div>
 
-        {/* Scrollable content */}
-        <div className="space-y-0 pr-8">
+        {/* Content */}
+        <div className="px-8 py-6 pr-12">
           <section id="sp-intro" className="min-h-[300px] flex flex-col justify-center">
             <h3 className="text-lg font-semibold text-chalk mb-2">Introduction</h3>
             <p className="text-sm text-blush leading-relaxed">
@@ -80,7 +79,7 @@ export default function ScrollProgressDemo() {
           <section id="sp-details" className="min-h-[300px] flex flex-col justify-center">
             <h3 className="text-lg font-semibold text-chalk mb-2">Implementation</h3>
             <p className="text-sm text-blush leading-relaxed">
-              Built on Framer Motion's <code className="text-indigo-300">useScroll</code> and{' '}
+              Built on Framer Motion&apos;s <code className="text-indigo-300">useScroll</code> and{' '}
               <code className="text-indigo-300">useSpring</code>. The progress value is derived
               from <code className="text-indigo-300">scrollYProgress</code> and fed through a
               spring with configurable stiffness and damping.
@@ -92,11 +91,11 @@ export default function ScrollProgressDemo() {
           </section>
 
           <section id="sp-outro" className="min-h-[280px] flex flex-col justify-center">
-            <h3 className="text-lg font-semibold text-chalk mb-2">That's it</h3>
+            <h3 className="text-lg font-semibold text-chalk mb-2">That&apos;s it</h3>
             <p className="text-sm text-blush leading-relaxed">
-              Drop <code className="text-indigo-300">{'<ScrollProgress />'}</code> anywhere in your
-              layout. Pass a <code className="text-indigo-300">containerRef</code> to scope it to a
-              div, or omit it to track the full page scroll.
+              Drop <code className="text-indigo-300">{'<ScrollProgress />'}</code> above your
+              scrollable container. Pass a <code className="text-indigo-300">containerRef</code> to
+              scope it, or omit it to track the full page scroll.
             </p>
           </section>
         </div>

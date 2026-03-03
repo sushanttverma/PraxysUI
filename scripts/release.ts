@@ -82,9 +82,7 @@ if (dirty) {
 
 try { run('git fetch origin main --quiet', { silent: true }) } catch { /* no remote — OK */ }
 
-const local = runCapture('git rev-parse HEAD')
-let remote = local
-try { remote = runCapture('git rev-parse origin/main') } catch { /* no remote — OK */ }
+try { runCapture('git rev-parse origin/main') } catch { /* no remote — OK */ }
 
 const behind = runCapture('git rev-list HEAD..origin/main --count')
 if (parseInt(behind, 10) > 0) {
@@ -97,6 +95,23 @@ if (parseInt(behind, 10) > 0) {
 
 console.log()
 console.log(`  Releasing v${CURRENT} → v${VERSION}...`)
+console.log()
+
+// 0. Lint + type check
+console.log('  Running lint...')
+try {
+  run('npx eslint')
+} catch {
+  console.error('Error: Lint failed. Fix errors before releasing.')
+  process.exit(1)
+}
+console.log('  Running type check...')
+try {
+  run('npx tsc --noEmit')
+} catch {
+  console.error('Error: Type check failed. Fix errors before releasing.')
+  process.exit(1)
+}
 console.log()
 
 // 1. Bump packages/cli/package.json

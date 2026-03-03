@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
-import { motion, useSpring, useTransform, useScroll } from 'framer-motion'
+import React, { useEffect, useState } from 'react'
+import { motion, useSpring, useScroll } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 interface Section {
@@ -43,7 +43,6 @@ const ScrollProgress: React.FC<ScrollProgressProps> = ({
   const [activeSection, setActiveSection] = useState<string | null>(
     sections.length > 0 ? sections[0].id : null
   )
-  const [sectionProgress, setSectionProgress] = useState<Record<string, number>>({})
 
   useEffect(() => {
     if (sections.length === 0) return
@@ -59,10 +58,6 @@ const ScrollProgress: React.FC<ScrollProgressProps> = ({
           if (entry.isIntersecting) {
             setActiveSection(section.id)
           }
-          setSectionProgress((prev) => ({
-            ...prev,
-            [section.id]: entry.intersectionRatio,
-          }))
         },
         { threshold: Array.from({ length: 11 }, (_, i) => i / 10), rootMargin: '-10% 0px -10% 0px' }
       )
@@ -75,9 +70,17 @@ const ScrollProgress: React.FC<ScrollProgressProps> = ({
   }, [sections])
 
   if (position === 'top') {
+    // When scoped to a container: render as a plain block element placed *above*
+    // the scrollable div by the user — scaleX still tracks containerRef scroll.
+    // When tracking window: use fixed so it stays pinned to the viewport.
+    const isScoped = !!containerRef
     return (
       <motion.div
-        className={cn('fixed top-0 left-0 right-0 z-50 origin-left', className)}
+        className={cn(
+          'origin-left z-50',
+          isScoped ? 'w-full block' : 'fixed top-0 left-0 right-0',
+          className
+        )}
         style={{
           height: thickness,
           background: color,
