@@ -35,11 +35,12 @@ export default function ScrollProgressDemo() {
               key={s.id}
               type="button"
               className="group flex items-center gap-2"
-              onClick={() =>
-                containerRef.current
-                  ?.querySelector(`#${s.id}`)
-                  ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-              }
+              onClick={() => {
+                const el = containerRef.current?.querySelector(`#${s.id}`) as HTMLElement | null
+                if (el && containerRef.current) {
+                  containerRef.current.scrollTo({ top: el.offsetTop, behavior: 'smooth' })
+                }
+              }}
             >
               <span className="text-xs text-blush group-hover:text-chalk transition-colors opacity-0 group-hover:opacity-100">
                 {s.label}

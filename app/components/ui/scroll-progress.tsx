@@ -123,9 +123,9 @@ const ScrollProgress: React.FC<ScrollProgressProps> = ({
               <button
                 key={section.id}
                 type="button"
-                onClick={() => {
+                onClick={() =>
                   document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' })
-                }}
+                }
                 className="group relative flex items-center justify-end gap-2"
                 aria-label={`Scroll to ${section.label}`}
               >
