@@ -20,6 +20,17 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '1.0.1',
+    date: 'Mar 4, 2026',
+    title: 'Scroll Progress',
+    description:
+      'New Scroll Progress component — animated reading indicator with spring physics, top bar and right-side section dots navigator.',
+    iconName: 'sparkles',
+    changes: [
+      { type: 'added', text: 'Scroll Progress — spring-animated reading progress bar and section dots navigator, scopeable to any scroll container' },
+    ],
+  },
+  {
     version: '1.3.4',
     date: 'Feb 24, 2026',
     title: '100 Components Milestone',
