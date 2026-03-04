@@ -6,6 +6,7 @@ export {
   getPrevNext,
   getTitle,
   componentRegistry,
+  componentCount,
   isComponentSlug,
   getAllComponents,
 } from "./registry/index";
