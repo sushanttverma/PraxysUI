@@ -365,6 +365,10 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "scroll-dna": scrollDna,
 };
 
+// ─── Single source of truth for component count ─────────
+// Import this wherever the count is needed — never hardcode it.
+export const componentCount = Object.keys(componentRegistry).length;
+
 // Helper: check if a slug is a component page
 export function isComponentSlug(slug: string): boolean {
   return slug in componentRegistry;

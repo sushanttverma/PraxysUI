@@ -7,11 +7,12 @@ import Link from "next/link";
 import Confetti from "@/app/components/ui/confetti";
 import MagneticCursor from "@/app/components/ui/magnetic-cursor";
 import TypewriterText from "@/app/components/ui/typewriter-text";
+import { componentCount } from "@/lib/registry";
 
 const TERMINAL_LINES = [
   { text: "$ npx @praxys/ui init", delay: 0 },
   { text: "✓ Installing components...", delay: 1200 },
-  { text: "✓ 101 components added", delay: 2400 },
+  { text: `✓ ${componentCount} components added`, delay: 2400 },
   { text: "→ Ready to ship!", delay: 3400 },
 ];
 
@@ -145,7 +146,7 @@ export default function SignalCTA() {
           transition={{ delay: 0.2 }}
           className="text-blush text-base sm:text-lg text-center max-w-lg mx-auto mb-14"
         >
-          101+ animated components. Copy, paste, and ship in minutes.
+          {componentCount}+ animated components. Copy, paste, and ship in minutes.
           No dependencies required.
         </motion.p>
 

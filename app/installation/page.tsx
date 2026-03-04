@@ -4,6 +4,7 @@ import { ChevronRight } from "lucide-react";
 import { CodeBlock } from "@/app/components/shared/CodeBlock";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { componentCount } from "@/lib/registry";
 
 // ─── Metadata ────────────────────────────────────────────
 
@@ -175,7 +176,7 @@ export default function Page() {
               More CLI Commands
             </h2>
             <CodeBlock
-              code={`npx @praxys/ui list                    # Browse all 100 components
+              code={`npx @praxys/ui list                    # Browse all ${componentCount} components
 npx @praxys/ui list --category buttons  # Filter by category
 npx @praxys/ui list --search modal      # Search components
 npx @praxys/ui info animated-button     # Component details
