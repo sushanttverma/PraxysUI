@@ -187,7 +187,12 @@ function ComponentCard({ entry }: { entry: ComponentEntry }) {
               {cat.label}
             </span>
           )}
-          {entry.isNew && (
+          {entry.isSignature && (
+            <span className="rounded-full bg-gradient-to-r from-amber-500 to-ignite px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider text-void">
+              ✦ SIGNATURE
+            </span>
+          )}
+          {entry.isNew && !entry.isSignature && (
             <span className="rounded-full bg-ignite px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider text-void">
               NEW
             </span>
