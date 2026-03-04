@@ -200,14 +200,14 @@ All commands read this file for directory defaults. You can override per-command
 
 ## Components
 
-101 components across 6 categories:
+102 components across 6 categories:
 
-- **Buttons** (17) — Animated Button, Checkbox, Color Picker, Date Picker, File Upload, OTP Input, Rating, Slider, Switch, and more
-- **Cards** (10) — Data Table, Glow Border Card, Spotlight Card, Stats Card, Timeline, and more
-- **Text** (8) — Flip Text, Morphing Text, Typewriter Text, 3D Displacement Text, and more
-- **Navigation** (18) — Accordion, Command Menu, Glass Dock, Combobox, Autocomplete, Floating Menu, and more
-- **Visual** (12) — Liquid Ocean, Gradient Mesh, Parallax Scroll, Toast Notification, and more
-- **Media** (6) — Animated Hero, Interactive Book, Image Comparison, and more
+- **Buttons** (24) — Animated Button, Checkbox, Color Picker, Date Picker, File Upload, OTP Input, Rating, Slider, Switch, and more
+- **Cards** (15) — Data Table, Glow Border Card, Spotlight Card, Stats Card, Timeline, and more
+- **Text** (12) — Flip Text, Morphing Text, Typewriter Text, 3D Displacement Text, and more
+- **Navigation** (25) — Accordion, Command Menu, Glass Dock, Combobox, Autocomplete, Floating Menu, and more
+- **Visual** (17) — Liquid Ocean, Gradient Mesh, Parallax Scroll, Toast Notification, and more
+- **Media** (9) — Animated Hero, Interactive Book, Image Comparison, and more
 
 Browse all components at [ui.praxys.xyz/components](https://ui.praxys.xyz/components).
 

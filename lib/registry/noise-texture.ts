@@ -6,7 +6,6 @@ title: "Noise Texture",
 description:
   "Subtle animated noise/grain overlay using SVG turbulence filters for a film-grain aesthetic.",
 category: "visual",
-isNew: true,
 dependencies: ["clsx", "tailwind-merge"],
 code: `'use client'
 

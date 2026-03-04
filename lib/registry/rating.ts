@@ -6,7 +6,6 @@ title: "Rating",
 description:
   "An accessible animated rating component with star icons, half-star support, custom icons, hover states, and spring animations.",
 category: "buttons",
-isNew: true,
 dependencies: ["framer-motion", "clsx", "tailwind-merge", "lucide-react"],
 code: `'use client'
 

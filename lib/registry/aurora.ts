@@ -6,7 +6,6 @@ title: "Aurora",
 description:
   "Aurora borealis gradient background effect with smoothly animated blurred color blobs.",
 category: "visual",
-isNew: true,
 dependencies: ["framer-motion", "clsx", "tailwind-merge"],
 code: `'use client'
 
