@@ -20,6 +20,18 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '1.0.3',
+    date: 'Mar 4, 2026',
+    title: 'Scroll DNA + Homepage Redesign',
+    description:
+      'New Scroll DNA signature component — a DNA-strand scroll navigator with interactive scrubbing, section waypoints, and a floating code card. Also ships a full homepage redesign with cinematic loader, horizontal showcase, and interactive forge sections.',
+    iconName: 'sparkles',
+    changes: [
+      { type: 'added', text: 'Scroll DNA — DNA-strand scroll navigator with click-to-jump, drag scrubbing, section dots, and floating copyable code card (Praxys Signature)' },
+      { type: 'added', text: 'Homepage — CinematicLoader, HeroVoid, HorizontalShowcase, InteractiveForge, PulseNumbers, SignalCTA, ShowcaseCard, ScrollBarWidget sections' },
+    ],
+  },
+  {
     version: '1.0.2',
     date: 'Mar 4, 2026',
     title: 'Scroll Progress — Stability Fix',
