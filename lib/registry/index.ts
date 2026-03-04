@@ -111,6 +111,7 @@ import rangeSlider from "./range-slider";
 import copyButton from "./copy-button";
 import mentionInput from "./mention-input";
 import scrollProgress from "./scroll-progress";
+import scrollDna from "./scroll-dna";
 
 // ─── Sidebar structure ───────────────────────────────────
 
@@ -230,6 +231,7 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "copy-button", title: "Copy Button" },
       { slug: "mention-input", title: "Mention Input" },
       { slug: "scroll-progress", title: "Scroll Progress" },
+      { slug: "scroll-dna", title: "Scroll DNA" },
     ],
   },
 ];
@@ -360,6 +362,7 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "copy-button": copyButton,
   "mention-input": mentionInput,
   "scroll-progress": scrollProgress,
+  "scroll-dna": scrollDna,
 };
 
 // Helper: check if a slug is a component page

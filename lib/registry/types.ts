@@ -39,6 +39,7 @@ export type ComponentEntry = {
   description: string;
   category: "buttons" | "cards" | "text" | "navigation" | "visual" | "media";
   isNew?: boolean;
+  isSignature?: boolean;
   dependencies: string[];
   code: string;
   usage: string;
