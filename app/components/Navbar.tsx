@@ -367,6 +367,19 @@ export default function Navbar() {
       >
         {/* ── Top bar (always visible) ── */}
         <div className="flex items-center justify-between px-1.5 py-1.5 gap-2">
+          {/* Brand badge */}
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-void text-text-faint text-xs font-medium select-none hover:text-chalk transition-colors"
+          >
+            <span className="hidden sm:inline text-chalk/70 font-pixel">
+              Praxys UI
+            </span>
+          </Link>
+
+          {/* Theme toggle */}
+          <ThemeToggle />
+
           {/* Menu / Close button */}
           <button
             onClick={toggleMenu}
@@ -401,19 +414,6 @@ export default function Navbar() {
               suppressHydrationWarning
             />
           </button>
-
-          {/* Theme toggle */}
-          <ThemeToggle />
-
-          {/* Brand badge */}
-          <Link
-            href="/"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-void text-text-faint text-xs font-medium select-none hover:text-chalk transition-colors"
-          >
-            <span className="hidden sm:inline text-chalk/70 font-pixel">
-              Praxys UI
-            </span>
-          </Link>
         </div>
 
         {/* ── Expanded content ── */}
