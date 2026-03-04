@@ -4,6 +4,7 @@ import { JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "./components/ThemeProvider";
 import CommandPalette from "./components/CommandPalette";
 import { SITE_DESCRIPTION } from "@/lib/site-stats";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const geistPixel = localFont({
@@ -104,6 +105,7 @@ export default function RootLayout({
           {children}
           <CommandPalette />
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
