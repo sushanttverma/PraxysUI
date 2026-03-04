@@ -6,7 +6,6 @@ title: "Blur Fade",
 description:
   "Blur + fade entrance animation wrapper that blurs children in from a configurable direction.",
 category: "visual",
-isNew: true,
 dependencies: ["framer-motion", "clsx", "tailwind-merge"],
 code: `'use client'
 

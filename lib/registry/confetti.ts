@@ -6,7 +6,6 @@ title: "Confetti",
 description:
   "Confetti celebration burst effect with physics-based falling particles triggered on demand.",
 category: "visual",
-isNew: true,
 dependencies: ["framer-motion", "clsx", "tailwind-merge"],
 code: `'use client'
 

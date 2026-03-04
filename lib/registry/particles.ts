@@ -6,7 +6,6 @@ title: "Particles",
 description:
   "Floating particle background with randomized drift animations that loop infinitely.",
 category: "visual",
-isNew: true,
 dependencies: ["framer-motion", "clsx", "tailwind-merge"],
 code: `'use client'
 

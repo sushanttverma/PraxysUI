@@ -28,32 +28,67 @@ function runCapture(cmd: string): string {
   return (execSync(cmd, { cwd: root, encoding: 'utf8' }) as string).trim()
 }
 
-// ─── Sync CLI README component count ─────────────────────
-// Reads the count directly from the registry index (no import needed — just
-// counts `import <name> from "./<slug>"` lines, excluding type imports).
+// ─── Sync CLI README counts from registry ────────────────
+// Reads total + per-category counts directly from the registry source.
+// Runs automatically on every `npm run release` — never manually edit counts.
 
 function syncCliReadme(): void {
   const registryPath = resolve(root, 'lib/registry/index.ts')
   const registrySrc = readFileSync(registryPath, 'utf8')
 
-  // Count lines like: import foo from "./foo";  (excludes `import type ...`)
-  const count = (registrySrc.match(/^import [a-zA-Z]/gm) ?? [])
+  // ── Total count ──────────────────────────────────────────
+  // Count `import foo from "./foo"` lines (excludes `import type ...`)
+  const total = (registrySrc.match(/^import [a-zA-Z]/gm) ?? [])
     .filter(line => !line.startsWith('import type'))
     .length
+
+  // ── Per-category counts ──────────────────────────────────
+  // Parse each registry file and read its `category:` field
+  const registryDir = resolve(root, 'lib/registry')
+  const categoryCounts: Record<string, number> = {}
+  const componentImports = (registrySrc.match(/^import \w+ from "\.\/(.+)"/gm) ?? [])
+  for (const line of componentImports) {
+    const slug = line.match(/from "\.\/(.+)"/)?.[1]
+    if (!slug || slug === 'types') continue
+    try {
+      const src = readFileSync(resolve(registryDir, `${slug}.ts`), 'utf8')
+      const cat = src.match(/category:\s*["'](\w+)["']/)?.[1]
+      if (cat) categoryCounts[cat] = (categoryCounts[cat] ?? 0) + 1
+    } catch { /* skip missing files */ }
+  }
 
   const readmePath = resolve(root, 'packages/cli/README.md')
   let readme = readFileSync(readmePath, 'utf8')
 
-  // 1. Replace standalone totals: "NNN components" → "${count} components"
-  //    Matches: "Add all 102 components", "102 components across", etc.
-  readme = readme.replace(/\b\d+(?= components)/g, String(count))
+  // ── Patch total count ────────────────────────────────────
+  // Only replace numbers immediately before the word " components" (not version numbers)
+  readme = readme.replace(/\b\d+(?= components)/g, String(total))
+  // Patch ratio totals: "12/NNN" only on lines containing "components" or "Total"
+  readme = readme.replace(/^(.*(?:components|Total).*)$/gm, line =>
+    line.replace(/(\d+\/)(\d+)/, (_, installed) => `${installed}${total}`)
+  )
 
-  // 2. Replace totals in ratio patterns: "12/102" → "12/${count}"
-  //    Matches: "12/102 components installed", "Total  12/102"
-  readme = readme.replace(/(\d+\/)(\d+)/g, (_, installed) => `${installed}${count}`)
+  // ── Patch category counts ────────────────────────────────
+  // Matches: "**Buttons** (17)" → "**Buttons** (24)"
+  const categoryLabels: Record<string, string> = {
+    buttons: 'Buttons',
+    cards: 'Cards',
+    text: 'Text',
+    navigation: 'Navigation',
+    visual: 'Visual',
+    media: 'Media',
+  }
+  for (const [cat, label] of Object.entries(categoryLabels)) {
+    const n = categoryCounts[cat] ?? 0
+    // Matches: "**Buttons** (17)" → "**Buttons** (24)"
+    readme = readme.replace(
+      new RegExp(`(\\*\\*${label}\\*\\* \\()\\d+(\\))`, 'g'),
+      `$1${n}$2`
+    )
+  }
 
   writeFileSync(readmePath, readme)
-  console.log(`  ✓ CLI README synced  (${count} components)`)
+  console.log(`  ✓ CLI README synced  (${total} components, categories: ${JSON.stringify(categoryCounts)})`)
 }
 
 

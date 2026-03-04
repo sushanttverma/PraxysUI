@@ -6,7 +6,6 @@ title: "Switch",
 description:
   "An accessible animated toggle switch with spring thumb animation, size variants, label support, and keyboard interaction.",
 category: "buttons",
-isNew: true,
 dependencies: ["framer-motion", "clsx", "tailwind-merge", "lucide-react"],
 code: `'use client'
 
