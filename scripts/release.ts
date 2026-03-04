@@ -69,21 +69,13 @@ function syncCliReadme(): void {
   )
 
   // ── Patch category counts ────────────────────────────────
-  // Matches: "**Buttons** (17)" → "**Buttons** (24)"
-  const categoryLabels: Record<string, string> = {
-    buttons: 'Buttons',
-    cards: 'Cards',
-    text: 'Text',
-    navigation: 'Navigation',
-    visual: 'Visual',
-    media: 'Media',
-  }
-  for (const [cat, label] of Object.entries(categoryLabels)) {
-    const n = categoryCounts[cat] ?? 0
-    // Matches: "**Buttons** (17)" → "**Buttons** (24)"
+  // Derives label from category slug: "buttons" → "Buttons"
+  // Handles any category — new ones are auto-discovered from the registry files.
+  for (const [cat, count] of Object.entries(categoryCounts)) {
+    const label = cat.charAt(0).toUpperCase() + cat.slice(1)
     readme = readme.replace(
       new RegExp(`(\\*\\*${label}\\*\\* \\()\\d+(\\))`, 'g'),
-      `$1${n}$2`
+      `$1${count}$2`
     )
   }
 
