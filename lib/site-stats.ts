@@ -1,12 +1,12 @@
-import { componentRegistry, sidebarGroups } from "./registry";
+import { componentCount, sidebarGroups } from "./registry";
 import { templateRegistry } from "./templates";
 
 // ─── Computed stats (single source of truth) ────────────
 // All counts are derived from actual data — add/remove an
 // entry in its registry and the numbers update everywhere.
 
-/** Number of UI components in the registry */
-export const COMPONENT_COUNT = Object.keys(componentRegistry).length;
+/** Number of UI components in the registry — base source: lib/registry/index.ts */
+export const COMPONENT_COUNT = componentCount;
 
 /** Number of sidebar categories (excluding "Getting Started") */
 export const CATEGORY_COUNT = sidebarGroups.filter(
