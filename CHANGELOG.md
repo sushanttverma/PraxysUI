@@ -2,6 +2,17 @@
 
 All notable changes to Praxys UI are documented here.
 
+## [1.0.3] — Mar 4, 2026
+
+**Scroll DNA + Homepage Redesign**
+
+New Scroll DNA signature component — a DNA-strand scroll navigator with interactive scrubbing, section waypoints, and a floating code card. Also ships a full homepage redesign with cinematic loader, horizontal showcase, and interactive forge sections.
+
+### Added
+
+- Scroll DNA — DNA-strand scroll navigator with click-to-jump, drag scrubbing, section dots, and floating copyable code card (Praxys Signature)
+- Homepage — CinematicLoader, HeroVoid, HorizontalShowcase, InteractiveForge, PulseNumbers, SignalCTA, ShowcaseCard, ScrollBarWidget sections
+
 ## [1.0.2] — Mar 4, 2026
 
 **Scroll Progress — Stability Fix**
