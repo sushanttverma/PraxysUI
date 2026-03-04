@@ -51,7 +51,7 @@ npx @praxys/ui add animated-button
 # Add multiple at once
 npx @praxys/ui add accordion alert badge tooltip
 
-# Add all 101 components
+# Add all 102 components
 npx @praxys/ui add all
 
 # Add and install dependencies
@@ -132,7 +132,7 @@ npx @praxys/ui doctor
   ✓ clsx installed (^2.1.1)
   ✓ tailwind-merge installed (^2.6.0)
   ✓ framer-motion installed (^12.0.0)
-  ✓ 12/101 components installed
+  ✓ 12/102 components installed
 
   All checks passed!
 ```
@@ -152,7 +152,7 @@ npx @praxys/ui stats
   visual             0/12     ░░░░░░░░░░░░
   media              0/6      ░░░░░░
   ────────────────────────────────────────
-  Total             12/101
+  Total             12/102
 
   Coverage: 17% of components installed
 ```

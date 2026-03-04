@@ -28,7 +28,34 @@ function runCapture(cmd: string): string {
   return (execSync(cmd, { cwd: root, encoding: 'utf8' }) as string).trim()
 }
 
-// ─── Read current CLI version ────────────────────────────
+// ─── Sync CLI README component count ─────────────────────
+// Reads the count directly from the registry index (no import needed — just
+// counts `import <name> from "./<slug>"` lines, excluding type imports).
+
+function syncCliReadme(): void {
+  const registryPath = resolve(root, 'lib/registry/index.ts')
+  const registrySrc = readFileSync(registryPath, 'utf8')
+
+  // Count lines like: import foo from "./foo";  (excludes `import type ...`)
+  const count = (registrySrc.match(/^import [a-zA-Z]/gm) ?? [])
+    .filter(line => !line.startsWith('import type'))
+    .length
+
+  const readmePath = resolve(root, 'packages/cli/README.md')
+  let readme = readFileSync(readmePath, 'utf8')
+
+  // 1. Replace standalone totals: "NNN components" → "${count} components"
+  //    Matches: "Add all 102 components", "102 components across", etc.
+  readme = readme.replace(/\b\d+(?= components)/g, String(count))
+
+  // 2. Replace totals in ratio patterns: "12/102" → "12/${count}"
+  //    Matches: "12/102 components installed", "Total  12/102"
+  readme = readme.replace(/(\d+\/)(\d+)/g, (_, installed) => `${installed}${count}`)
+
+  writeFileSync(readmePath, readme)
+  console.log(`  ✓ CLI README synced  (${count} components)`)
+}
+
 
 const cliPkgPath = resolve(root, 'packages/cli/package.json')
 const cliPkg = JSON.parse(readFileSync(cliPkgPath, 'utf8'))
@@ -131,7 +158,11 @@ if (updatedSrc === cliSrc) {
 }
 writeFileSync(cliSrcPath, updatedSrc)
 
-// 3. Regenerate CHANGELOG.md
+// 3. Sync CLI README component count from registry
+syncCliReadme()
+run('git add packages/cli/README.md', { silent: true })
+
+// 4. Regenerate CHANGELOG.md
 try {
   run('npx tsx scripts/generate-changelog.ts')
   run('git add CHANGELOG.md', { silent: true })
@@ -139,11 +170,11 @@ try {
   // Not fatal — changelog generation is best-effort
 }
 
-// 4. Commit
+// 5. Commit
 run('git add packages/cli/package.json packages/cli/src/index.ts', { silent: true })
 run(`git commit -m "chore: release v${VERSION}"`)
 
-// 5. Tag
+// 6. Tag
 run(`git tag -a "v${VERSION}" -m "v${VERSION}"`, { silent: true })
 
 // ─── Done ────────────────────────────────────────────────
