@@ -111,20 +111,23 @@ function renderControl(
         case 'select':
             return (
                 <div className="flex flex-wrap gap-1">
-                    {control.options.map(opt => (
-                        <button
-                            key={opt}
-                            onClick={() => onChange(opt)}
-                            className={cn(
-                                'px-2 py-0.5 rounded-md text-[10px] font-medium border transition-colors',
-                                value === opt
-                                    ? 'border-ignite bg-ignite/10 text-ignite'
-                                    : 'border-border text-blush hover:text-chalk hover:border-border-light'
-                            )}
-                        >
-                            {opt}
-                        </button>
-                    ))}
+                    {control.options.map(opt => {
+                        const option = normalizeSelectOption(opt)
+                        return (
+                            <button
+                                key={option.value}
+                                onClick={() => onChange(option.value)}
+                                className={cn(
+                                    'px-2 py-0.5 rounded-md text-[10px] font-medium border transition-colors',
+                                    value === option.value
+                                        ? 'border-ignite bg-ignite/10 text-ignite'
+                                        : 'border-border text-blush hover:text-chalk hover:border-border-light'
+                                )}
+                            >
+                                {option.label}
+                            </button>
+                        )
+                    })}
                 </div>
             )
 
@@ -146,4 +149,13 @@ function renderControl(
         default:
             return null
     }
+}
+
+function normalizeSelectOption(
+    option: string | { label: string; value: string }
+): { label: string; value: string } {
+    if (typeof option === 'string') {
+        return { label: option, value: option }
+    }
+    return option
 }

@@ -16,7 +16,11 @@ export type PlaygroundPropDef = {
   | { type: "text"; default: string }
   | { type: "number"; default: number; min?: number; max?: number; step?: number }
   | { type: "boolean"; default: boolean }
-  | { type: "select"; default: string; options: string[] }
+  | {
+      type: "select";
+      default: string;
+      options: Array<string | { label: string; value: string }>;
+    }
   | { type: "color"; default: string }
 );
 
