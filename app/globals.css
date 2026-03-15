@@ -96,6 +96,10 @@
   font-family: var(--font-geist-pixel), monospace;
 }
 
+.variable-proximity {
+  font-family: 'Roboto Flex', sans-serif;
+}
+
 body {
   background: var(--color-void);
   color: var(--color-chalk);
