@@ -18,6 +18,7 @@ import {
   FileText,
   Clock,
   Search,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { COMPONENT_COUNT_LABEL } from "@/lib/site-stats";
@@ -101,6 +102,12 @@ const toolItems: NavItem[] = [
     label: "Animation Studio",
     icon: <Wand2 className="h-4 w-4" />,
     description: "Motion configuration",
+  },
+  {
+    href: "/background-studio",
+    label: "Background Studio",
+    icon: <Sparkles className="h-4 w-4" />,
+    description: "Background effects lab",
   },
   {
     href: "/gradient-maker",
