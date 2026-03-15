@@ -98,6 +98,10 @@ export default function RootLayout({
           href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap"
           rel="stylesheet"
         />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap"
+          rel="stylesheet"
+        />
         {/* JetBrains Mono is loaded via next/font/google — no external <link> needed */}
       </head>
       <body className="noise-overlay antialiased" suppressHydrationWarning>

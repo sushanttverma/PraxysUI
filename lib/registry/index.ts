@@ -25,6 +25,11 @@ import perspectiveGrid from "./perspective-grid";
 import flipFadeText from "./flip-fade-text";
 import fallingText from "./falling-text";
 import splitText from "./split-text";
+import blurText from "./blur-text";
+import shinyText from "./shiny-text";
+import fuzzyText from "./fuzzy-text";
+import scrollReveal from "./scroll-reveal";
+import variableProximity from "./variable-proximity";
 import displacementText from "./displacement-text";
 import spotlightNavbar from "./spotlight-navbar";
 import glassDock from "./glass-dock";
@@ -148,6 +153,11 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "flip-fade-text", title: "Flip Fade Text" },
       { slug: "falling-text", title: "Falling Text" },
       { slug: "split-text", title: "Split Text" },
+      { slug: "blur-text", title: "Blur Text" },
+      { slug: "shiny-text", title: "Shiny Text" },
+      { slug: "fuzzy-text", title: "Fuzzy Text" },
+      { slug: "scroll-reveal", title: "Scroll Reveal" },
+      { slug: "variable-proximity", title: "Variable Proximity" },
       { slug: "displacement-text", title: "3D Displacement Text" },
       { slug: "spotlight-navbar", title: "Spotlight Navbar" },
       { slug: "glass-dock", title: "Glass Dock" },
@@ -282,6 +292,11 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "flip-fade-text": flipFadeText,
   "falling-text": fallingText,
   "split-text": splitText,
+  "blur-text": blurText,
+  "shiny-text": shinyText,
+  "fuzzy-text": fuzzyText,
+  "scroll-reveal": scrollReveal,
+  "variable-proximity": variableProximity,
   "displacement-text": displacementText,
   "spotlight-navbar": spotlightNavbar,
   "glass-dock": glassDock,
