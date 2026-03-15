@@ -156,13 +156,14 @@ const SplitText: React.FC<SplitTextProps> = ({
     willChange: 'transform, opacity',
   }
   const classes = `split-parent overflow-hidden inline-block whitespace-normal ${className}`
-  const Tag = tag as React.ElementType
-
-  return (
-    <Tag ref={ref} style={style} className={classes}>
-      {text}
-    </Tag>
-  )
+  if (tag === 'h1') return <h1 ref={ref as React.RefObject<HTMLHeadingElement>} style={style} className={classes}>{text}</h1>
+  if (tag === 'h2') return <h2 ref={ref as React.RefObject<HTMLHeadingElement>} style={style} className={classes}>{text}</h2>
+  if (tag === 'h3') return <h3 ref={ref as React.RefObject<HTMLHeadingElement>} style={style} className={classes}>{text}</h3>
+  if (tag === 'h4') return <h4 ref={ref as React.RefObject<HTMLHeadingElement>} style={style} className={classes}>{text}</h4>
+  if (tag === 'h5') return <h5 ref={ref as React.RefObject<HTMLHeadingElement>} style={style} className={classes}>{text}</h5>
+  if (tag === 'h6') return <h6 ref={ref as React.RefObject<HTMLHeadingElement>} style={style} className={classes}>{text}</h6>
+  if (tag === 'span') return <span ref={ref as React.RefObject<HTMLSpanElement>} style={style} className={classes}>{text}</span>
+  return <p ref={ref as React.RefObject<HTMLParagraphElement>} style={style} className={classes}>{text}</p>
 }
 
 export default SplitText

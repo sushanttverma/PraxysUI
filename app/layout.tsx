@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono, Roboto_Flex } from "next/font/google";
 import { ThemeProvider } from "./components/ThemeProvider";
 import CommandPalette from "./components/CommandPalette";
 import { SITE_DESCRIPTION } from "@/lib/site-stats";
@@ -18,6 +18,12 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
+const robotoFlex = Roboto_Flex({
+  subsets: ["latin"],
+  variable: "--font-roboto-flex",
   display: "swap",
 });
 
@@ -82,7 +88,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistPixel.variable} ${jetbrainsMono.variable}`}
+      className={`${geistPixel.variable} ${jetbrainsMono.variable} ${robotoFlex.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -96,10 +102,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
         <link
           href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap"
           rel="stylesheet"
         />
         {/* JetBrains Mono is loaded via next/font/google — no external <link> needed */}

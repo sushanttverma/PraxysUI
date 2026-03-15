@@ -22,6 +22,7 @@ export const TEMPLATE_COUNT = Object.keys(templateRegistry).length;
  */
 const toolSlugs = [
   "studio",
+  "background-studio",
   "gradient-maker",
   "shadow-lab",
   "glass-generator",

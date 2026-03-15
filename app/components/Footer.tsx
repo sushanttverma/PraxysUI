@@ -17,6 +17,7 @@ const productLinks = [
 
 const toolLinks = [
   { label: "Animation Studio", href: "/studio" },
+  { label: "Background Studio", href: "/background-studio" },
   { label: "Gradient Maker", href: "/gradient-maker" },
   { label: "Shadow Lab", href: "/shadow-lab" },
   { label: "Glassmorphism", href: "/glass-generator" },
