@@ -23,8 +23,8 @@ export default function FallingTextDemo() {
       <div className="relative h-[400px] overflow-hidden rounded-xl border border-border bg-void">
         <FallingText
           key={previewKey}
-          text="React Bits is a library of animated and interactive React components designed to streamline UI development and simplify your workflow."
-          highlightWords={['React', 'Bits', 'animated', 'components', 'simplify']}
+          text="Praxys builds animated React components."
+          highlightWords={['Praxys', 'animated', 'components']}
           trigger={trigger}
           gravity={gravity}
           fontSize="2rem"

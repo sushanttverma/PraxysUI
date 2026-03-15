@@ -133,11 +133,30 @@ export default async function ComponentDetailPage({
           <ComponentPreview
             preview={<ComponentPageClient slug={slug} />}
             codeBlock={
-              <CodeBlock
-                code={entry.code}
-                language="tsx"
-                filename={`components/ui/${slug}.tsx`}
-              />
+              <div className="space-y-4 p-4">
+                <InstallSteps
+                  steps={[
+                    {
+                      title: "Install dependencies",
+                      code: `npm install ${entry.dependencies.join(" ")}`,
+                      language: "bash",
+                    },
+                    {
+                      title: "Add utility file",
+                      description:
+                        "Create the cn() utility if you haven't already.",
+                      code: `import { type ClassValue, clsx } from "clsx";\nimport { twMerge } from "tailwind-merge";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}`,
+                      language: "tsx",
+                      filename: "lib/utils.ts",
+                    },
+                  ]}
+                />
+                <CodeBlock
+                  code={entry.code}
+                  language="tsx"
+                  filename={`components/ui/${slug}.tsx`}
+                />
+              </div>
             }
           />
 
@@ -153,46 +172,6 @@ export default async function ComponentDetailPage({
               <PropsPlayground slug={slug} playground={entry.playground} />
             </div>
           )}
-
-          {/* Install */}
-          <div>
-            <h2 className="mb-4 font-pixel text-xl font-semibold text-chalk">
-              Installation
-            </h2>
-
-            <InstallSteps
-              steps={[
-                {
-                  title: "Install dependencies",
-                  code: `npm install ${entry.dependencies.join(" ")}`,
-                  language: "bash",
-                },
-                {
-                  title: "Add utility file",
-                  description:
-                    "Create the cn() utility if you haven't already.",
-                  code: `import { type ClassValue, clsx } from "clsx";\nimport { twMerge } from "tailwind-merge";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}`,
-                  language: "tsx",
-                  filename: "lib/utils.ts",
-                },
-                {
-                  title: "Copy the source code",
-                  description: `Copy the code below and paste it into components/ui/${slug}.tsx`,
-                  code: entry.code,
-                  language: "tsx",
-                  filename: `components/ui/${slug}.tsx`,
-                },
-              ]}
-            />
-          </div>
-
-          {/* Usage */}
-          <div>
-            <h2 className="mb-4 font-pixel text-xl font-semibold text-chalk">
-              Usage
-            </h2>
-            <CodeBlock code={entry.usage} language="tsx" />
-          </div>
 
           {/* Props */}
           <div>

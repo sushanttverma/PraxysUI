@@ -83,8 +83,10 @@ const FallingText: React.FC<FallingTextProps> = ({
     const engine = Engine.create()
     engine.world.gravity.y = gravity
 
+    const canvasContainerEl = canvasContainerRef.current
+
     const render = Render.create({
-      element: canvasContainerRef.current,
+      element: canvasContainerEl,
       engine,
       options: { width, height, background: backgroundColor, wireframes },
     })
@@ -150,8 +152,8 @@ const FallingText: React.FC<FallingTextProps> = ({
       cancelAnimationFrame(rafId)
       Render.stop(render)
       Runner.stop(runner)
-      if (render.canvas && canvasContainerRef.current?.contains(render.canvas)) {
-        canvasContainerRef.current.removeChild(render.canvas)
+      if (render.canvas && canvasContainerEl.contains(render.canvas)) {
+        canvasContainerEl.removeChild(render.canvas)
       }
       World.clear(engine.world, false)
       Engine.clear(engine)
@@ -167,7 +169,7 @@ const FallingText: React.FC<FallingTextProps> = ({
   return (
     <div
       ref={containerRef}
-      className={cn('relative z-[1] h-full w-full cursor-pointer overflow-hidden pt-8 text-center', className)}
+      className={cn('relative z-[1] flex h-full min-h-[220px] w-full cursor-pointer items-start justify-center overflow-hidden pt-8 text-center', className)}
       onClick={trigger === 'click' ? handleTrigger : undefined}
       onMouseEnter={trigger === 'hover' ? handleTrigger : undefined}
     >
@@ -183,8 +185,8 @@ usage: `import FallingText from "@/app/components/ui/falling-text"
 export function Demo() {
   return (
     <FallingText
-      text="React Bits style falling physics text, now in Praxys."
-      highlightWords={["falling", "physics"]}
+      text="Praxys builds animated React components."
+      highlightWords={["Praxys", "animated", "components"]}
       trigger="hover"
       gravity={0.7}
       fontSize="1.75rem"
@@ -206,7 +208,7 @@ props: [
 ],
 playground: {
   controls: [
-    { name: "text", label: "Text", type: "text", default: "React Bits style falling physics text, now in Praxys." },
+    { name: "text", label: "Text", type: "text", default: "Praxys builds animated React components." },
     {
       name: "trigger",
       label: "Trigger",
@@ -221,7 +223,8 @@ playground: {
     { name: "backgroundColor", label: "Background", type: "text", default: "transparent" },
   ],
   defaults: {
-    highlightWords: ["falling", "physics"],
+    highlightWords: ["Praxys", "animated", "components"],
+    className: "h-[320px]",
   },
 },
 component: () => import("@/app/components/ui/falling-text"),
