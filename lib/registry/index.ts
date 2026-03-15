@@ -23,6 +23,7 @@ import staggeredGrid from "./staggered-grid";
 import expandableBentoGrid from "./expandable-bento-grid";
 import perspectiveGrid from "./perspective-grid";
 import flipFadeText from "./flip-fade-text";
+import fallingText from "./falling-text";
 import displacementText from "./displacement-text";
 import spotlightNavbar from "./spotlight-navbar";
 import glassDock from "./glass-dock";
@@ -144,6 +145,7 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "expandable-bento-grid", title: "Expandable Bento Grid" },
       { slug: "perspective-grid", title: "Perspective Grid" },
       { slug: "flip-fade-text", title: "Flip Fade Text" },
+      { slug: "falling-text", title: "Falling Text" },
       { slug: "displacement-text", title: "3D Displacement Text" },
       { slug: "spotlight-navbar", title: "Spotlight Navbar" },
       { slug: "glass-dock", title: "Glass Dock" },
@@ -276,6 +278,7 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "expandable-bento-grid": expandableBentoGrid,
   "perspective-grid": perspectiveGrid,
   "flip-fade-text": flipFadeText,
+  "falling-text": fallingText,
   "displacement-text": displacementText,
   "spotlight-navbar": spotlightNavbar,
   "glass-dock": glassDock,
