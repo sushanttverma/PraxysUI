@@ -379,11 +379,14 @@ function ControlField({
             onChange={(e) => onChange(e.target.value)}
             className="w-full rounded-lg border border-border bg-void px-3 py-1.5 text-sm text-chalk focus:border-ignite/50 focus:outline-none focus:ring-1 focus:ring-ignite/25 cursor-pointer"
           >
-            {control.options.map((opt) => (
-              <option key={opt} value={opt}>
-                {opt}
-              </option>
-            ))}
+            {control.options.map((opt) => {
+              const option = normalizeSelectOption(opt);
+              return (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              );
+            })}
           </select>
         </div>
       );
@@ -412,6 +415,15 @@ function ControlField({
     default:
       return null;
   }
+}
+
+function normalizeSelectOption(
+  option: string | { label: string; value: string }
+): { label: string; value: string } {
+  if (typeof option === "string") {
+    return { label: option, value: option };
+  }
+  return option;
 }
 
 // ─── Color helper ───────────────────────────────────────

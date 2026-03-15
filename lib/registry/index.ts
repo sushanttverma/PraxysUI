@@ -35,6 +35,7 @@ import folderPreview from "./folder-preview";
 import interactiveBook from "./interactive-book";
 import logoSlider from "./logo-slider";
 import typewriterText from "./typewriter-text";
+import circularText from "./circular-text";
 import toastNotification from "./toast-notification";
 import accordion from "./accordion";
 import animatedTabs from "./animated-tabs";
@@ -155,6 +156,7 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "reveal-loader", title: "Reveal Loader" },
       { slug: "logo-slider", title: "Logo Slider" },
       { slug: "typewriter-text", title: "Typewriter Text" },
+      { slug: "circular-text", title: "Circular Text" },
       { slug: "toast-notification", title: "Toast Notification" },
       { slug: "accordion", title: "Accordion" },
       { slug: "animated-tabs", title: "Animated Tabs" },
@@ -286,6 +288,7 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "interactive-book": interactiveBook,
   "logo-slider": logoSlider,
   "typewriter-text": typewriterText,
+  "circular-text": circularText,
   "toast-notification": toastNotification,
   "accordion": accordion,
   "animated-tabs": animatedTabs,
