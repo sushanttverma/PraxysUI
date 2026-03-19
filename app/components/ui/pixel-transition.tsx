@@ -49,7 +49,7 @@ const PixelTransition: React.FC<PixelTransitionProps> = ({
 
       const staggerStep = duration / totalPixels
 
-      shuffledIndices.forEach((pixelIndex, order) => {
+      shuffledIndices.current.forEach((pixelIndex, order) => {
         const el = pixelRefs.current[pixelIndex]
         if (!el) return
 
