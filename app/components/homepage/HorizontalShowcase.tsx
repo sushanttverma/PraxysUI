@@ -1,26 +1,38 @@
 "use client";
 
-import { motion } from "framer-motion";
-import ShowcaseCard from "./ShowcaseCard";
-import FlipText from "@/app/components/ui/flip-text";
+import { useRef, useCallback, useSyncExternalStore } from "react";
 import Aurora from "@/app/components/ui/aurora";
-import Particles from "@/app/components/ui/particles";
-import DisplacementText from "@/app/components/ui/displacement-text";
-import GlowBorderCard from "@/app/components/ui/glow-border-card";
-import CreepyButton from "@/app/components/ui/creepy-button";
-import AnimatedButton from "@/app/components/ui/animated-button";
-import AnimatedCounter from "@/app/components/ui/animated-counter";
 import MorphingText from "@/app/components/ui/morphing-text";
-import GradientMesh from "@/app/components/ui/gradient-mesh";
-import { COMPONENT_COUNT } from "@/lib/site-stats";
+import GlowBorderCard from "@/app/components/ui/glow-border-card";
+import Particles from "@/app/components/ui/particles";
+import FlipText from "@/app/components/ui/flip-text";
+import AnimatedButton from "@/app/components/ui/animated-button";
+
+const noopSubscribe = () => () => {};
+function useIsClient() {
+  return useSyncExternalStore(noopSubscribe, () => true, () => false);
+}
+
+function LazyParticles() {
+  const isClient = useIsClient();
+  if (!isClient) return <div className="w-full h-full bg-[var(--color-void)]" />;
+  return (
+    <Particles
+      count={25}
+      size={4}
+      color="#E84E2D"
+      speed={4}
+      className="!border-0 !rounded-none !bg-transparent w-full !h-full"
+    />
+  );
+}
 
 const DEMOS = [
   {
-    title: "Aurora",
-    description: "Animated gradient blobs with 3D perspective and drift",
+    name: "Aurora",
     render: () => (
       <Aurora
-        colors={["#E84E2D", "#C9958A", "#7B61FF", "#06b6d4"]}
+        colors={["#E84E2D", "#C9958A", "#7B61FF"]}
         blur={120}
         speed={10}
         className="!border-0 !rounded-none w-full h-full"
@@ -28,23 +40,19 @@ const DEMOS = [
     ),
   },
   {
-    title: "DisplacementText",
-    description: "Mouse-driven 3D text with spring-physics tilt and shadows",
+    name: "MorphingText",
     render: () => (
-      <div className="w-full h-full flex items-center justify-center p-4">
-        <DisplacementText
-          text="Praxys"
-          fontSize={64}
-          color="var(--color-chalk)"
-          shadowColor="var(--color-ignite)"
-          depth={15}
+      <div className="w-full h-full flex items-center justify-center">
+        <MorphingText
+          words={["Beautiful", "Animated", "Performant"]}
+          className="text-4xl font-bold text-chalk font-pixel"
+          interval={2500}
         />
       </div>
     ),
   },
   {
-    title: "GlowBorderCard",
-    description: "Mouse-tracking radial gradient glow that follows your cursor",
+    name: "GlowBorderCard",
     render: () => (
       <div className="w-full h-full flex items-center justify-center p-6">
         <GlowBorderCard className="max-w-[300px] w-full">
@@ -67,36 +75,24 @@ const DEMOS = [
     ),
   },
   {
-    title: "Particles",
-    description: "Physics-based particle system with configurable density and motion",
-    render: () => (
-      <Particles
-        count={25}
-        size={4}
-        color="#E84E2D"
-        speed={4}
-        className="!border-0 !rounded-none !bg-transparent w-full !h-full"
-      />
-    ),
+    name: "Particles",
+    render: () => <LazyParticles />,
   },
   {
-    title: "MorphingText",
-    description: "Smooth blur-based text morphing between words",
+    name: "FlipText",
     render: () => (
-      <div className="w-full h-full flex items-center justify-center p-4">
-        <MorphingText
-          words={["Beautiful", "Animated", "Accessible", "Performant"]}
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-chalk font-pixel"
-          interval={2500}
+      <div className="w-full h-full flex items-center justify-center">
+        <FlipText
+          text="Praxys UI"
+          className="text-5xl font-bold text-chalk font-pixel"
         />
       </div>
     ),
   },
   {
-    title: "AnimatedButton",
-    description: "Spring-physics button with gradient shine on tap",
+    name: "AnimatedButton",
     render: () => (
-      <div className="w-full h-full flex flex-col items-center justify-center gap-4 p-4">
+      <div className="w-full h-full flex flex-col items-center justify-center gap-4">
         <AnimatedButton className="bg-ignite/20 border-ignite/40 text-chalk px-8 py-3">
           Get Started
         </AnimatedButton>
@@ -106,101 +102,101 @@ const DEMOS = [
       </div>
     ),
   },
-  {
-    title: "CreepyButton",
-    description: "Flickering drip animation with per-letter jitter on hover",
-    render: () => (
-      <div className="w-full h-full flex items-center justify-center p-4">
-        <CreepyButton>Hover if you dare</CreepyButton>
-      </div>
-    ),
-  },
-  {
-    title: `${COMPONENT_COUNT}+ More`,
-    description: "Explore the full library of animated components",
-    render: () => (
-      <div className="w-full h-full flex flex-col items-center justify-center gap-4 p-4">
-        <AnimatedCounter
-          to={COMPONENT_COUNT}
-          duration={2.5}
-          suffix="+"
-          className="text-6xl sm:text-7xl font-bold text-ignite font-pixel tabular-nums"
-        />
-        <p className="text-blush text-base">components and counting</p>
-      </div>
-    ),
-  },
 ];
 
-// 2-col grid, every row sums to exactly 2
-// Row 1: Aurora (full width)
-// Row 2: DisplacementText + GlowBorderCard
-// Row 3: Particles (full width)
-// Row 4: MorphingText + AnimatedButton
-// Row 5: CreepyButton + Counter
-const GRID_CLASSES: Record<string, string> = {
-  "0": "md:col-span-2", // Aurora — full width
-  "1": "md:col-span-1", // DisplacementText
-  "2": "md:col-span-1", // GlowBorderCard
-  "3": "md:col-span-2", // Particles — full width
-  "4": "md:col-span-1", // MorphingText
-  "5": "md:col-span-1", // AnimatedButton
-  "6": "md:col-span-1", // CreepyButton
-  "7": "md:col-span-1", // Counter
-};
+export default function HorizontalShowcase() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const dragState = useRef({ isDown: false, startX: 0, scrollLeft: 0 });
 
-export default function VerticalShowcase() {
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.setPointerCapture(e.pointerId);
+    dragState.current = { isDown: true, startX: e.pageX, scrollLeft: el.scrollLeft };
+    el.style.cursor = "grabbing";
+    el.style.scrollSnapType = "none";
+  }, []);
+
+  const onPointerMove = useCallback((e: React.PointerEvent) => {
+    if (!dragState.current.isDown || !scrollRef.current) return;
+    const dx = e.pageX - dragState.current.startX;
+    scrollRef.current.scrollLeft = dragState.current.scrollLeft - dx;
+  }, []);
+
+  const onPointerUp = useCallback((e: React.PointerEvent) => {
+    dragState.current.isDown = false;
+    const el = scrollRef.current;
+    if (!el) return;
+    el.releasePointerCapture(e.pointerId);
+    el.style.cursor = "grab";
+    el.style.scrollSnapType = "x mandatory";
+  }, []);
+
+  const onWheel = useCallback((e: React.WheelEvent) => {
+    if (!scrollRef.current || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    scrollRef.current.scrollLeft += e.deltaY;
+  }, []);
+
   return (
-    <section className="relative py-24 px-6 overflow-hidden">
-      {/* GradientMesh background */}
-      <div className="absolute inset-0 pointer-events-none opacity-30">
-        <GradientMesh
-          colors={["#E84E2D", "#C9958A", "#0B0A08", "#E84E2D"]}
-          speed={12}
-          blur={140}
-          className="!border-0 !rounded-none w-full h-full"
-        />
+    <section className="relative py-20 bg-[var(--color-void)]">
+      {/* Header */}
+      <div className="px-8 mb-10 flex items-center gap-6">
+        <h2 className="font-pixel text-3xl sm:text-4xl text-[var(--color-chalk)] whitespace-nowrap">
+          The Library
+        </h2>
+        <div className="flex-1 h-px bg-[var(--color-border)]" />
       </div>
+      <p className="px-8 -mt-6 mb-10 font-mono text-sm text-[var(--color-chalk)]/50">
+        Drag to explore &rarr;
+      </p>
 
-      {/* Section header */}
-      <div className="relative z-10 max-w-7xl mx-auto mb-12">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="font-mono text-xs text-ignite/60 block mb-3">
-            {"// the library"}
-          </span>
-          <FlipText
-            text="Built to impress."
-            className="text-3xl sm:text-4xl md:text-5xl font-bold text-chalk font-pixel"
-          />
-        </motion.div>
-      </div>
-
-      {/* Bento grid */}
-      <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Gallery */}
+      <div
+        ref={scrollRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        onWheel={onWheel}
+        className="flex gap-6 px-8 overflow-x-auto cursor-grab select-none"
+        style={{
+          scrollSnapType: "x mandatory",
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          WebkitOverflowScrolling: "touch",
+        }}
+      >
         {DEMOS.map((demo, i) => (
-          <motion.div
-            key={demo.title}
-            className={GRID_CLASSES[String(i)] || ""}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.5, delay: (i % 3) * 0.1 }}
+          <div
+            key={demo.name}
+            className="flex-shrink-0 w-[500px] h-[calc(100vh-12rem)] border border-[var(--color-border)] rounded-sm overflow-hidden flex flex-col transition-transform duration-300"
+            style={{ scrollSnapAlign: "center" }}
           >
-            <ShowcaseCard
-              title={demo.title}
-              description={demo.description}
-              index={i}
-            >
+            {/* Live demo area */}
+            <div className="relative flex-1 overflow-hidden bg-[var(--color-void)]">
               {demo.render()}
-            </ShowcaseCard>
-          </motion.div>
+            </div>
+
+            {/* Card footer */}
+            <div className="flex items-center justify-between px-5 py-4 border-t border-[var(--color-border)]">
+              <span className="font-pixel text-sm text-[var(--color-chalk)]">
+                {demo.name}
+              </span>
+              <span className="font-mono text-xs text-[var(--color-chalk)]/30">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+            </div>
+          </div>
         ))}
       </div>
+
+      {/* Hide scrollbar for Webkit */}
+      <style jsx>{`
+        div::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </section>
   );
 }
