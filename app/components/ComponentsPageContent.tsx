@@ -253,7 +253,6 @@ export default function ComponentsPageContent() {
   }, [allComponents]);
 
   /* Signature components */
-  const signatureComponents = useMemo(() => allComponents.filter((c) => c.isSignature), [allComponents]);
 
   return (
     <div className="min-h-screen bg-[var(--color-void)]">

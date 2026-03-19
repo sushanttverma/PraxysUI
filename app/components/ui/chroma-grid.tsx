@@ -69,18 +69,16 @@ const ChromaGrid: React.FC<ChromaGridProps> = ({
     })
   }, [radius])
 
-  const animate = useCallback(() => {
-    smoothPos.current.x = lerp(smoothPos.current.x, mousePos.current.x, damping)
-    smoothPos.current.y = lerp(smoothPos.current.y, mousePos.current.y, damping)
-
-    updateCards()
-    rafId.current = requestAnimationFrame(animate)
-  }, [damping, updateCards])
-
   useEffect(() => {
-    rafId.current = requestAnimationFrame(animate)
+    const loop = () => {
+      smoothPos.current.x = lerp(smoothPos.current.x, mousePos.current.x, damping)
+      smoothPos.current.y = lerp(smoothPos.current.y, mousePos.current.y, damping)
+      updateCards()
+      rafId.current = requestAnimationFrame(loop)
+    }
+    rafId.current = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(rafId.current)
-  }, [animate])
+  }, [damping, updateCards])
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
