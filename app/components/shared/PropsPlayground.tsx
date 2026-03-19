@@ -44,7 +44,7 @@ function generatePropsString(
   return controls
     .map((c) => {
       const val = values[c.name];
-      if (val === c.default) return null; // skip defaults
+      if (val === c.default) return null;
       if (c.type === "text") return `${c.name}="${val}"`;
       if (c.type === "color") return `${c.name}="${val}"`;
       if (c.type === "select") return `${c.name}="${val}"`;
@@ -71,9 +71,8 @@ export default function PropsPlayground({
   const [Component, setComponent] = useState<ComponentType<any> | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
-  const [key, setKey] = useState(0); // force remount on reset
+  const [key, setKey] = useState(0);
 
-  // Load actual component
   const entry = componentRegistry[slug];
   const registryError = !entry ? `Component "${slug}" not found.` : null;
 
@@ -87,12 +86,9 @@ export default function PropsPlayground({
 
   const displayError = registryError || error;
 
-  const handleChange = useCallback(
-    (name: string, value: unknown) => {
-      setValues((prev) => ({ ...prev, [name]: value }));
-    },
-    []
-  );
+  const handleChange = useCallback((name: string, value: unknown) => {
+    setValues((prev) => ({ ...prev, [name]: value }));
+  }, []);
 
   const handleReset = useCallback(() => {
     setValues(getDefaultValues(controls));
@@ -105,66 +101,32 @@ export default function PropsPlayground({
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    }).catch(() => {
-      // Clipboard write failed — silently ignore
-    });
+    }).catch(() => {});
   }, [values, controls]);
 
-  // Merge fixed defaults + control values for the component
   const componentProps = { ...defaults, ...values };
-
-  // For components that need children as a playground prop, extract it
   const childrenValue = componentProps.children;
   const passProps = { ...componentProps };
-  // If children is a string from controls, pass it as children separately
   const childrenControl = controls.find((c) => c.name === "children");
-  if (childrenControl) {
-    delete passProps.children;
-  }
-
-  // Components that declare a null children default should not receive it
-  if (playground.specialChildrenPreset && passProps.children === null) {
-    delete passProps.children;
-  }
+  if (childrenControl) delete passProps.children;
+  if (playground.specialChildrenPreset && passProps.children === null) delete passProps.children;
 
   return (
-    <div className="rounded-xl border border-border overflow-hidden">
+    <div className="overflow-hidden rounded-2xl border border-[var(--color-border)] shadow-[0_4px_32px_rgba(0,0,0,0.15)]">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-border bg-obsidian/50 px-4 py-2.5">
-        <div className="flex items-center gap-2">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-ignite"
-          >
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-          </svg>
-          <span className="text-sm font-medium text-chalk">Playground</span>
-        </div>
-
-        <div className="flex items-center gap-1.5">
+      <div className="flex items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-obsidian)]/50 px-5 py-3">
+        <span className="text-xs font-semibold text-[var(--color-chalk)]">Playground</span>
+        <div className="flex items-center gap-1">
           <button
             onClick={handleCopyProps}
-            className="flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-blush transition-colors hover:bg-ignite/10 hover:text-chalk cursor-pointer"
-            title="Copy props"
+            className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-medium text-[var(--color-text-faint)] transition-colors hover:bg-[var(--color-border)]/50 hover:text-[var(--color-chalk)] cursor-pointer"
           >
-            {copied ? (
-              <Check className="h-3.5 w-3.5 text-green-400" />
-            ) : (
-              <Clipboard className="h-3.5 w-3.5" />
-            )}
+            {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Clipboard className="h-3.5 w-3.5" />}
             {copied ? "Copied" : "Copy"}
           </button>
           <button
             onClick={handleReset}
-            className="flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs text-blush transition-colors hover:bg-ignite/10 hover:text-chalk cursor-pointer"
-            title="Reset to defaults"
+            className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-medium text-[var(--color-text-faint)] transition-colors hover:bg-[var(--color-border)]/50 hover:text-[var(--color-chalk)] cursor-pointer"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             Reset
@@ -172,16 +134,16 @@ export default function PropsPlayground({
         </div>
       </div>
 
-      {/* Body: Preview + Controls */}
+      {/* Body */}
       <div className="flex flex-col lg:flex-row">
         {/* Live preview */}
-        <div className="flex-1 border-b lg:border-b-0 lg:border-r border-border bg-void/50 p-4 sm:p-6 overflow-hidden">
-          <div className="flex min-h-[200px] items-center justify-center">
+        <div className="flex-1 overflow-hidden border-b border-[var(--color-border)] bg-[var(--color-void)]/50 p-4 sm:p-8 lg:border-b-0 lg:border-r">
+          <div className="flex min-h-[220px] items-center justify-center">
             {displayError ? (
-              <p className="text-sm text-ignite/70">{displayError}</p>
+              <p className="text-sm text-[var(--color-ignite)]/70">{displayError}</p>
             ) : !Component ? (
-              <div className="flex items-center gap-2 text-text-faint">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-ignite/30 border-t-ignite" />
+              <div className="flex items-center gap-2 text-[var(--color-text-faint)]">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--color-border)] border-t-[var(--color-ignite)]" />
                 Loading...
               </div>
             ) : (
@@ -198,11 +160,11 @@ export default function PropsPlayground({
 
         {/* Controls panel */}
         {controls.length > 0 && (
-          <div className="w-full lg:w-72 xl:w-80 shrink-0 bg-obsidian/30 p-4">
-            <p className="mb-3 font-pixel text-xs uppercase tracking-wider text-text-faint">
+          <div className="w-full shrink-0 bg-[var(--color-obsidian)]/20 p-5 lg:w-72 xl:w-80">
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--color-text-faint)]">
               Properties
             </p>
-            <div className="space-y-4">
+            <div className="space-y-5">
               {controls.map((control) => (
                 <ControlField
                   key={control.name}
@@ -219,7 +181,7 @@ export default function PropsPlayground({
   );
 }
 
-// ─── Preview wrapper (handles error boundary) ───────────
+// ─── Preview wrapper ────────────────────────────────────
 
 function PlaygroundPreview({
   Component,
@@ -233,53 +195,33 @@ function PlaygroundPreview({
   childrenValue?: ReactNode;
   specialChildrenPreset?: string;
 }) {
-  // Special wrapper content for certain components (configured in registry)
   const specialChildren = getSpecialChildren(specialChildrenPreset);
-
-  if (specialChildren !== undefined) {
-    return <Component {...props}>{specialChildren}</Component>;
-  }
-
-  if (childrenValue !== undefined) {
-    return <Component {...props}>{childrenValue}</Component>;
-  }
-
+  if (specialChildren !== undefined) return <Component {...props}>{specialChildren}</Component>;
+  if (childrenValue !== undefined) return <Component {...props}>{childrenValue}</Component>;
   return <Component {...props} />;
 }
 
-// ─── Special children presets ────────────────────────────
+// ─── Special children presets ───────────────────────────
 
-function getSpecialChildren(
-  preset: string | undefined
-): ReactNode | undefined {
+function getSpecialChildren(preset: string | undefined): ReactNode | undefined {
   if (preset === "glow-card") {
     return (
       <>
-        <h3 className="text-lg font-semibold text-chalk">Card Title</h3>
-        <p className="mt-2 text-sm text-blush">
-          Hover over this card to see the glow effect.
-        </p>
+        <h3 className="text-lg font-semibold text-[var(--color-chalk)]">Card Title</h3>
+        <p className="mt-2 text-sm text-[var(--color-blush)]">Hover over this card to see the glow effect.</p>
       </>
     );
   }
-
   if (preset === "liquid-metal") {
-    return (
-      <span className="font-pixel text-2xl text-chalk">Move your cursor</span>
-    );
+    return <span className="font-pixel text-2xl text-[var(--color-chalk)]">Move your cursor</span>;
   }
-
   if (preset === "grid-items") {
     return [1, 2, 3, 4, 5, 6].map((n) => (
-      <div
-        key={n}
-        className="rounded-lg border border-border bg-obsidian p-6 text-center text-chalk"
-      >
+      <div key={n} className="rounded-xl border border-[var(--color-border)] bg-[var(--color-obsidian)] p-6 text-center text-[var(--color-chalk)]">
         Item {n}
       </div>
     ));
   }
-
   return undefined;
 }
 
@@ -295,10 +237,12 @@ function ControlField({
   onChange: (value: unknown) => void;
 }) {
   const labelEl = (
-    <label className="block text-xs font-medium text-blush mb-1.5">
-      {control.label}
-      <span className="ml-1 text-text-faint">({control.name})</span>
-    </label>
+    <div className="mb-2 flex items-center justify-between">
+      <label className="text-[11px] font-medium text-[var(--color-blush)]">
+        {control.label}
+      </label>
+      <span className="font-mono text-[10px] text-[var(--color-text-faint)]">{control.name}</span>
+    </div>
   );
 
   switch (control.type) {
@@ -310,34 +254,44 @@ function ControlField({
             type="text"
             value={String(value ?? "")}
             onChange={(e) => onChange(e.target.value)}
-            className="w-full rounded-lg border border-border bg-void px-3 py-1.5 text-sm text-chalk placeholder:text-text-faint focus:border-ignite/50 focus:outline-none focus:ring-1 focus:ring-ignite/25"
+            className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-void)] px-3 py-2 text-sm text-[var(--color-chalk)] outline-none transition-colors placeholder:text-[var(--color-text-faint)] focus:border-[var(--color-ignite)]/30"
           />
         </div>
       );
 
     case "number": {
       const { min, max, step } = control;
+      const numVal = Number(value ?? control.default);
+      const pct = min !== undefined && max !== undefined ? ((numVal - min) / (max - min)) * 100 : 50;
       return (
         <div>
           {labelEl}
-          <div className="flex items-center gap-2">
-            <input
-              type="range"
-              min={min}
-              max={max}
-              step={step}
-              value={Number(value ?? control.default)}
-              onChange={(e) => onChange(Number(e.target.value))}
-              className="flex-1 accent-ignite cursor-pointer"
-            />
+          <div className="flex items-center gap-3">
+            <div className="relative flex-1">
+              <div className="pointer-events-none absolute top-1/2 h-[3px] w-full -translate-y-1/2 rounded-full bg-[var(--color-border)]">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[var(--color-ignite)] to-[var(--color-blush)]"
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+              <input
+                type="range"
+                min={min}
+                max={max}
+                step={step}
+                value={numVal}
+                onChange={(e) => onChange(Number(e.target.value))}
+                className="relative z-10 w-full cursor-pointer appearance-none bg-transparent [&::-moz-range-thumb]:h-3.5 [&::-moz-range-thumb]:w-3.5 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white/20 [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(224,78,45,0.3)] [&::-moz-range-track]:bg-transparent [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white/20 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(224,78,45,0.3)]"
+              />
+            </div>
             <input
               type="number"
               min={min}
               max={max}
               step={step}
-              value={Number(value ?? control.default)}
+              value={numVal}
               onChange={(e) => onChange(Number(e.target.value))}
-              className="w-16 rounded-md border border-border bg-void px-2 py-1 text-center text-xs text-chalk focus:border-ignite/50 focus:outline-none"
+              className="w-16 rounded-lg border border-[var(--color-border)] bg-[var(--color-void)] px-2 py-1.5 text-center font-mono text-xs text-[var(--color-chalk)] outline-none focus:border-[var(--color-ignite)]/30"
             />
           </div>
         </div>
@@ -347,23 +301,23 @@ function ControlField({
     case "boolean":
       return (
         <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-blush">
+          <span className="text-[11px] font-medium text-[var(--color-blush)]">
             {control.label}
-            <span className="ml-1 text-text-faint">({control.name})</span>
+            <span className="ml-1.5 font-mono text-[10px] text-[var(--color-text-faint)]">{control.name}</span>
           </span>
           <button
             role="switch"
             aria-checked={!!value}
             onClick={() => onChange(!value)}
             className={cn(
-              "relative h-5 w-9 rounded-full transition-colors cursor-pointer",
-              value ? "bg-ignite" : "bg-border"
+              "relative h-6 w-11 rounded-full transition-colors cursor-pointer",
+              value ? "bg-[var(--color-ignite)]" : "bg-[var(--color-border)]"
             )}
           >
             <span
               className={cn(
-                "absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-chalk transition-transform",
-                !!value && "translate-x-4"
+                "absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow-md transition-transform",
+                !!value && "translate-x-5"
               )}
             />
           </button>
@@ -374,20 +328,26 @@ function ControlField({
       return (
         <div>
           {labelEl}
-          <select
-            value={String(value ?? control.default)}
-            onChange={(e) => onChange(e.target.value)}
-            className="w-full rounded-lg border border-border bg-void px-3 py-1.5 text-sm text-chalk focus:border-ignite/50 focus:outline-none focus:ring-1 focus:ring-ignite/25 cursor-pointer"
-          >
+          <div className="flex flex-wrap gap-1.5">
             {control.options.map((opt) => {
-              const option = normalizeSelectOption(opt);
+              const option = typeof opt === "string" ? { label: opt, value: opt } : opt;
+              const isActive = option.value === String(value);
               return (
-                <option key={option.value} value={option.value}>
+                <button
+                  key={option.value}
+                  onClick={() => onChange(option.value)}
+                  className={cn(
+                    "rounded-lg px-3 py-1.5 text-[11px] font-medium transition-all cursor-pointer",
+                    isActive
+                      ? "bg-[var(--color-ignite)]/10 text-[var(--color-ignite)]"
+                      : "bg-[var(--color-border)]/30 text-[var(--color-text-faint)] hover:bg-[var(--color-border)]/60 hover:text-[var(--color-chalk)]"
+                  )}
+                >
                   {option.label}
-                </option>
+                </button>
               );
             })}
-          </select>
+          </div>
         </div>
       );
 
@@ -396,17 +356,20 @@ function ControlField({
         <div>
           {labelEl}
           <div className="flex items-center gap-2">
-            <input
-              type="color"
-              value={toHex(String(value ?? control.default))}
-              onChange={(e) => onChange(e.target.value)}
-              className="h-8 w-8 shrink-0 cursor-pointer rounded-md border border-border bg-transparent p-0.5"
-            />
+            <div className="relative">
+              <div className="h-8 w-8 rounded-lg border border-[var(--color-border)]" style={{ backgroundColor: String(value ?? control.default) }} />
+              <input
+                type="color"
+                value={toHex(String(value ?? control.default))}
+                onChange={(e) => onChange(e.target.value)}
+                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+              />
+            </div>
             <input
               type="text"
               value={String(value ?? "")}
               onChange={(e) => onChange(e.target.value)}
-              className="flex-1 rounded-lg border border-border bg-void px-3 py-1.5 text-xs text-chalk font-mono placeholder:text-text-faint focus:border-ignite/50 focus:outline-none"
+              className="flex-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-void)] px-3 py-1.5 font-mono text-xs text-[var(--color-chalk)] outline-none focus:border-[var(--color-ignite)]/30"
             />
           </div>
         </div>
@@ -417,22 +380,8 @@ function ControlField({
   }
 }
 
-function normalizeSelectOption(
-  option: string | { label: string; value: string }
-): { label: string; value: string } {
-  if (typeof option === "string") {
-    return { label: option, value: option };
-  }
-  return option;
-}
-
-// ─── Color helper ───────────────────────────────────────
-
 /** Best-effort conversion to #hex for the color picker */
 function toHex(color: string): string {
-  if (color.startsWith("#") && (color.length === 7 || color.length === 4)) {
-    return color;
-  }
-  // For rgba/var values, fall back to a neutral
+  if (color.startsWith("#") && (color.length === 7 || color.length === 4)) return color;
   return "#E84E2D";
 }

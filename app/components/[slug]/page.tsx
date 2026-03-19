@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { ExternalLink, Github } from "lucide-react";
 import {
   componentRegistry,
   isComponentSlug,
-  getPrevNext,
-  getTitle,
 } from "@/lib/registry";
 
 const GITHUB_REPO_URL = "https://github.com/sushanttverma/Praxys-UI";
@@ -15,9 +13,8 @@ import { PropsTable } from "@/app/components/shared/PropsTable";
 import { InstallSteps } from "@/app/components/shared/InstallSteps";
 import ComponentPreview from "@/app/components/shared/ComponentPreview";
 import ComponentPageClient from "@/app/components/shared/ComponentPageClient";
-import PropsPlayground from "@/app/components/shared/PropsPlayground";
+import ComponentSidebar from "@/app/components/shared/ComponentSidebar";
 import Navbar from "../Navbar";
-import Footer from "../Footer";
 
 // ─── Dynamic metadata ───────────────────────────────────
 
@@ -27,15 +24,10 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-
   if (isComponentSlug(slug)) {
     const entry = componentRegistry[slug];
-    return {
-      title: entry.title,
-      description: entry.description,
-    };
+    return { title: `${entry.title} | Praxys UI`, description: entry.description };
   }
-
   return {};
 }
 
@@ -45,35 +37,18 @@ export function generateStaticParams() {
   return Object.keys(componentRegistry).map((slug) => ({ slug }));
 }
 
-// ─── Breadcrumbs ────────────────────────────────────────
+// ─── Category meta ──────────────────────────────────────
 
-function Breadcrumbs({ items }: { items: { label: string; href?: string }[] }) {
-  return (
-    <nav aria-label="Breadcrumb" className="mb-4">
-      <ol className="flex items-center gap-1.5 text-xs text-text-faint">
-        {items.map((item, i) => (
-          <li key={i} className="flex items-center gap-1.5">
-            {i > 0 && (
-              <ChevronRight className="h-3 w-3 text-text-faint/50" />
-            )}
-            {item.href ? (
-              <Link
-                href={item.href}
-                className="transition-colors hover:text-blush"
-              >
-                {item.label}
-              </Link>
-            ) : (
-              <span className="text-blush">{item.label}</span>
-            )}
-          </li>
-        ))}
-      </ol>
-    </nav>
-  );
-}
+const categoryMeta: Record<string, { label: string; accent: string }> = {
+  buttons: { label: "Buttons", accent: "#E04E2D" },
+  cards: { label: "Cards & Layout", accent: "#38bdf8" },
+  text: { label: "Text Effects", accent: "#34d399" },
+  navigation: { label: "Navigation", accent: "#fbbf24" },
+  visual: { label: "Visual Effects", accent: "#a78bfa" },
+  media: { label: "Media & Content", accent: "#fb7185" },
+};
 
-// ─── Page component ─────────────────────────────────────
+// ─── Page ───────────────────────────────────────────────
 
 export default async function ComponentDetailPage({
   params,
@@ -82,136 +57,123 @@ export default async function ComponentDetailPage({
 }) {
   const { slug } = await params;
 
-  if (!isComponentSlug(slug)) {
-    notFound();
-  }
+  if (!isComponentSlug(slug)) notFound();
 
   const entry = componentRegistry[slug];
-  const { prev: rawPrev, next: rawNext } = getPrevNext(slug);
-  // Filter out non-component slugs (e.g. "introduction", "installation") so
-  // prev/next never links to a route that doesn't exist under /components/[slug]
-  const prev = rawPrev && isComponentSlug(rawPrev) ? rawPrev : null;
-  const next = rawNext && isComponentSlug(rawNext) ? rawNext : null;
+  const cat = categoryMeta[entry.category];
 
   return (
-    <div className="min-h-screen bg-void">
+    <div className="min-h-screen bg-[var(--color-void)]">
       <Navbar />
 
-      <main className="mx-auto max-w-7xl px-6 pt-24 pb-20">
-        <div className="space-y-10">
-          {/* Editorial header */}
-          <div>
-            <Breadcrumbs
-              items={[
-                { label: "Components", href: "/components" },
-                { label: entry.title },
-              ]}
-            />
-            <div className="flex items-end justify-between gap-4">
-              <div className="min-w-0">
-                <p className="font-mono text-[10px] text-text-faint tracking-wider mb-1">
-                  {`// components / ${slug}`}
-                </p>
-                <h1 className="font-pixel text-2xl sm:text-3xl md:text-4xl font-bold text-chalk leading-none">
-                  {entry.title}
-                </h1>
-              </div>
-              <a
-                href={`${GITHUB_REPO_URL}/blob/main/app/components/ui/${slug}.tsx`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden sm:flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-text-faint transition-colors hover:border-border-light hover:text-blush mb-0.5"
-              >
-                Edit on GitHub
-                <ExternalLink className="h-3 w-3" />
-              </a>
-            </div>
-            <div className="mt-4 h-px w-full" style={{ background: 'linear-gradient(90deg, var(--color-ignite), var(--color-ignite) 30%, transparent)' }} />
-          </div>
+      <div className="flex pt-16">
+        {/* ─── Left Sidebar ─── */}
+        <ComponentSidebar activeSlug={slug} />
 
-          {/* Preview + Code */}
-          <ComponentPreview
-            preview={<ComponentPageClient slug={slug} />}
-            codeBlock={
-              <div className="space-y-4 p-4">
-                <InstallSteps
-                  steps={[
-                    {
-                      title: "Install dependencies",
-                      code: `npm install ${entry.dependencies.join(" ")}`,
-                      language: "bash",
-                    },
-                    {
-                      title: "Add utility file",
-                      description:
-                        "Create the cn() utility if you haven't already.",
-                      code: `import { type ClassValue, clsx } from "clsx";\nimport { twMerge } from "tailwind-merge";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}`,
-                      language: "tsx",
-                      filename: "lib/utils.ts",
-                    },
-                  ]}
-                />
-                <CodeBlock
-                  code={entry.code}
-                  language="tsx"
-                  filename={`components/ui/${slug}.tsx`}
-                />
-              </div>
-            }
-          />
+        {/* ─── Main Content ─── */}
+        <main className="min-w-0 flex-1 px-6 py-10 lg:px-12">
+          <div className="mx-auto max-w-4xl">
+            {/* ─── Header ─── */}
+            <div className="mb-10">
+              <h1 className="font-pixel text-4xl font-bold text-[var(--color-chalk)] sm:text-5xl md:text-6xl">
+                {entry.title}
+              </h1>
 
-          {/* Playground */}
-          {entry.playground && entry.playground.controls.length > 0 && (
-            <div>
-              <h2 className="mb-4 font-pixel text-xl font-semibold text-chalk">
-                Playground
-              </h2>
-              <p className="mb-4 text-sm text-blush">
-                Tweak the props below and see the component update in real time.
+              {/* Meta row */}
+              <div className="mt-4 flex flex-wrap items-center gap-3">
+                {cat && (
+                  <span
+                    className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold"
+                    style={{ backgroundColor: `${cat.accent}15`, color: cat.accent }}
+                  >
+                    {cat.label}
+                  </span>
+                )}
+                {entry.isSignature && (
+                  <span className="rounded-full bg-gradient-to-r from-amber-500 to-[var(--color-ignite)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+                    SIGNATURE
+                  </span>
+                )}
+                {entry.isNew && !entry.isSignature && (
+                  <span className="rounded-full bg-[var(--color-ignite)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+                    NEW
+                  </span>
+                )}
+                {entry.dependencies.map((dep) => (
+                  <span
+                    key={dep}
+                    className="rounded-full border border-[var(--color-border)] bg-[var(--color-obsidian)]/50 px-2.5 py-0.5 font-mono text-[10px] text-[var(--color-text-faint)]"
+                  >
+                    {dep}
+                  </span>
+                ))}
+              </div>
+
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--color-text-faint)]">
+                {entry.description}
               </p>
-              <PropsPlayground slug={slug} playground={entry.playground} />
-            </div>
-          )}
 
-          {/* Props */}
-          <div>
-            <h2 className="mb-4 font-pixel text-xl font-semibold text-chalk">
-              Props
-            </h2>
-            <PropsTable props={entry.props} />
-          </div>
-
-          {/* Prev / Next navigation */}
-          <div className="border-t border-border pt-8">
-            <div className="flex items-center justify-between">
-              {prev ? (
-                <Link
-                  href={`/components/${prev}`}
-                  className="group flex items-center gap-2 text-text-faint transition-colors hover:text-ignite"
+              {/* Actions */}
+              <div className="mt-5 flex items-center gap-3">
+                <a
+                  href={`${GITHUB_REPO_URL}/blob/main/app/components/ui/${slug}.tsx`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] px-4 py-2 text-xs font-medium text-[var(--color-text-faint)] transition-all hover:border-[var(--color-border-light)] hover:text-[var(--color-blush)]"
                 >
-                  <ChevronLeft className="h-4 w-4" />
-                  <span className="font-mono text-sm">{getTitle(prev)}</span>
-                </Link>
-              ) : (
-                <span />
-              )}
-              {next ? (
-                <Link
-                  href={`/components/${next}`}
-                  className="group flex items-center gap-2 text-text-faint transition-colors hover:text-ignite"
-                >
-                  <span className="font-mono text-sm">{getTitle(next)}</span>
-                  <ChevronRight className="h-4 w-4" />
-                </Link>
-              ) : (
-                <span />
-              )}
+                  <Github className="h-3.5 w-3.5" />
+                  View Source
+                  <ExternalLink className="h-3 w-3 opacity-40" />
+                </a>
+              </div>
             </div>
-          </div>
-        </div>
-      </main>
 
-      <Footer />
+            {/* ─── Preview + Code + Customize ─── */}
+            <section className="mb-12">
+              <ComponentPreview
+                preview={<ComponentPageClient slug={slug} />}
+                slug={slug}
+                playground={entry.playground}
+                codeBlock={
+                  <div className="space-y-4 p-4">
+                    <InstallSteps
+                      steps={[
+                        {
+                          title: "Install dependencies",
+                          code: `npm install ${entry.dependencies.join(" ")}`,
+                          language: "bash",
+                        },
+                        {
+                          title: "Add utility file",
+                          description: "Create the cn() utility if you haven't already.",
+                          code: `import { type ClassValue, clsx } from "clsx";\nimport { twMerge } from "tailwind-merge";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}`,
+                          language: "tsx",
+                          filename: "lib/utils.ts",
+                        },
+                      ]}
+                    />
+                    <CodeBlock
+                      code={entry.code}
+                      language="tsx"
+                      filename={`components/ui/${slug}.tsx`}
+                    />
+                  </div>
+                }
+              />
+            </section>
+
+            {/* ─── Props ─── */}
+            {entry.props.length > 0 && (
+              <section className="mb-12">
+                <h2 className="mb-5 text-lg font-bold text-[var(--color-chalk)]">
+                  Props
+                </h2>
+                <PropsTable props={entry.props} />
+              </section>
+            )}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

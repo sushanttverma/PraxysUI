@@ -8,20 +8,20 @@ export function PropsTable({ props }: PropsTableProps) {
   if (props.length === 0) return null;
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-border">
+    <div className="overflow-x-auto rounded-2xl border border-[var(--color-border)] shadow-[0_4px_32px_rgba(0,0,0,0.1)]">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-border bg-obsidian/50">
-            <th className="px-4 py-3 text-left font-medium text-chalk">
+          <tr className="border-b border-[var(--color-border)] bg-[var(--color-obsidian)]/50">
+            <th className="px-5 py-3.5 text-left text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-faint)]">
               Prop
             </th>
-            <th className="px-4 py-3 text-left font-medium text-chalk">
+            <th className="px-5 py-3.5 text-left text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-faint)]">
               Type
             </th>
-            <th className="px-4 py-3 text-left font-medium text-chalk">
+            <th className="px-5 py-3.5 text-left text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-faint)]">
               Default
             </th>
-            <th className="px-4 py-3 text-left font-medium text-chalk">
+            <th className="px-5 py-3.5 text-left text-[11px] font-semibold uppercase tracking-wider text-[var(--color-text-faint)]">
               Description
             </th>
           </tr>
@@ -30,24 +30,24 @@ export function PropsTable({ props }: PropsTableProps) {
           {props.map((prop) => (
             <tr
               key={prop.name}
-              className="border-b border-border/50 last:border-0"
+              className="border-b border-[var(--color-border)]/50 transition-colors last:border-0 hover:bg-[var(--color-obsidian)]/20"
             >
-              <td className="px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
-                <code className="rounded bg-ignite/10 px-1.5 py-0.5 font-mono text-xs text-ignite">
+              <td className="whitespace-nowrap px-5 py-3">
+                <code className="rounded-lg bg-[var(--color-ignite)]/10 px-2 py-0.5 font-mono text-xs font-medium text-[var(--color-ignite)]">
                   {prop.name}
                 </code>
               </td>
-              <td className="px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
-                <code className="font-mono text-xs text-blush">
+              <td className="whitespace-nowrap px-5 py-3">
+                <code className="rounded-lg bg-[var(--color-border)]/50 px-2 py-0.5 font-mono text-xs text-[var(--color-blush)]">
                   {prop.type}
                 </code>
               </td>
-              <td className="px-2 py-2 sm:px-4 sm:py-3 whitespace-nowrap">
-                <code className="font-mono text-xs text-text-faint">
+              <td className="whitespace-nowrap px-5 py-3">
+                <code className="font-mono text-xs text-[var(--color-text-faint)]">
                   {prop.default}
                 </code>
               </td>
-              <td className="px-2 py-2 sm:px-4 sm:py-3 text-blush">{prop.description}</td>
+              <td className="px-5 py-3 text-[13px] text-[var(--color-blush)]">{prop.description}</td>
             </tr>
           ))}
         </tbody>
