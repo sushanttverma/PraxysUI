@@ -149,6 +149,13 @@ const COMPONENT_REGISTRY: Record<string, ComponentMeta> = {
   "carousel": { title: "Carousel", description: "Image carousel with directional slide animation, auto-play, arrow and dot navigation.", category: "media", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
   "avatar": { title: "Avatar", description: "Avatar component with four sizes, status indicators, fallback initials, and animated status dot.", category: "media", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
   "lightbox": { title: "Lightbox", description: "Fullscreen image viewer with zoom, arrow key navigation, thumbnail strip, and backdrop blur.", category: "media", dependencies: ["framer-motion", "clsx", "tailwind-merge"], isNew: true },
+  "scroll-stack": { title: "Scroll Stack", description: "Scroll-driven card stack where cards progressively reveal, scale up, and rotate as the user scrolls.", category: "cards", dependencies: [], isNew: true },
+  "magic-bento": { title: "Magic Bento", description: "Interactive bento grid with glowing borders, cursor-following spotlight, particle effects, tilt, magnetism, and click ripples.", category: "cards", dependencies: ["gsap"], isNew: true },
+  "circular-gallery": { title: "Circular Gallery", description: "3D orbital image carousel with drag/scroll navigation, momentum, and perspective transforms.", category: "media", dependencies: [], isNew: true },
+  "masonry": { title: "Masonry", description: "Height-balanced responsive masonry grid with staggered entry animations and hover scale.", category: "cards", dependencies: [], isNew: true },
+  "chroma-grid": { title: "Chroma Grid", description: "Grid of cards in grayscale that reveal vibrant colors in a radial area around the cursor.", category: "cards", dependencies: [], isNew: true },
+  "pixel-transition": { title: "Pixel Transition", description: "Pixelated dissolution effect that transitions between two pieces of content on hover.", category: "visual", dependencies: ["gsap"], isNew: true },
+  "folder": { title: "Folder", description: "3D-styled folder icon with layered papers that fan out on click with hover animations.", category: "visual", dependencies: [], isNew: true },
 };
 
 const COMPONENT_LIST = Object.keys(COMPONENT_REGISTRY);
