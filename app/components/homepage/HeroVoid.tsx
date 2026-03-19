@@ -1,25 +1,48 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useCallback, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Copy, Check } from "lucide-react";
 import Link from "next/link";
 import { COMPONENT_COUNT } from "@/lib/site-stats";
 
+const LiquidEther = dynamic(
+  () => import("@/app/components/praxys-vendor/backgrounds/LiquidEther/LiquidEther"),
+  { ssr: false }
+);
+
 export default function HeroVoid() {
   const [copied, setCopied] = useState(false);
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  const gridRef = useRef<HTMLDivElement>(null);
+  const [showBg, setShowBg] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
 
+  // Wait for section to have real dimensions before mounting WebGL
   useEffect(() => {
-    const handle = (e: MouseEvent) => {
-      const cx = (e.clientX / window.innerWidth - 0.5) * 2;
-      const cy = (e.clientY / window.innerHeight - 0.5) * 2;
-      setMouse({ x: cx * 12, y: cy * 12 });
-    };
-    window.addEventListener("mousemove", handle);
-    return () => window.removeEventListener("mousemove", handle);
+    const el = sectionRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (entry && entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+        ro.disconnect();
+        // Extra frame delay to ensure paint is complete
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setShowBg(true);
+          });
+        });
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText("npx @praxys/ui init");
@@ -28,114 +51,131 @@ export default function HeroVoid() {
   }, []);
 
   return (
-    <section className="relative h-[100dvh] flex items-center justify-center overflow-hidden" style={{ background: "var(--color-void)" }}>
-      {/* Perspective grid */}
-      <div
-        ref={gridRef}
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          transform: `translate(${mouse.x}px, ${mouse.y}px)`,
-          transition: "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)",
-        }}
-      >
+    <section
+      ref={sectionRef}
+      className="relative flex h-[100dvh] items-center justify-center overflow-hidden bg-[var(--color-void)]"
+    >
+      {/* Liquid Ether Background */}
+      {showBg && (
         <div
-          className="absolute inset-[-80px]"
-          style={{
-            backgroundImage: `
-              linear-gradient(var(--color-border) 1px, transparent 1px),
-              linear-gradient(90deg, var(--color-border) 1px, transparent 1px)
-            `,
-            backgroundSize: "60px 60px",
-            maskImage: "radial-gradient(ellipse 70% 50% at 50% 50%, black 20%, transparent 80%)",
-            WebkitMaskImage: "radial-gradient(ellipse 70% 50% at 50% 50%, black 20%, transparent 80%)",
-            opacity: 0.5,
-          }}
-        />
-      </div>
-
-      {/* Corner stats */}
-      <span className="absolute top-8 right-8 font-mono text-[11px] tracking-wider z-10" style={{ color: "var(--color-text-faint)" }}>
-        {COMPONENT_COUNT}+ components
-      </span>
-      <span className="absolute bottom-8 left-8 font-mono text-[11px] tracking-wider z-10" style={{ color: "var(--color-text-faint)" }}>
-        open source
-      </span>
-
-      {/* Center content */}
-      <motion.div
-        className="relative z-10 flex flex-col items-center"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-      >
-        {/* Title with bisecting line */}
-        <div className="relative flex items-center justify-center">
-          {/* Horizontal bisecting line */}
-
-          <h1
-            className="font-pixel text-[14vw] md:text-[12vw] leading-none tracking-tight select-none"
-            style={{ color: "var(--color-chalk)" }}
-          >
-            Praxys
-          </h1>
+          className="absolute inset-0 z-0"
+          style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
+        >
+          <LiquidEther
+            colors={["#E04E2D", "#1c1a17", "#C9958A", "#050505"]}
+            mouseForce={20}
+            cursorSize={120}
+            resolution={0.5}
+            isViscous={false}
+            autoDemo={true}
+            autoSpeed={0.5}
+            autoIntensity={2.2}
+            className="!pointer-events-auto"
+            style={{ width: "100%", height: "100%", position: "relative" }}
+          />
         </div>
+      )}
 
+      {/* Dark overlay to ensure text readability */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[1]"
+        style={{
+          background: "radial-gradient(ellipse 80% 80% at 50% 50%, rgba(5,5,5,0.3), rgba(5,5,5,0.7) 70%)",
+        }}
+      />
+
+      {/* Scroll-linked content */}
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="relative z-10 flex flex-col items-center px-6"
+      >
+        {/* Tag */}
         <motion.p
-          className="mt-4 text-base md:text-lg tracking-wide"
-          style={{ color: "var(--color-blush)" }}
+          className="mb-8 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-text-faint)]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
         >
-          Components that move.
+          {COMPONENT_COUNT}+ animated components · open source
         </motion.p>
 
-        {/* CTA */}
-        <motion.div
-          className="mt-10 flex flex-col items-center gap-4"
+        {/* Title */}
+        <motion.h1
+          className="font-pixel text-center text-[13vw] leading-[0.85] tracking-tight sm:text-[11vw] md:text-[9vw]"
+          style={{ color: "var(--color-chalk)" }}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        >
+          Components
+          <br />
+          <span style={{ color: "var(--color-ignite)" }}>that move.</span>
+        </motion.h1>
+
+        {/* Subtitle */}
+        <motion.p
+          className="mt-6 max-w-md text-center text-sm leading-relaxed text-[var(--color-blush)] sm:text-base"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+        >
+          Copy-paste animated React components.
+          <br className="hidden sm:block" />
+          No dependencies. No lock-in. Just ship.
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div
+          className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.6 }}
         >
           <Link href="/components">
-            <button
-              className="group flex items-center gap-2 rounded-full px-7 py-3 text-sm font-medium transition-all hover:brightness-110 cursor-pointer"
-              style={{ background: "var(--color-ignite)", color: "var(--color-void)" }}
-            >
-              Enter the library
+            <button className="group flex h-12 items-center gap-2 rounded-xl bg-[var(--color-ignite)] px-7 text-sm font-semibold text-[var(--color-void)] transition-all hover:brightness-110">
+              Browse Components
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
           </Link>
-
-          <button
-            onClick={handleCopy}
-            className="group inline-flex items-center gap-2.5 font-mono text-xs tracking-wide cursor-pointer bg-transparent border-none"
-            style={{ color: "var(--color-text-faint)" }}
-          >
-            <span style={{ color: "var(--color-ignite)", opacity: 0.5 }}>$</span>
-            npx @praxys/ui init
-            {copied ? (
-              <Check className="h-3 w-3 text-green-500" />
-            ) : (
-              <Copy className="h-3 w-3 opacity-40 group-hover:opacity-80 transition-opacity" />
-            )}
-          </button>
+          <Link href="/installation">
+            <button className="flex h-12 items-center rounded-xl border border-white/10 bg-white/5 px-7 text-sm font-medium text-[var(--color-chalk)] backdrop-blur-sm transition-all hover:bg-white/10">
+              Installation
+            </button>
+          </Link>
         </motion.div>
+
+        {/* Copy command */}
+        <motion.button
+          onClick={handleCopy}
+          className="group mt-6 inline-flex items-center gap-3 border-none bg-transparent font-mono text-xs tracking-wide text-[var(--color-text-faint)]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.9 }}
+        >
+          <span className="text-[var(--color-ignite)] opacity-50">$</span>
+          npx @praxys/ui init
+          {copied ? (
+            <Check className="h-3 w-3 text-green-500" />
+          ) : (
+            <Copy className="h-3 w-3 opacity-40 transition-opacity group-hover:opacity-80" />
+          )}
+        </motion.button>
       </motion.div>
 
-      {/* Scroll hint — pulsing line */}
+      {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
+        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
+        transition={{ delay: 1.5 }}
       >
         <motion.div
-          className="w-px h-8"
-          style={{ background: `linear-gradient(to bottom, var(--color-text-faint), transparent)` }}
-          animate={{ opacity: [0.6, 0.15, 0.6] }}
+          animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        />
+          className="flex h-8 w-5 items-start justify-center rounded-full border border-white/10 pt-1.5"
+        >
+          <div className="h-1.5 w-0.5 rounded-full bg-white/30" />
+        </motion.div>
       </motion.div>
     </section>
   );
