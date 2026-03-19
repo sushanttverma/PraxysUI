@@ -9,10 +9,11 @@ import {
 const GITHUB_REPO_URL = "https://github.com/sushanttverma/Praxys-UI";
 import { CodeBlock } from "@/app/components/shared/CodeBlock";
 import { PropsTable } from "@/app/components/shared/PropsTable";
-import { InstallSteps } from "@/app/components/shared/InstallSteps";
 import ComponentPreview from "@/app/components/shared/ComponentPreview";
 import ComponentPageClient from "@/app/components/shared/ComponentPageClient";
 import ComponentSidebar from "@/app/components/shared/ComponentSidebar";
+import InstallBlock from "@/app/components/shared/InstallBlock";
+import UsageBlock from "@/app/components/shared/UsageBlock";
 import Navbar from "../Navbar";
 
 // ─── Dynamic metadata ───────────────────────────────────
@@ -98,14 +99,6 @@ export default async function ComponentDetailPage({
                     NEW
                   </span>
                 )}
-                {entry.dependencies.map((dep) => (
-                  <span
-                    key={dep}
-                    className="rounded-full border border-[var(--color-border)] bg-[var(--color-obsidian)]/50 px-2.5 py-0.5 font-mono text-[10px] text-[var(--color-text-faint)]"
-                  >
-                    {dep}
-                  </span>
-                ))}
               </div>
 
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--color-text-faint)]">
@@ -127,35 +120,29 @@ export default async function ComponentDetailPage({
               </div>
             </div>
 
-            {/* ─── Preview + Code + Customize ─── */}
+            {/* ─── Preview + Customize ─── */}
             <section className="mb-12">
               <ComponentPreview
                 preview={<ComponentPageClient slug={slug} />}
                 slug={slug}
                 playground={entry.playground}
                 codeBlock={
-                  <div className="space-y-4 p-4">
-                    <InstallSteps
-                      steps={[
-                        {
-                          title: "Install dependencies",
-                          code: `npm install ${entry.dependencies.join(" ")}`,
-                          language: "bash",
-                        },
-                        {
-                          title: "Add utility file",
-                          description: "Create the cn() utility if you haven't already.",
-                          code: `import { type ClassValue, clsx } from "clsx";\nimport { twMerge } from "tailwind-merge";\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}`,
-                          language: "tsx",
-                          filename: "lib/utils.ts",
-                        },
-                      ]}
-                    />
-                    <CodeBlock
-                      code={entry.code}
-                      language="tsx"
-                      filename={`components/ui/${slug}.tsx`}
-                    />
+                  <div className="space-y-10 p-6">
+                    {/* Install */}
+                    <InstallBlock slug={slug} dependencies={entry.dependencies} />
+
+                    {/* Usage */}
+                    <UsageBlock code={entry.usage} />
+
+                    {/* Full Code */}
+                    <div>
+                      <h2 className="mb-4 text-lg font-bold text-[var(--color-chalk)]">Code</h2>
+                      <CodeBlock
+                        code={entry.code}
+                        language="tsx"
+                        filename={`components/ui/${slug}.tsx`}
+                      />
+                    </div>
                   </div>
                 }
               />

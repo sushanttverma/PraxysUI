@@ -15,7 +15,7 @@ import { componentRegistry, type PlaygroundConfig, type PlaygroundPropDef } from
 
 interface ComponentPreviewProps {
   preview: React.ReactNode;
-  codeBlock: React.ReactNode;
+  codeBlock?: React.ReactNode;
   slug?: string;
   playground?: PlaygroundConfig;
 }
@@ -93,7 +93,6 @@ export default function ComponentPreview({
   const [PlaygroundComponent, setPlaygroundComponent] = useState<ComponentType<any> | null>(null);
   const [copied, setCopied] = useState(false);
 
-  /* Load the actual component for playground */
   useEffect(() => {
     if (!hasPlayground || !slug) return;
     const entry = componentRegistry[slug];
@@ -121,7 +120,6 @@ export default function ComponentPreview({
     }).catch(() => {});
   }, [propValues, controls]);
 
-  /* Playground component props */
   const playgroundProps = useMemo(() => {
     if (!hasPlayground) return {};
     const merged = { ...playground?.defaults, ...propValues };
@@ -144,8 +142,7 @@ export default function ComponentPreview({
     <div className="overflow-hidden rounded-2xl border border-[var(--color-border)] shadow-[0_4px_32px_rgba(0,0,0,0.15)]">
       {/* ─── Tab Bar ─── */}
       <div className="flex items-center justify-between border-b border-[var(--color-border)] bg-[var(--color-obsidian)]/50 px-2">
-        {/* Tabs */}
-        <div role="tablist" aria-label="Component view" className="flex">
+        <div role="tablist" className="flex">
           <button
             role="tab"
             aria-selected={activeTab === "preview"}
@@ -176,12 +173,11 @@ export default function ComponentPreview({
           </button>
         </div>
 
-        {/* Replay — only on preview */}
         {activeTab === "preview" && (
           <button
             onClick={handleReplay}
             aria-label="Replay animation"
-            className="mr-2 flex h-8 w-8 items-center justify-center rounded-xl bg-[var(--color-obsidian)] border border-[var(--color-border)] text-[var(--color-text-faint)] transition-all hover:text-[var(--color-chalk)] cursor-pointer"
+            className="mr-2 flex h-8 w-8 items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-obsidian)] text-[var(--color-text-faint)] transition-all hover:text-[var(--color-chalk)] cursor-pointer"
           >
             <RotateCcw className="h-3.5 w-3.5" />
           </button>
@@ -192,7 +188,6 @@ export default function ComponentPreview({
       <div hidden={activeTab !== "preview"}>
         {activeTab === "preview" && (
           <>
-            {/* Live preview area */}
             <div className="relative flex min-h-[350px] items-center justify-center overflow-hidden bg-[var(--color-void)]/50 p-4 sm:p-8">
               <Suspense
                 fallback={
@@ -215,7 +210,7 @@ export default function ComponentPreview({
               </Suspense>
             </div>
 
-            {/* ─── Inline Customize Controls ─── */}
+            {/* Customize controls */}
             {hasPlayground && (
               <div className="border-t border-[var(--color-border)] bg-[var(--color-obsidian)]/20">
                 <div className="flex items-center justify-between border-b border-[var(--color-border)]/50 px-5 py-3">
@@ -237,35 +232,18 @@ export default function ComponentPreview({
                     </button>
                   </div>
                 </div>
-
                 <div className="px-5 py-5">
-                  {/* Select controls as pills */}
                   {controls.filter((c) => c.type === "select").length > 0 && (
                     <div className="mb-5 flex flex-wrap gap-2">
-                      {controls
-                        .filter((c) => c.type === "select")
-                        .map((control) => (
-                          <SelectPills
-                            key={control.name}
-                            control={control as PlaygroundPropDef & { type: "select" }}
-                            value={propValues[control.name]}
-                            onChange={handlePropChange}
-                          />
-                        ))}
+                      {controls.filter((c) => c.type === "select").map((control) => (
+                        <SelectPills key={control.name} control={control as PlaygroundPropDef & { type: "select" }} value={propValues[control.name]} onChange={handlePropChange} />
+                      ))}
                     </div>
                   )}
-
                   <div className="space-y-5">
-                    {controls
-                      .filter((c) => c.type !== "select")
-                      .map((control) => (
-                        <ControlField
-                          key={control.name}
-                          control={control}
-                          value={propValues[control.name]}
-                          onChange={(val) => handlePropChange(control.name, val)}
-                        />
-                      ))}
+                    {controls.filter((c) => c.type !== "select").map((control) => (
+                      <ControlField key={control.name} control={control} value={propValues[control.name]} onChange={(val) => handlePropChange(control.name, val)} />
+                    ))}
                   </div>
                 </div>
               </div>
@@ -274,9 +252,9 @@ export default function ComponentPreview({
         )}
       </div>
 
-      {/* ─── Code Panel ─── */}
+      {/* ─── Code Panel (Install + Usage + Code) ─── */}
       <div hidden={activeTab !== "code"}>
-        {activeTab === "code" && (
+        {activeTab === "code" && codeBlock && (
           <div className="[&>div]:rounded-none [&>div]:border-0">{codeBlock}</div>
         )}
       </div>
@@ -286,15 +264,7 @@ export default function ComponentPreview({
 
 /* ─── Select Pills ───────────────────────────────────────── */
 
-function SelectPills({
-  control,
-  value,
-  onChange,
-}: {
-  control: PlaygroundPropDef & { type: "select" };
-  value: unknown;
-  onChange: (name: string, value: unknown) => void;
-}) {
+function SelectPills({ control, value, onChange }: { control: PlaygroundPropDef & { type: "select" }; value: unknown; onChange: (name: string, value: unknown) => void }) {
   return (
     <div className="flex items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-void)]/50 px-3 py-2">
       <span className="text-[11px] font-medium text-[var(--color-text-faint)]">{control.label}:</span>
@@ -303,18 +273,7 @@ function SelectPills({
           const option = typeof opt === "string" ? { label: opt, value: opt } : opt;
           const isActive = option.value === String(value);
           return (
-            <button
-              key={option.value}
-              onClick={() => onChange(control.name, option.value)}
-              className={cn(
-                "rounded-lg px-2.5 py-1 text-[11px] font-medium transition-all cursor-pointer",
-                isActive
-                  ? "bg-[var(--color-ignite)]/15 text-[var(--color-ignite)]"
-                  : "text-[var(--color-text-faint)] hover:text-[var(--color-chalk)]"
-              )}
-            >
-              {option.label}
-            </button>
+            <button key={option.value} onClick={() => onChange(control.name, option.value)} className={cn("rounded-lg px-2.5 py-1 text-[11px] font-medium transition-all cursor-pointer", isActive ? "bg-[var(--color-ignite)]/15 text-[var(--color-ignite)]" : "text-[var(--color-text-faint)] hover:text-[var(--color-chalk)]")}>{option.label}</button>
           );
         })}
       </div>
@@ -324,34 +283,17 @@ function SelectPills({
 
 /* ─── Control Field ──────────────────────────────────────── */
 
-function ControlField({
-  control,
-  value,
-  onChange,
-}: {
-  control: PlaygroundPropDef;
-  value: unknown;
-  onChange: (value: unknown) => void;
-}) {
+function ControlField({ control, value, onChange }: { control: PlaygroundPropDef; value: unknown; onChange: (value: unknown) => void }) {
   switch (control.type) {
     case "boolean":
       return (
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium text-[var(--color-chalk)]">{control.label}</span>
-          <button
-            role="switch"
-            aria-checked={!!value}
-            onClick={() => onChange(!value)}
-            className={cn(
-              "relative h-6 w-11 rounded-full transition-colors cursor-pointer",
-              value ? "bg-[var(--color-ignite)]" : "bg-[var(--color-border)]"
-            )}
-          >
+          <button role="switch" aria-checked={!!value} onClick={() => onChange(!value)} className={cn("relative h-6 w-11 rounded-full transition-colors cursor-pointer", value ? "bg-[var(--color-ignite)]" : "bg-[var(--color-border)]")}>
             <span className={cn("absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow-md transition-transform", !!value && "translate-x-5")} />
           </button>
         </div>
       );
-
     case "number": {
       const { min, max, step } = control;
       const numVal = Number(value ?? control.default);
@@ -363,34 +305,19 @@ function ControlField({
             <div className="pointer-events-none absolute top-1/2 h-[4px] w-full -translate-y-1/2 rounded-full bg-[var(--color-border)]">
               <div className="h-full rounded-full bg-gradient-to-r from-[var(--color-ignite)] to-[var(--color-blush)]" style={{ width: `${pct}%` }} />
             </div>
-            <input
-              type="range"
-              min={min}
-              max={max}
-              step={step}
-              value={numVal}
-              onChange={(e) => onChange(Number(e.target.value))}
-              className="relative z-10 w-full cursor-pointer appearance-none bg-transparent [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[var(--color-obsidian)] [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(224,78,45,0.3)] [&::-moz-range-track]:bg-transparent [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[var(--color-obsidian)] [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(224,78,45,0.3)]"
-            />
+            <input type="range" min={min} max={max} step={step} value={numVal} onChange={(e) => onChange(Number(e.target.value))} className="relative z-10 w-full cursor-pointer appearance-none bg-transparent [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[var(--color-obsidian)] [&::-moz-range-thumb]:bg-white [&::-moz-range-track]:bg-transparent [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[var(--color-obsidian)] [&::-webkit-slider-thumb]:bg-white" />
           </div>
           <span className="w-14 text-right font-mono text-sm text-[var(--color-chalk)]">{numVal}</span>
         </div>
       );
     }
-
     case "text":
       return (
         <div className="flex items-center gap-4">
           <span className="w-32 shrink-0 text-sm font-medium text-[var(--color-chalk)]">{control.label}</span>
-          <input
-            type="text"
-            value={String(value ?? "")}
-            onChange={(e) => onChange(e.target.value)}
-            className="flex-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-void)] px-3 py-2 text-sm text-[var(--color-chalk)] outline-none transition-colors placeholder:text-[var(--color-text-faint)] focus:border-[var(--color-ignite)]/30"
-          />
+          <input type="text" value={String(value ?? "")} onChange={(e) => onChange(e.target.value)} className="flex-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-void)] px-3 py-2 text-sm text-[var(--color-chalk)] outline-none transition-colors placeholder:text-[var(--color-text-faint)] focus:border-[var(--color-ignite)]/30" />
         </div>
       );
-
     case "color":
       return (
         <div className="flex items-center gap-4">
@@ -398,18 +325,12 @@ function ControlField({
           <div className="flex items-center gap-2">
             <div className="relative">
               <div className="h-8 w-8 rounded-lg border border-[var(--color-border)]" style={{ backgroundColor: String(value ?? control.default) }} />
-              <input
-                type="color"
-                value={toHex(String(value ?? control.default))}
-                onChange={(e) => onChange(e.target.value)}
-                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-              />
+              <input type="color" value={toHex(String(value ?? control.default))} onChange={(e) => onChange(e.target.value)} className="absolute inset-0 h-full w-full cursor-pointer opacity-0" />
             </div>
             <span className="font-mono text-xs text-[var(--color-text-faint)]">{String(value)}</span>
           </div>
         </div>
       );
-
     default:
       return null;
   }
