@@ -4,6 +4,7 @@ import { ExternalLink, Github } from "lucide-react";
 import {
   componentRegistry,
   isComponentSlug,
+  backgroundSlugs,
 } from "@/lib/registry";
 
 const GITHUB_REPO_URL = "https://github.com/sushanttverma/Praxys-UI";
@@ -34,7 +35,9 @@ export async function generateMetadata({
 // ─── Static params ──────────────────────────────────────
 
 export function generateStaticParams() {
-  return Object.keys(componentRegistry).map((slug) => ({ slug }));
+  return Object.keys(componentRegistry)
+    .filter((slug) => !backgroundSlugs.has(slug))
+    .map((slug) => ({ slug }));
 }
 
 // ─── Category meta ──────────────────────────────────────

@@ -9,6 +9,7 @@ export {
   componentCount,
   isComponentSlug,
   getAllComponents,
+  backgroundSlugs,
 } from "./registry/index";
 
 export type {

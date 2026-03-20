@@ -127,6 +127,27 @@ import masonry from "./masonry";
 import magicBento from "./magic-bento";
 import chromaGrid from "./chroma-grid";
 import pixelTransition from "./pixel-transition";
+import silk from "./silk";
+import orb from "./orb";
+import liquidChrome from "./liquid-chrome";
+import balatro from "./balatro";
+import dither from "./dither";
+import dotGrid from "./dot-grid";
+import beams from "./beams";
+import darkVeil from "./dark-veil";
+import lightRays from "./light-rays";
+import prism from "./prism";
+import gradientBlinds from "./gradient-blinds";
+import grainient from "./grainient";
+import pixelBlast from "./pixel-blast";
+import liquidEther from "./liquid-ether";
+import colorBends from "./color-bends";
+import lightPillar from "./light-pillar";
+import antigravity from "./antigravity";
+import clickSpark from "./click-spark";
+import laserFlow from "./laser-flow";
+import ribbons from "./ribbons";
+import splashCursor from "./splash-cursor";
 
 // ─── Sidebar structure ───────────────────────────────────
 
@@ -262,6 +283,32 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "magic-bento", title: "Magic Bento" },
       { slug: "chroma-grid", title: "Chroma Grid" },
       { slug: "pixel-transition", title: "Pixel Transition" },
+    ],
+  },
+  {
+    title: "Backgrounds",
+    items: [
+      { slug: "silk", title: "Silk" },
+      { slug: "orb", title: "Orb" },
+      { slug: "liquid-chrome", title: "Liquid Chrome" },
+      { slug: "balatro", title: "Balatro" },
+      { slug: "dither", title: "Dither" },
+      { slug: "dot-grid", title: "Dot Grid" },
+      { slug: "beams", title: "Beams" },
+      { slug: "dark-veil", title: "Dark Veil" },
+      { slug: "light-rays", title: "Light Rays" },
+      { slug: "prism", title: "Prism" },
+      { slug: "gradient-blinds", title: "Gradient Blinds" },
+      { slug: "grainient", title: "Grainient" },
+      { slug: "pixel-blast", title: "Pixel Blast" },
+      { slug: "liquid-ether", title: "Liquid Ether" },
+      { slug: "color-bends", title: "Color Bends" },
+      { slug: "light-pillar", title: "Light Pillar" },
+      { slug: "antigravity", title: "Antigravity" },
+      { slug: "click-spark", title: "Click Spark" },
+      { slug: "laser-flow", title: "Laser Flow" },
+      { slug: "ribbons", title: "Ribbons" },
+      { slug: "splash-cursor", title: "Splash Cursor" },
     ],
   },
 ];
@@ -408,7 +455,37 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "magic-bento": magicBento,
   "chroma-grid": chromaGrid,
   "pixel-transition": pixelTransition,
+  "silk": silk,
+  "orb": orb,
+  "liquid-chrome": liquidChrome,
+  "balatro": balatro,
+  "dither": dither,
+  "dot-grid": dotGrid,
+  "beams": beams,
+  "dark-veil": darkVeil,
+  "light-rays": lightRays,
+  "prism": prism,
+  "gradient-blinds": gradientBlinds,
+  "grainient": grainient,
+  "pixel-blast": pixelBlast,
+  "liquid-ether": liquidEther,
+  "color-bends": colorBends,
+  "light-pillar": lightPillar,
+  "antigravity": antigravity,
+  "click-spark": clickSpark,
+  "laser-flow": laserFlow,
+  "ribbons": ribbons,
+  "splash-cursor": splashCursor,
 };
+
+// ─── Background slugs (WebGL – skip SSG) ────────────────
+export const backgroundSlugs = new Set([
+  "silk", "orb", "liquid-chrome", "balatro", "dither", "dot-grid",
+  "beams", "dark-veil", "light-rays", "prism", "gradient-blinds",
+  "grainient", "pixel-blast", "liquid-ether", "color-bends",
+  "light-pillar", "antigravity", "click-spark", "laser-flow",
+  "ribbons", "splash-cursor",
+]);
 
 // ─── Single source of truth for component count ─────────
 // Import this wherever the count is needed — never hardcode it.
