@@ -66,15 +66,15 @@ export default async function ComponentDetailPage({
   const cat = categoryMeta[entry.category];
 
   return (
-    <div className="min-h-screen bg-[var(--color-void)]">
+    <div className="min-h-screen bg-[#060608]">
       <Navbar />
 
-      <div className="flex pt-16">
+      <div className="flex">
         {/* ─── Left Sidebar ─── */}
         <ComponentSidebar activeSlug={slug} />
 
         {/* ─── Main Content ─── */}
-        <main className="min-w-0 flex-1 px-6 py-10 lg:px-12">
+        <main className="min-w-0 flex-1 px-6 pb-10 pt-24 lg:px-12">
           <div className="mx-auto max-w-4xl">
             {/* ─── Header ─── */}
             <div className="mb-10">
