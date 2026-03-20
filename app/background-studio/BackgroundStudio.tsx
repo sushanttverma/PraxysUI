@@ -47,7 +47,7 @@ type BackgroundDef = {
 /* ─── Constants ─────────────────────────────────────────── */
 
 const PKG_MANAGERS = ["pnpm", "npm", "yarn", "bun"] as const;
-const PRAXYS_CLI_SUPPORTED = new Set<string>(["aurora", "particles"]);
+const PRAXYS_CLI_SUPPORTED = new Set<string>(["silk", "aurora", "particles", "grid-motion", "orb", "liquid-chrome", "balatro", "dither", "dot-grid", "beams", "dark-veil", "light-rays", "prism", "gradient-blinds", "grainient", "pixel-blast", "liquid-ether", "color-bends", "light-pillar", "antigravity", "click-spark", "laser-flow", "ribbons", "splash-cursor"]);
 
 function formatJsxPropValue(value: unknown) {
   if (typeof value === "string") return `"${value}"`;
