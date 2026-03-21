@@ -45,36 +45,35 @@ const CircularGallery: React.FC<CircularGalleryProps> = ({
   const isDraggingRef = useRef(false)
   const lastXRef = useRef(0)
   const rafRef = useRef<number>(0)
-  const [, forceRender] = useState(0)
+  const [renderAngle, setRenderAngle] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
 
   const itemCount = items.length
   const angleStep = 360 / itemCount
 
-  const animate = useCallback(() => {
-    if (!isDraggingRef.current) {
-      // Apply friction-based deceleration
-      velocityRef.current *= 0.95
-
-      // Stop when velocity is negligible
-      if (Math.abs(velocityRef.current) < 0.01) {
-        velocityRef.current = 0
-      } else {
-        angleRef.current += velocityRef.current
-        forceRender((n) => n + 1)
-      }
-    }
-
-    rafRef.current = requestAnimationFrame(animate)
-  }, [])
-
   useEffect(() => {
-    rafRef.current = requestAnimationFrame(animate)
+    const loop = () => {
+      if (!isDraggingRef.current) {
+        velocityRef.current *= 0.95
+
+        if (Math.abs(velocityRef.current) < 0.01) {
+          velocityRef.current = 0
+        } else {
+          angleRef.current += velocityRef.current
+          setRenderAngle(angleRef.current)
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(loop)
+    }
+    rafRef.current = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(rafRef.current)
-  }, [animate])
+  }, [])
 
   // Drag handlers
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     isDraggingRef.current = true
+    setIsDragging(true)
     lastXRef.current = e.clientX
     velocityRef.current = 0
     ;(e.target as HTMLElement).setPointerCapture?.(e.pointerId)
@@ -88,13 +87,14 @@ const CircularGallery: React.FC<CircularGalleryProps> = ({
       angleRef.current += delta
       velocityRef.current = delta
       lastXRef.current = e.clientX
-      forceRender((n) => n + 1)
+      setRenderAngle(angleRef.current)
     },
     [radius, scrollSpeed]
   )
 
   const handlePointerUp = useCallback(() => {
     isDraggingRef.current = false
+    setIsDragging(false)
   }, [])
 
   // Wheel handler
@@ -104,7 +104,7 @@ const CircularGallery: React.FC<CircularGalleryProps> = ({
       const delta = (e.deltaY / 100) * scrollSpeed * 3
       angleRef.current += delta
       velocityRef.current = delta * 0.5
-      forceRender((n) => n + 1)
+      setRenderAngle(angleRef.current)
     },
     [scrollSpeed]
   )
@@ -126,7 +126,7 @@ const CircularGallery: React.FC<CircularGalleryProps> = ({
         width: '100%',
         height: itemHeight + 80,
         overflow: 'hidden',
-        cursor: isDraggingRef.current ? 'grabbing' : 'grab',
+        cursor: isDragging ? 'grabbing' : 'grab',
         perspective: 1200,
         userSelect: 'none',
         touchAction: 'none',
@@ -141,7 +141,7 @@ const CircularGallery: React.FC<CircularGalleryProps> = ({
         }}
       >
         {items.map((item, i) => {
-          const itemAngle = normalizeAngle(angleRef.current + i * angleStep)
+          const itemAngle = normalizeAngle(renderAngle + i * angleStep)
           // Convert to radians, center at 0 (front-facing)
           const rad = ((itemAngle - 180) * Math.PI) / 180
 
@@ -169,7 +169,7 @@ const CircularGallery: React.FC<CircularGalleryProps> = ({
                 transform: `translateX(${x}px) translateZ(${z}px) scale(${scale})`,
                 opacity,
                 zIndex: Math.round(normalizedZ * 1000),
-                transition: isDraggingRef.current ? 'none' : 'opacity 0.1s ease-out',
+                transition: isDragging ? 'none' : 'opacity 0.1s ease-out',
                 pointerEvents: 'none',
               }}
             >

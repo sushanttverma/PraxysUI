@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useState, useMemo, useCallback } from 'react'
+import React, { useRef, useState, useCallback, useEffect } from 'react'
 import gsap from 'gsap'
 import { cn } from '@/lib/utils'
 
@@ -29,13 +29,15 @@ const PixelTransition: React.FC<PixelTransitionProps> = ({
   const cellSize = 100 / gridSize // percentage
 
   // Pre-compute a shuffled order for stagger animation
-  const shuffledIndices = useMemo(() => {
+  const shuffledIndices = useRef<number[]>([])
+
+  useEffect(() => {
     const indices = Array.from({ length: totalPixels }, (_, i) => i)
     for (let i = indices.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
       ;[indices[i], indices[j]] = [indices[j], indices[i]]
     }
-    return indices
+    shuffledIndices.current = indices
   }, [totalPixels])
 
   const animatePixels = useCallback(

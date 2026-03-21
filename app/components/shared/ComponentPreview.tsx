@@ -86,7 +86,7 @@ export default function ComponentPreview({
   const [replayKey, setReplayKey] = useState(0);
 
   /* Playground state */
-  const controls = playground?.controls ?? [];
+  const controls = useMemo(() => playground?.controls ?? [], [playground]);
   const hasPlayground = slug && playground && controls.length > 0;
   const [propValues, setPropValues] = useState<PropValues>(() => getDefaultValues(controls));
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

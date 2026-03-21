@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { ExternalLink, Github } from "lucide-react";
 import {
   componentRegistry,

@@ -4,13 +4,9 @@ import React, { Suspense, useEffect, useMemo, useRef, useState, useCallback } fr
 import {
   ArrowLeft,
   Check,
-  ChevronDown,
   Code2,
   Copy,
   Download,
-  ExternalLink,
-  Grid3X3,
-  Info,
   Palette,
   Plus,
   RotateCcw,
@@ -267,14 +263,13 @@ export default function BackgroundStudio() {
   const backgrounds = useMemo(() => RB_BACKGROUNDS as BackgroundDef[], []);
 
   /* State */
-  const [bgId, setBgId] = useState(backgrounds[0]?.id ?? "silk");
+  const [bgId, setBgId] = useState(backgrounds.find((b) => b.id === "aurora")?.id ?? backgrounds[0]?.id ?? "silk");
   const selected = useMemo(() => backgrounds.find((b) => b.id === bgId) ?? backgrounds[0], [backgrounds, bgId]);
 
   const [values, setValues] = useState<Record<string, unknown>>(() => (selected ? getDefaultProps(selected) : {}));
   const [search, setSearch] = useState("");
   const [canvasBg, setCanvasBg] = useState("#060010");
   const [panelOpen, setPanelOpen] = useState(true);
-  const [browserOpen, setBrowserOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
   const [pkg, setPkg] = useState<(typeof PKG_MANAGERS)[number]>("pnpm");
@@ -313,7 +308,6 @@ export default function BackgroundStudio() {
       }
       if (e.key === "Escape") {
         setCommandOpen(false);
-        setBrowserOpen(false);
         setExportOpen(false);
       }
       if (e.key === "\\" && (e.metaKey || e.ctrlKey)) {
@@ -390,7 +384,6 @@ export default function BackgroundStudio() {
       setBgId(id);
       setValues(getDefaultProps(next));
       setCommandOpen(false);
-      setBrowserOpen(false);
       setSearch("");
     },
     [backgrounds]
