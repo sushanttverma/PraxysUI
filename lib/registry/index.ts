@@ -38,6 +38,7 @@ import liquidMetal from "./liquid-metal";
 import revealLoader from "./reveal-loader";
 import animatedHero from "./animated-hero";
 import maskedAvatars from "./masked-avatars";
+import folder from "./folder";
 import folderPreview from "./folder-preview";
 import interactiveBook from "./interactive-book";
 import logoSlider from "./logo-slider";
@@ -120,6 +121,12 @@ import copyButton from "./copy-button";
 import mentionInput from "./mention-input";
 import scrollProgress from "./scroll-progress";
 import scrollDna from "./scroll-dna";
+import scrollStack from "./scroll-stack";
+import circularGallery from "./circular-gallery";
+import masonry from "./masonry";
+import magicBento from "./magic-bento";
+import chromaGrid from "./chroma-grid";
+import pixelTransition from "./pixel-transition";
 
 // ─── Sidebar structure ───────────────────────────────────
 
@@ -165,6 +172,7 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "liquid-metal", title: "Liquid Metal" },
       { slug: "animated-hero", title: "Animated Hero" },
       { slug: "masked-avatars", title: "Masked Avatars" },
+      { slug: "folder", title: "Folder" },
       { slug: "folder-preview", title: "Folder Preview" },
       { slug: "interactive-book", title: "Interactive Book" },
       { slug: "reveal-loader", title: "Reveal Loader" },
@@ -248,6 +256,12 @@ export const sidebarGroups: SidebarGroup[] = [
       { slug: "mention-input", title: "Mention Input" },
       { slug: "scroll-progress", title: "Scroll Progress" },
       { slug: "scroll-dna", title: "Scroll DNA" },
+      { slug: "scroll-stack", title: "Scroll Stack" },
+      { slug: "masonry", title: "Masonry" },
+      { slug: "circular-gallery", title: "Circular Gallery" },
+      { slug: "magic-bento", title: "Magic Bento" },
+      { slug: "chroma-grid", title: "Chroma Grid" },
+      { slug: "pixel-transition", title: "Pixel Transition" },
     ],
   },
 ];
@@ -305,6 +319,7 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "reveal-loader": revealLoader,
   "animated-hero": animatedHero,
   "masked-avatars": maskedAvatars,
+  "folder": folder,
   "folder-preview": folderPreview,
   "interactive-book": interactiveBook,
   "logo-slider": logoSlider,
@@ -387,6 +402,12 @@ export const componentRegistry: Record<string, ComponentEntry> = {
   "mention-input": mentionInput,
   "scroll-progress": scrollProgress,
   "scroll-dna": scrollDna,
+  "scroll-stack": scrollStack,
+  "masonry": masonry,
+  "circular-gallery": circularGallery,
+  "magic-bento": magicBento,
+  "chroma-grid": chromaGrid,
+  "pixel-transition": pixelTransition,
 };
 
 // ─── Single source of truth for component count ─────────
