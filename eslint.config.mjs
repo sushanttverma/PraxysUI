@@ -15,15 +15,8 @@ const eslintConfig = defineConfig([
     "app/components/praxys-vendor/backgrounds/**",
     "app/components/praxys-vendor/tools/**",
     "app/components/praxys-vendor/animations/**",
+    "app/components/ui/**",
   ]),
-  // UI components use plain <img> intentionally — they are framework-agnostic
-  // copy-paste components that must work outside Next.js (Vite, Remix, etc.).
-  {
-    files: ["app/components/ui/**"],
-    rules: {
-      "@next/next/no-img-element": "off",
-    },
-  },
 ]);
 
 export default eslintConfig;

@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Copy, Check } from "lucide-react";
 import Link from "next/link";
 import { COMPONENT_COUNT } from "@/lib/site-stats";
+import { useTheme } from "@/app/components/ThemeProvider";
 
 const LiquidEther = dynamic(
   () => import("@/app/components/praxys-vendor/backgrounds/LiquidEther/LiquidEther"),
@@ -16,6 +17,8 @@ export default function HeroVoid() {
   const [copied, setCopied] = useState(false);
   const [showBg, setShowBg] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const { theme } = useTheme();
+  const isLight = theme === "light";
 
   // Wait for section to have real dimensions before mounting WebGL
   useEffect(() => {
@@ -62,7 +65,7 @@ export default function HeroVoid() {
           style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
         >
           <LiquidEther
-            colors={["#E04E2D", "#1c1a17", "#C9958A", "#050505"]}
+            colors={isLight ? ["#E04E2D", "#F0EDE8", "#C9958A", "#FAFAF8"] : ["#E04E2D", "#1c1a17", "#C9958A", "#050505"]}
             mouseForce={20}
             cursorSize={120}
             resolution={0.5}
@@ -76,11 +79,13 @@ export default function HeroVoid() {
         </div>
       )}
 
-      {/* Dark overlay to ensure text readability */}
+      {/* Overlay to ensure text readability */}
       <div
         className="pointer-events-none absolute inset-0 z-[1]"
         style={{
-          background: "radial-gradient(ellipse 80% 80% at 50% 50%, rgba(5,5,5,0.3), rgba(5,5,5,0.7) 70%)",
+          background: isLight
+            ? "radial-gradient(ellipse 80% 80% at 50% 50%, rgba(250,250,248,0.3), rgba(250,250,248,0.65) 70%)"
+            : "radial-gradient(ellipse 80% 80% at 50% 50%, rgba(5,5,5,0.3), rgba(5,5,5,0.7) 70%)",
         }}
       />
 
@@ -138,7 +143,7 @@ export default function HeroVoid() {
             </button>
           </Link>
           <Link href="/installation">
-            <button className="flex h-12 items-center rounded-xl border border-white/10 bg-white/5 px-7 text-sm font-medium text-[var(--color-chalk)] backdrop-blur-sm transition-all hover:bg-white/10">
+            <button className="flex h-12 items-center rounded-xl border border-[var(--color-border)] bg-[var(--color-obsidian)]/60 px-7 text-sm font-medium text-[var(--color-chalk)] backdrop-blur-sm transition-all hover:bg-[var(--color-obsidian)]">
               Installation
             </button>
           </Link>
@@ -172,9 +177,9 @@ export default function HeroVoid() {
         <motion.div
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="flex h-8 w-5 items-start justify-center rounded-full border border-white/10 pt-1.5"
+          className="flex h-8 w-5 items-start justify-center rounded-full border border-[var(--color-border)] pt-1.5"
         >
-          <div className="h-1.5 w-0.5 rounded-full bg-white/30" />
+          <div className="h-1.5 w-0.5 rounded-full bg-[var(--color-text-faint)]" />
         </motion.div>
       </motion.div>
     </section>
