@@ -51,7 +51,7 @@ npx @praxys/ui add animated-button
 # Add multiple at once
 npx @praxys/ui add accordion alert badge tooltip
 
-# Add all 118 components
+# Add all 139 components
 npx @praxys/ui add all
 
 # Add and install dependencies
@@ -132,7 +132,7 @@ npx @praxys/ui doctor
   ✓ clsx installed (^2.1.1)
   ✓ tailwind-merge installed (^2.6.0)
   ✓ framer-motion installed (^12.0.0)
-  ✓ 12/118 components installed
+  ✓ 12/139 components installed
 
   All checks passed!
 ```
@@ -152,7 +152,7 @@ npx @praxys/ui stats
   visual             0/12     ░░░░░░░░░░░░
   media              0/6      ░░░░░░
   ────────────────────────────────────────
-  Total             12/118
+  Total             12/139
 
   Coverage: 17% of components installed
 ```
@@ -200,13 +200,13 @@ All commands read this file for directory defaults. You can override per-command
 
 ## Components
 
-118 components across 6 categories:
+139 components across 6 categories:
 
 - **Buttons** (24) — Animated Button, Checkbox, Color Picker, Date Picker, File Upload, OTP Input, Rating, Slider, Switch, and more
 - **Cards** (19) — Data Table, Glow Border Card, Spotlight Card, Stats Card, Timeline, and more
 - **Text** (20) — Flip Text, Morphing Text, Typewriter Text, 3D Displacement Text, and more
 - **Navigation** (25) — Accordion, Command Menu, Glass Dock, Combobox, Autocomplete, Floating Menu, and more
-- **Visual** (19) — Liquid Ocean, Gradient Mesh, Parallax Scroll, Toast Notification, and more
+- **Visual** (40) — Liquid Ocean, Gradient Mesh, Parallax Scroll, Toast Notification, and more
 - **Media** (10) — Animated Hero, Interactive Book, Image Comparison, and more
 
 Browse all components at [ui.praxys.xyz/components](https://ui.praxys.xyz/components).

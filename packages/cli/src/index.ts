@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, writeFileSync, readFileSync, unlinkSync } from "
 import { join } from "path";
 import { execSync } from "child_process";
 
-const VERSION = "1.0.5";
+const VERSION = "1.0.6";
 
 // ─── Types ──────────────────────────────────────────────
 
